@@ -6,4 +6,4 @@
 - **Apps/protection:** [Docker & Apps](DOCKER-AND-APPS.md) · [Backup/Sync/Replication](BACKUP-SYNC-AND-REPLICATION.md) · [Office](OFFICE.md)
 - **Network:** [Networking](NETWORKING.md) · [Remote Access](REMOTE-ACCESS.md) · [Notifications](NOTIFICATIONS.md)
 - **Admin/support:** [Architecture](ARCHITECTURE.md) · [Security](SECURITY-MODEL.md) · [Recovery](RECOVERY.md) · [Ports](PORTS-AND-SERVICES.md) · [Troubleshooting](TROUBLESHOOTING.md) · [Support Evidence](SUPPORT-EVIDENCE.md) · [FAQ](FAQ.md)
-- **Release/dev:** [Known Limitations](KNOWN-LIMITATIONS.md) · [Source & Build](SOURCE-AND-BUILD.md) · [Release Verification](RELEASE-VERIFICATION.md)
+- **Release/dev:** [Known Limitations](KNOWN-LIMITATIONS.md) · [Distribution Model](DISTRIBUTION.md) · [Release Verification](RELEASE-VERIFICATION.md)

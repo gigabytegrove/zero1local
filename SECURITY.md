@@ -2,7 +2,7 @@
 
 ## Supported release
 
-Security fixes are targeted at the current stable Zero1Local release. At the time of this documentation set, that release is **v1.2.3**.
+Security fixes are targeted at the current stable Zero1Local release. At the time of this documentation set, that release is **v1.2.4**.
 
 ## Reporting a vulnerability
 

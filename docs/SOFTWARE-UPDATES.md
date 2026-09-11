@@ -1,6 +1,6 @@
 # Software Updates
 
-Zero1Local v1.2.3 gives software updates a dedicated owner-facing workspace at `/updates`. It is designed to answer four questions immediately: **what is installed, what is newest, what changed, and what is happening now?**
+Zero1Local v1.2.4 gives software updates a dedicated owner-facing workspace at `/updates`. It is designed to answer four questions immediately: **what is installed, what is newest, what changed, and what is happening now?**
 
 ## What the page shows
 
@@ -76,3 +76,14 @@ See also:
 - [UPDATE-PATH.md](UPDATE-PATH.md)
 - [UPGRADING-AND-ROLLBACK.md](UPGRADING-AND-ROLLBACK.md)
 - [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+
+
+## Linux-native updater in v1.2.4
+
+Online updates now use the managed cache `/var/cache/zero1-local/updates` instead of `/root`. Once a package passes download, archive, checksum and appliance checks, Zero1Local starts a detached Linux updater on the NAS. That updater runs the same transactional `scripts/install.sh` path used by the cumulative manual installer, survives the expected management-service restart, checks the running version and `/healthz`, and then cleans the update workspace.
+
+PowerShell remains the manual/factory-stock entry point; it is not required by the online updater.
+
+### Update artifact cleanup
+
+Zero1Local removes completed/failed transaction workspaces and prunes superseded Zero1Local-owned cache entries. Installing v1.2.4 also removes the legacy `/root/Zero1Local-update-*` archives/directories created by the v1.2.3 updater bug. The separate manual deployment directory `/root/zero1local-deploy-*` is not part of this cleanup policy.

@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.2.4
+
+- Replaced `/root/Zero1Local-update-*` online-update staging with `/var/cache/zero1-local/updates`.
+- Added detached Linux-native update execution using the existing transactional NAS installer.
+- Persisted update state across the expected management-service restart.
+- Added update-specific Task Center stages and presentation.
+- Added automatic cleanup of successful, failed, superseded, stale, and legacy Zero1Local-owned update artifacts.
+- Fixed direct-refresh routing for `/updates`.
+- Stopped redundant unchanged fan-control writes that produced recurring 10-second kernel warnings.
+- Normalized permission bits on the exact vendor systemd unit files observed as executable/world-writable, without changing unit contents.
+- Added public documentation-provenance disclosure.
+- Public production packages are now distribution-only: compiled runtime artifacts are published; the private application source and developer build/test tree are not included.
+- Replaced public Source/Build documentation with a Distribution Model page and distribution-oriented contribution guidance.
+
 ## v1.2.3
 
 - Reworked stable GitHub discovery to combine GitHub Latest Release with release history and no-cache manual checks.
