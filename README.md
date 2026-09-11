@@ -6,7 +6,7 @@
 
 **Take Back Control.** Zero1Local converts the supported IronCow Zero1 NAS into a local-first NAS platform while preserving the appliance's validated Debian 11 / RK3568 hardware foundation.
 
-Current stable release: **v1.2.3**
+Current stable release: **v1.2.4**
 
 Zero1Local is a Gigabyte Grove project originally created by Brad Trammell.
 
@@ -15,6 +15,8 @@ Zero1Local is a Gigabyte Grove project originally created by Brad Trammell.
 Zero1Local replaces the cloud-dependent appliance-management experience with a locally managed NAS interface and services. The v1.2 feature baseline includes storage and RAID management, SMB/NFS sharing, users and groups, File Manager, Docker/apps, backup/synchronization, networking, notifications, recovery, phone transfer and system administration.
 
 The release is cumulative: you do not install a chain of older Zero1Local versions first.
+
+The public GitHub repository is a production distribution/support repository. Compiled runtime artifacts are published; the private application source and developer build/test tree are not. See [Distribution model](docs/DISTRIBUTION.md).
 
 ## Before you install
 
@@ -49,15 +51,15 @@ Read [Installation](docs/INSTALLATION.md) before deploying to a factory-stock ap
 | Network | Hostname, DNS, VLANs, advanced network configuration and optional WireGuard |
 | Recovery | Independent recovery service, Recovery Key, emergency SSH and rollback-safe installation |
 
-## Software Updates in v1.2.3
+## Software Updates in v1.2.4
 
-v1.2.3 introduces a dedicated, consumer-facing **Software Updates** workspace. It clearly separates the version installed on the NAS from the latest version received from GitHub, shows release notes and package readiness, and follows download, verification, installation, restart and rollback states in one place.
+v1.2.4 completes the Linux-native online update path. Update downloads are staged under `/var/cache/zero1-local/updates`, verified on the NAS, and handed to a detached Linux updater that uses the same rollback-safe transactional installer as manual deployment. The updater persists status through the expected management-service restart and removes its managed package/extraction workspace on success or failure.
 
-Stable discovery now combines GitHub's Latest Release endpoint with release history, and **Check now** bypasses stale HTTP cache/ETag state. See [Software Updates](docs/SOFTWARE-UPDATES.md) for the full behavior and troubleshooting model.
+Task Center now presents software updates as software updates: download, package opening, verification, appliance checks, installation, restart, and final verification/cleanup. It no longer reuses phone-transfer/file-copy fields for update work. See [Software Updates](docs/SOFTWARE-UPDATES.md) and [GitHub Update Path](docs/UPDATE-PATH.md).
 
 ## Documentation
 
-The repository documentation is organized for both owners and contributors:
+The repository documentation is organized for owners, installers and support:
 
 - [Documentation home](docs/README.md)
 - [Getting started](docs/GETTING-STARTED.md)
@@ -83,7 +85,8 @@ The repository documentation is organized for both owners and contributors:
 - [Evidence collection](docs/SUPPORT-EVIDENCE.md)
 - [Known limitations](docs/KNOWN-LIMITATIONS.md)
 - [FAQ](docs/FAQ.md)
-- [Source and build](docs/SOURCE-AND-BUILD.md)
+- [Distribution model](docs/DISTRIBUTION.md)
+- [Documentation provenance](docs/DOCUMENTATION-PROVENANCE.md)
 
 ## Important design principles
 
@@ -97,6 +100,12 @@ The repository documentation is organized for both owners and contributors:
 ## Support
 
 Before opening an issue, read [SUPPORT.md](SUPPORT.md) and [Troubleshooting](docs/TROUBLESHOOTING.md). Never publish passwords, recovery keys, OAuth credentials, GitHub tokens or private SSH keys in an issue.
+
+## Documentation Provenance
+
+Zero1Local public documentation was generated with assistance from **OpenAI ChatGPT** after project planning and implementation documentation was supplied to it. **AI was not used in the design or implementation of the Zero1Local software.** Documentation is reviewed against the actual production distribution artifacts before publication.
+
+See [Documentation provenance](docs/DOCUMENTATION-PROVENANCE.md).
 
 ## Warranty Disclaimer and Assumption of Risk
 

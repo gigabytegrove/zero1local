@@ -1,10 +1,10 @@
 # Zero1Local Support
 
-This page explains how to get useful support for Zero1Local v1.2.3 without guessing at appliance state.
+This page explains how to get useful support for Zero1Local v1.2.4 without guessing at appliance state.
 
 ## Before opening an issue
 
-1. Confirm the issue is reproducible on the current v1.2.3 release.
+1. Confirm the issue is reproducible on the current v1.2.4 release.
 2. Check [Troubleshooting](docs/TROUBLESHOOTING.md) and [Known limitations](docs/KNOWN-LIMITATIONS.md).
 3. Record what you expected, what actually happened and the exact sequence that triggered it.
 4. Collect the smallest evidence set that proves the failure. See [Support evidence](docs/SUPPORT-EVIDENCE.md).
@@ -65,3 +65,8 @@ http://<NAS-IP>:8089/
 ```
 
 It uses the separate Recovery Key shown under **System → Recovery**. See [Recovery](docs/RECOVERY.md).
+
+
+## Software update issues
+
+Include the update state, update log, managed update-cache listing, and `zero1-local.service` journal described in [Support evidence](docs/SUPPORT-EVIDENCE.md). Do not delete update state before collecting evidence.

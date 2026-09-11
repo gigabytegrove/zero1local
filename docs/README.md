@@ -42,12 +42,15 @@ Use this index as the documentation home for the current stable release.
 - [Recovery](RECOVERY.md)
 - [Ports and services](PORTS-AND-SERVICES.md)
 - [Troubleshooting](TROUBLESHOOTING.md)
+- [Logging and maintenance](LOGGING-AND-MAINTENANCE.md)
 - [Support evidence](SUPPORT-EVIDENCE.md)
 - [FAQ](FAQ.md)
 
 ## Development and release
 
+- [Distribution model](DISTRIBUTION.md)
 - [Release verification](RELEASE-VERIFICATION.md)
+- [Documentation provenance](DOCUMENTATION-PROVENANCE.md)
 
 ## Release and legal
 

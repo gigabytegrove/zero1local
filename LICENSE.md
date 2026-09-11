@@ -63,6 +63,6 @@ following conditions:
    CONFIRMING HARDWARE COMPATIBILITY, AND DECIDING WHETHER TO INSTALL OR USE THE
    SOFTWARE.
 
-Credits do not alter the license terms above. Debugging of the original Zero1Local
-project included assistance from ChatGPT by OpenAI.
+Credits do not alter the license terms above. Public documentation accompanying Zero1Local was generated with assistance from ChatGPT by OpenAI after project planning and implementation documentation was supplied to it. AI was not used in the design or implementation of the Zero1Local software.
 ```
+

@@ -99,3 +99,26 @@ systemctl status zero1-dns.service --no-pager
 ## Need more evidence
 
 See [Support evidence](SUPPORT-EVIDENCE.md).
+
+
+## Online update fails or stops
+
+Start with the update state and update log:
+
+```bash
+cat /var/lib/zero1-local/update-apply.json 2>/dev/null
+ls -lah /var/lib/zero1-local/update-apply-*.log 2>/dev/null
+tail -n 200 /var/lib/zero1-local/update-apply-*.log 2>/dev/null
+ls -lah /var/cache/zero1-local/updates 2>/dev/null
+```
+
+v1.2.4 must not create new `/root/Zero1Local-update-*` archives. If such an entry predates v1.2.4, the v1.2.4 installer removes it as legacy updater debris.
+
+## Repeating fan/GPIO warnings
+
+v1.2.4 no longer rewrites an unchanged fan state every ten seconds. One hardware message associated with an actual fan-state transition can still be meaningful; a continuing ten-second warning storm after v1.2.4 should be reported with the surrounding kernel log and current fan status rather than hidden or filtered.
+
+```bash
+journalctl -k -n 200 --no-pager
+curl -fsS http://127.0.0.1/api/hardware/fan 2>/dev/null || true
+```

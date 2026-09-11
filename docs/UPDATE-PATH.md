@@ -1,5 +1,11 @@
 # GitHub Update Path
 
+## v1.2.4 Linux-native installation path
+
+v1.2.4 retains the resilient GitHub discovery introduced in v1.2.3 but replaces the broken `/root` staging/install handoff. The management service downloads to `/var/cache/zero1-local/updates`, verifies the canonical five-file production distribution, validates the inner release, and hands the release to a detached Linux-native updater. The updater invokes the existing rollback-safe transactional installer and cleans its managed workspace afterward.
+
+The Windows PowerShell installer remains the manual/factory-stock deployment entry point; online updates do not execute PowerShell.
+
 ## v1.2.3 discovery correction
 
 v1.2.3 makes update discovery resilient to a stale GitHub release-list response by combining the GitHub Latest Release endpoint with the normal release-history endpoint. A user-triggered check bypasses saved ETag/cache state. The newest GitHub release seen is recorded independently from the installed version and exposed to the dedicated `/updates` workspace.

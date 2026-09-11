@@ -1,34 +1,27 @@
 # Contributing to Zero1Local
 
-Zero1Local accepts useful fixes and improvements, but changes must preserve the product's local-first and evidence-first safety model.
+The public Zero1Local repository is a **distribution and support repository**. The private application source and developer build/test tree are not published here.
 
-## Development rules
+Public contributions are welcome in the forms that fit this repository:
 
-- Do not remove existing behavior as an incidental part of another fix.
-- Do not weaken storage, rollback, firewall, recovery or verification gates to make a test pass.
-- Do not treat `/disk0` as safe merely because the directory exists. The physical Main Storage identity must be proven.
-- Do not replace the validated kernel, bootloader or DTB as part of an ordinary Zero1Local change.
-- Keep the full first-party source tree buildable; do not ship a binary-only implementation as the canonical source.
-- Keep device-specific behavior evidence-gated. Do not describe untested hardware paths as qualified.
-- Preserve manual Phone Transfer ownership and verification semantics.
-- Keep public documentation synchronized with actual behavior.
+- reproducible bug reports
+- hardware compatibility evidence
+- installation and upgrade reports
+- documentation corrections
+- support and troubleshooting improvements
+- feature requests with clear owner use cases
 
-## Validation
+## Before opening an issue
 
-From the release source root:
+1. Confirm the issue is reproducible on the current stable release.
+2. Review [SUPPORT.md](SUPPORT.md) and [Troubleshooting](docs/TROUBLESHOOTING.md).
+3. Include the evidence requested in [Support Evidence](docs/SUPPORT-EVIDENCE.md).
+4. Remove passwords, recovery keys, OAuth credentials, private SSH keys and other secrets before posting logs.
 
-```bash
-go test ./...
-go vet ./...
-node --check web/app.js
-bash -n scripts/install.sh
-```
+## Software changes
 
-The release build uses Go 1.23.2 and produces Linux ARM64 binaries with:
+Because the application source is not distributed through the public repository, public pull requests are not the software-development workflow for Zero1Local. Use an issue or feature request to report a defect or propose a change.
 
-```bash
-CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -trimpath -ldflags="-s -w" -o bin/zero1d-linux-arm64 ./cmd/zero1d
-CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -trimpath -ldflags="-s -w" -o bin/zero1-recovery-linux-arm64 ./cmd/zero1-recovery
-```
+Public documentation changes may be proposed through the repository when appropriate.
 
-See [Source and build](docs/SOURCE-AND-BUILD.md) and [Release verification](docs/RELEASE-VERIFICATION.md).
+See [Distribution model](docs/DISTRIBUTION.md) and [Release Verification](docs/RELEASE-VERIFICATION.md).

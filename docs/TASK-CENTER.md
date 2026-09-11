@@ -53,3 +53,20 @@ Cancel aborts the active file, removes its private `.zero1-part-*` destination a
 ## Browser sessions
 
 Once a transfer is a server-side running task, browser/login session expiration or closing the page does not terminate it. Returning to Task Center after authentication shows the current backend task state.
+
+
+## Software update tasks
+
+Software-update tasks use their own detail layout. They do not display mobile-transfer concepts such as remaining files, current-file speed, transfer ETA, Pause, or Stop-after-current-file.
+
+The update timeline is:
+
+1. Downloading update
+2. Opening update package
+3. Verifying package
+4. Checking this NAS
+5. Installing update
+6. Restarting Zero1Local
+7. Verifying and cleaning up
+
+The transaction state is persisted independently of the management process so Task Center can rehydrate the same software-update task after Zero1Local restarts.
