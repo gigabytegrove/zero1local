@@ -49,3 +49,8 @@ Use this index as the documentation home for the current stable release.
 
 - [Source and build](SOURCE-AND-BUILD.md)
 - [Release verification](RELEASE-VERIFICATION.md)
+
+## Release and legal
+
+- [GitHub update path](UPDATE-PATH.md)
+- [Warranty disclaimer and assumption of risk](WARRANTY-AND-RISK.md)

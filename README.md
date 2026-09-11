@@ -6,15 +6,19 @@
 
 **Take Back Control.** Zero1Local converts the supported IronCow Zero1 NAS into a local-first NAS platform while preserving the appliance's validated Debian 11 / RK3568 hardware foundation.
 
-Current stable release: **v1.2**
+Current stable release: **v1.2.2**
 
 Zero1Local is a Gigabyte Grove project originally created by Brad Trammell.
 
 ## What Zero1Local does
 
-Zero1Local replaces the cloud-dependent appliance-management experience with a locally managed NAS interface and services. The v1.2 release includes storage and RAID management, SMB/NFS sharing, users and groups, File Manager, Docker/apps, backup/synchronization, networking, notifications, recovery, phone transfer and system administration.
+Zero1Local replaces the cloud-dependent appliance-management experience with a locally managed NAS interface and services. The v1.2 feature baseline includes storage and RAID management, SMB/NFS sharing, users and groups, File Manager, Docker/apps, backup/synchronization, networking, notifications, recovery, phone transfer and system administration.
 
 The release is cumulative: you do not install a chain of older Zero1Local versions first.
+
+## Before you install
+
+**Back up or move all important data off the NAS before installing Zero1Local.** Zero1Local may rewrite or reinitialize disk/storage structures for the supported layout and performance model. Existing data can be lost. A copy that exists only on the NAS is not an independent backup.
 
 ## Quick install
 
@@ -24,7 +28,7 @@ For a Zero1Local appliance or an already-rooted supported IronCow Zero1:
 .\Install-Zero1Local.ps1 <NAS-IP>
 ```
 
-For a supported factory-stock IronCow Zero1 requiring the root bootstrap:
+For a supported factory-stock IronCow Zero1 requiring the root bootstrap, scan the QR code on the product sticker on the **bottom of the NAS** to obtain the serial number, then run:
 
 ```powershell
 .\Install-Zero1Local.ps1 <NAS-IP> -Serial '<NAS_SERIAL>'
@@ -87,6 +91,14 @@ The repository documentation is organized for both owners and contributors:
 ## Support
 
 Before opening an issue, read [SUPPORT.md](SUPPORT.md) and [Troubleshooting](docs/TROUBLESHOOTING.md). Never publish passwords, recovery keys, OAuth credentials, GitHub tokens or private SSH keys in an issue.
+
+## Warranty Disclaimer and Assumption of Risk
+
+Zero1Local modifies software on the target NAS and is used at the device owner's risk. Potential consequences include data loss, service interruption, failed boot, filesystem or hardware damage, and a partially or completely unusable ("bricked") device.
+
+Zero1Local is provided **AS IS** and **AS AVAILABLE**, without warranty of any kind. To the maximum extent permitted by applicable law, **Brad Trammell, Gigabyte Grove, the Zero1Local developers, contributors, copyright holders and distributors are not responsible or liable for hardware damage, data loss, service interruption, loss of use, financial loss, or other damages or losses arising from installation, modification, distribution or use of Zero1Local.**
+
+The device owner is responsible for complete independent backups, moving irreplaceable data off the NAS before installation, confirming target compatibility and deciding whether to install or use the software. See [Warranty and assumption of risk](docs/WARRANTY-AND-RISK.md) and [LICENSE.md](LICENSE.md).
 
 ## License
 
