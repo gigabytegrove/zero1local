@@ -1,10 +1,10 @@
 # Zero1Local Support
 
-This page explains how to get useful support for Zero1Local v1.2 without guessing at appliance state.
+This page explains how to get useful support for Zero1Local v1.2.2 without guessing at appliance state.
 
 ## Before opening an issue
 
-1. Confirm the issue is reproducible on the current v1.2 release.
+1. Confirm the issue is reproducible on the current v1.2.2 release.
 2. Check [Troubleshooting](docs/TROUBLESHOOTING.md) and [Known limitations](docs/KNOWN-LIMITATIONS.md).
 3. Record what you expected, what actually happened and the exact sequence that triggered it.
 4. Collect the smallest evidence set that proves the failure. See [Support evidence](docs/SUPPORT-EVIDENCE.md).
@@ -39,6 +39,12 @@ Redact public IP addresses and personal filenames if they are not needed to repr
 - whether the issue affects both management endpoints (`:80` and `:8088`)
 
 Use the repository's **Bug report** or **Support request** issue template so the evidence is consistent.
+
+## Installation prerequisites
+
+Before installation, back up or move important data off the NAS. For a factory-stock/unrooted IronCow Zero1, obtain the serial by scanning the QR code on the sticker on the bottom of the NAS and run the installer with `-Serial <NAS_SERIAL>`.
+
+If stage 2 reports that direct root SSH is unavailable or shows a connection-refused SSH/banner error, use the factory-stock serial path rather than repeatedly retrying the IP-only command.
 
 ## Installation failures
 
