@@ -47,7 +47,6 @@ Use this index as the documentation home for the current stable release.
 
 ## Development and release
 
-- [Source and build](SOURCE-AND-BUILD.md)
 - [Release verification](RELEASE-VERIFICATION.md)
 
 ## Release and legal
