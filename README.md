@@ -6,7 +6,7 @@
 
 **Take Back Control.** Zero1Local converts the supported IronCow Zero1 NAS into a local-first NAS platform while preserving the appliance's validated Debian 11 / RK3568 hardware foundation.
 
-Current stable release: **v1.2.2**
+Current stable release: **v1.2.3**
 
 Zero1Local is a Gigabyte Grove project originally created by Brad Trammell.
 
@@ -48,6 +48,12 @@ Read [Installation](docs/INSTALLATION.md) before deploying to a factory-stock ap
 | Phone | Manual Android MTP transfer, automatic offload, nicknames, progress/ETA/controls |
 | Network | Hostname, DNS, VLANs, advanced network configuration and optional WireGuard |
 | Recovery | Independent recovery service, Recovery Key, emergency SSH and rollback-safe installation |
+
+## Software Updates in v1.2.3
+
+v1.2.3 introduces a dedicated, consumer-facing **Software Updates** workspace. It clearly separates the version installed on the NAS from the latest version received from GitHub, shows release notes and package readiness, and follows download, verification, installation, restart and rollback states in one place.
+
+Stable discovery now combines GitHub's Latest Release endpoint with release history, and **Check now** bypasses stale HTTP cache/ETag state. See [Software Updates](docs/SOFTWARE-UPDATES.md) for the full behavior and troubleshooting model.
 
 ## Documentation
 

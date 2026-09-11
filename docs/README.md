@@ -54,3 +54,5 @@ Use this index as the documentation home for the current stable release.
 
 - [GitHub update path](UPDATE-PATH.md)
 - [Warranty disclaimer and assumption of risk](WARRANTY-AND-RISK.md)
+
+- [Software Updates](SOFTWARE-UPDATES.md) — update discovery, version status, release notes, progress, rollback and troubleshooting.
