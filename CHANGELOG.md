@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.2.3
+
+- Reworked stable GitHub discovery to combine GitHub Latest Release with release history and no-cache manual checks.
+- Fixed the edge case where a fresh Latest release could be ignored when release history returned HTTP 304.
+- Added a dedicated Software Updates workspace with separate Installed / Latest version status.
+- Added release notes, package readiness, live download/install stages, recent releases, retry/error states, rollback visibility and advanced diagnostics.
+- Completed desktop/tablet/mobile consumer-language and responsive-layout review for the updater.
+- Preserved the locked v1.2 NAS feature baseline and canonical cumulative installer.
+
 ## v1.2
 
 Zero1Local v1.2 is the current cumulative stable baseline.

@@ -1,5 +1,12 @@
 # GitHub Update Path
 
+## v1.2.3 discovery correction
+
+v1.2.3 makes update discovery resilient to a stale GitHub release-list response by combining the GitHub Latest Release endpoint with the normal release-history endpoint. A user-triggered check bypasses saved ETag/cache state. The newest GitHub release seen is recorded independently from the installed version and exposed to the dedicated `/updates` workspace.
+
+Starting with v1.2.3, the exact `Zero1Local-v<version>-production.zip` asset may use the canonical five-file distribution layout because the updater support added during the v1.2.2 transition is retained.
+
+
 Zero1Local uses GitHub Releases from `gigabytegrove/zero1local` as the stable public update source.
 
 ## v1.2.2 transition
