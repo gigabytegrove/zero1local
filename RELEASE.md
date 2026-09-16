@@ -1,11 +1,22 @@
-# Zero1Local vredacted.invalid — WireGuard Backend Qualification Gate
+# Zero1Local vredacted.invalid — Update Monitor Activity & Local-Time UX
 
 **Git tag:** `vredacted.invalid`  
 **GitHub status:** **Pre-release**
 
 ## Release notes
 
-Zero1Local vredacted.invalid is the corrective release candidate built on vredacted.invalid after real-device evidence proved that installed WireGuard userspace tools did not necessarily mean the NAS kernel could create a WireGuard interface.
+Zero1Local vredacted.invalid is a focused corrective release candidate built on vredacted.invalid after live in-place update testing exposed presentation problems in the independent Update Monitor. It preserves the vredacted.invalid WireGuard backend qualification gate and all earlier v1.2.6.x behavior.
+
+### Update Monitor activity and safety UX
+
+- Replaces the temporary `Z1` tile/text treatment with the canonical Zero1Local light/dark logo assets already used by the primary interface.
+- Removes internal implementation copy about read-only/admin-session behavior from the owner-facing monitor.
+- Converts persisted UTC/RFC3339 update timestamps to the browser owner's local time zone, including the local time-zone abbreviation when available.
+- Adds a persistent working badge/spinner, animated determinate progress track, active-step spinner/pulse, and live status-refresh heartbeat.
+- Adds a continuously updating elapsed-time indicator so long-running safety/install/restart steps do not look frozen when the percentage is legitimately unchanged.
+- Strengthens the owner warning not to power off or unplug the NAS while an update is active.
+- Preserves the monitor's independent TCP/8090 status-only design and primary-management restart survivability.
+- Passes the active light/dark theme into the independent monitor when the update is launched from the main UI.
 
 ### Product organization and UI/UX
 
@@ -87,7 +98,7 @@ Zero1Local-vredacted.invalid-production.zip
 SHA-256:
 
 ```text
-f15f10c863e8764263e2e8fd57d5f2fecc726a18ba4508af957aeff0d975dcbf
+e532c69d8c3948874e3958d3cdd69d66ae3eec50a92b1c392069a033c7c60835
 ```
 
 Do **not** upload `Zero1Local-vredacted.invalid-source.tar.gz` or private source/build workspaces to GitHub. Documentation files and branding are committed to the repository as normal files rather than attached as source release artifacts.

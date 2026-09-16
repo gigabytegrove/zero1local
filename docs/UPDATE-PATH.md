@@ -54,7 +54,7 @@ The update runner captures/restores rollback state where supported and verifies 
 
 ## Session-independent progress
 
-The read-only Update Monitor on TCP/8090 reads persisted transaction state independently of the primary management daemon. This allows progress to remain visible across management-service restarts without weakening normal authenticated session behavior.
+The status-only Update Monitor on TCP/8090 reads persisted transaction state independently of the primary management daemon. This allows progress to remain visible across management-service restarts without weakening normal authenticated session behavior. The monitor renders timestamps in the browser owner's local time zone and keeps visible activity/heartbeat indicators moving even when a legitimate long-running stage remains at one percentage.
 
 ## Manual installation
 
