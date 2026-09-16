@@ -1,55 +1,37 @@
-# File Manager
+# Zero1Local File Manager — v1.2.6
 
-## Scope
-
-File Manager is share-first. The normal root is built from live SMB shares; raw `/disk0` and internal application/factory trees are not presented as ordinary owner folders.
-
-## Supported operations
-
-Within a selected share, v1.2 supports:
-
-- browse
-- upload/download
-- New folder
-- copy/move/rename
-- Recycle Bin and restore
-- permanent Recycle Bin deletion / empty bin
-- bounded recursive name search
-- folder properties
-- previews
-- ZIP creation
-- path-traversal-safe ZIP extraction
-- favorites and recent files
-- Office integration
-
-Share roots themselves remain protected from ordinary File Manager mutation.
+Zero1Local File Manager remains confined to authorized shared-folder roots. Browser-visible file IDs and relative paths are not permission boundaries by themselves; every operation is re-authorized server-side against the active user/session and share scope.
 
 ## Images
 
-Supported image previews open in a lightbox. Controls include:
+Images are streamed from the selected shared folder and open in the built-in viewer. Supported controls include:
 
-- zoom in/out
-- reset
-- Ctrl/Cmd + mouse-wheel zoom
-- zoom range from 25% through 800%
-- Open Original
+- Fit and 100% views;
+- zoom from 10%–1000%;
+- mouse-wheel zoom;
+- drag-to-pan;
+- rotation;
+- full screen;
+- natural dimensions;
+- keyboard previous/next navigation; and
+- a thumbnail filmstrip for images in the current folder.
 
-The media path is no longer constrained by the older 8 MB inline-preview ceiling.
+Streamed image previews are not limited by the text-preview memory ceiling.
 
 ## Video
 
-Video uses HTTP range streaming so browser-native formats can seek normally. Where a format is not browser-compatible and VLC/cvlc is installed on the appliance, Zero1Local can use the VLC-compatible fallback path. Availability depends on the appliance's installed media tooling and the actual codec/container.
+Browser-native formats such as common MP4/WebM files stream inline with browser controls and HTTP range/seeking support.
 
-## Recycle Bin
+For formats that are not normally browser-native, Zero1Local can use the installed VLC compatibility path to provide a browser-playable stream. The required VLC components are part of the supported appliance deployment path; owners are not expected to install them manually.
 
-Deletes use the visible Zero1Local Recycle Bin rather than treating removal as an immediate permanent unlink. Share-deletion workflows also use the Recycle Bin before network-sharing metadata is removed.
+## PDFs, text, and code
 
-## Troubleshooting media
+PDFs stream inline. Common text and source-code files open in a syntax-aware viewer with line numbers, wrapping, copying, and a local edit mode.
 
-If a video does not play:
+The in-memory preview ceiling remains for text-oriented preview types such as text/JSON/XML. It does not apply to streamed images, video, or PDF content.
 
-1. confirm the file downloads normally;
-2. test a browser-native format;
-3. check whether VLC/cvlc is installed on the NAS;
-4. inspect `zero1-local.service` logs for the media request;
-5. do not assume every codec can be transcoded by a browser alone.
+Browser edits are downloaded as an edited copy unless a specific File Manager workflow explicitly performs a server-side write. The viewer does not silently overwrite NAS files.
+
+## Safety boundary
+
+The File Manager must never expose absolute host filesystem paths. Path traversal, alternate separators/encoding, symlink escape, stale opaque IDs, and cross-scope object reuse must be rejected by the server-side confinement/authorization path.

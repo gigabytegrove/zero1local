@@ -1,81 +1,79 @@
-# Phone Transfer
+# Zero1Local Phone Transfer — v1.2.6
 
-Zero1Local v1.2 provides two phone workflows:
+Phone Transfer is a first-class workflow under **Sync & Backup → Phone Transfer**. The owner-facing product uses the name **Phone Transfer** consistently; older internal `/api/mobile-offload` identifiers may remain only for compatibility.
 
-1. **Automatic Phone Offload** — a saved rule bound to one physical phone.
-2. **Manual Phone Transfer** — browse a connected phone and select individual files to Copy or Move.
+## Workspace layout
 
-Primary hardware qualification is centered on Android MTP on the IronCow Zero1. Apple support exists in the inherited phone path but should not be represented as hardware-qualified until exercised on real Apple hardware.
+On desktop, Phone Transfer uses an approximately **80/20 split**:
 
-## Android connection mode
+- **Primary pane:** connected phones and saved automatic transfer rules.
+- **Information pane:** Automatic Transfer guidance, Manual Transfer entry points, connection help, and an **Advanced / Feature checks** disclosure.
 
-Android may connect as **Charging phone only**. Zero1Local cannot read MTP media in that mode. Unlock the phone, open its USB notification and select:
+Feature checks and qualification details are not front-and-center owner content.
 
-**Transferring files / Android Auto**
+## Two workflows
 
-## Stable identity and nicknames
+### Automatic Phone Transfer
 
-Automatic routing uses stable physical identity, not transient USB bus/device numbers. For Android, identity is derived from USB VID, PID and hardware USB serial; devices without a stable serial can be used interactively but cannot receive an automatic-on-connect rule.
+An automatic rule is bound to one physical phone identity and a NAS destination. When the saved phone is detected, Zero1Local waits for a transferable phone mode, then starts the rule when it can safely acquire the device.
 
-Nicknames are display metadata only. A nickname such as `Brad's Phone` is associated with the stable device identity while the detected manufacturer/model remains visible underneath it.
+Wrong Android USB mode is a waiting state, not an immediate failed transfer. The task should explain that the phone is connected and waiting for **Transferring files / Android Auto** mode.
 
-## Manual Phone Transfer
+### Manual Phone Transfer
 
-Manual Android USB transfer uses direct libmtp and does not mount the phone through FUSE.
+Manual Transfer lets an authenticated owner browse a currently connected supported phone and select files for **Copy** or **Move** to a NAS folder.
 
-The manual MTP browser/device session has **no elapsed-time or idle timeout**. It remains owned until the user closes/cancels it, the phone disconnects, a real protocol/device failure occurs or the transfer takes ownership and completes.
+The manual browser/session owns the connected phone while active. Automatic rules targeting that same phone wait until the manual session releases it.
 
-There is **no arbitrary Zero1Local manual-selection file-count ceiling**. Very large selections remain subject to real device memory, browser, NAS and protocol constraints, but Zero1Local does not reject them merely because the count exceeds 500 or another invented threshold.
+## Android USB behavior
 
-### Copy integrity
+On the supported Zero1 NAS hardware, Phone Transfer uses the external USB path in host mode for Android MTP. The exact phone must present a transferable MTP interface before file browsing/transfer can begin.
 
-For each file:
+Phone charging alone does not prove that MTP is ready.
 
-1. stream the phone object into a private `.zero1-part-*` destination;
-2. verify expected byte count;
-3. calculate transfer SHA-256;
-4. calculate NAS read-back SHA-256;
-5. atomically promote the destination only after verification succeeds.
+## Device identity
 
-### Move integrity
+Saved rules bind to a stable physical-device identity rather than a temporary USB bus address. Reconnection or reboot must not silently redirect a rule to a different phone.
 
-Move performs the full Copy verification first. The source object is deleted from the phone **only after** the verified NAS destination exists. A failed/unverified Move must leave the source on the phone.
+Owners may assign a friendly name to a known phone without changing its underlying identity.
 
-## Manual vs automatic ownership
+## Destination and shared-folder safety
 
-Manual Transfer has priority. Automatic Phone Offload must never steal, close, expire or reopen the phone underneath a live manual session.
+Phone Transfer destinations are selected through normal Zero1Local storage/shared-folder authorization. A transfer may create a destination folder only inside the permitted destination root.
 
-When an automatic rule is pending for a phone owned by Manual Transfer, the automatic task waits and leaves the manual task/LED state alone.
+The transfer path must not bypass normal storage/share confinement simply because the source is a phone.
 
-## Automatic readiness state machine
+## Copy and Move integrity
 
-A physical connection is not the same as transfer readiness.
+For **Copy**, a destination file is not considered complete until the transfer finishes successfully.
 
-Normal Android sequence:
+For **Move**, the phone source is deleted only after the NAS copy has been verified. If transfer or verification fails, the phone source remains.
 
-1. Zero1Local recognizes that the saved phone is physically connected.
-2. If the phone is still in charging-only/wrong mode, Task Center remains in a non-failing waiting state.
-3. The power/status LED slow-flashes **yellow**.
-4. Zero1Local keeps waiting with **no readiness timeout**.
-5. When MTP/file-transfer mode becomes available, Zero1Local acquires the device and changes the phone overlay to **green**.
-6. Transfer starts; active transfer uses fast-flashing green.
-7. Verified completion uses solid green for five seconds.
+Temporary partial files use a Zero1Local-owned partial-file path/name and are removed or recovered according to the task outcome.
 
-If the phone disconnects before it becomes ready, the pending automatic attempt ends cleanly. A later reconnect starts a new connect transition.
+## Task Center integration
 
-## Progress and control
+Phone Transfer work is server-side and continues independently of the browser session once started. Task Center reports progress, current file, speed/ETA when meaningful, waiting conditions, completion, cancellation, or failure.
 
-Task Center shows:
+Safe controls may include:
 
-- current file
-- files completed / total files
-- bytes transferred / total bytes when known
-- percentage complete / remaining
-- average effective transfer speed
-- dynamic ETA
-- ordered remaining-file queue
-- Pause / Resume
-- Stop after current file
-- Cancel now
+- Pause at a verified file boundary;
+- Resume;
+- Stop after current file; and
+- Cancel now.
 
-See [Task Center](TASK-CENTER.md).
+Controls are shown only when the backend supports them safely for the active job.
+
+## LED behavior
+
+Phone Transfer can temporarily use the power/status LED for waiting, active, completed, or failed states. See [LED Status](LED-STATUS.md). Storage/thermal critical status always has priority.
+
+## Apple support and qualification
+
+Apple/AFC support may exist in the inherited transfer path, but it must not be described as hardware-qualified until exercised successfully on real supported hardware.
+
+Wi-Fi and Bluetooth phone transfer are not documented as supported Phone Transfer transports in v1.2.6.
+
+## Qualification boundary
+
+A build/package pass does not prove a phone workflow. Hardware-specific qualification requires real-device evidence for connection mode, browse/transfer, Copy/Move integrity, reconnect behavior, automatic rules, and reboot persistence on the applicable phone/device path.

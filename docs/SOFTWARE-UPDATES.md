@@ -1,89 +1,74 @@
-# Software Updates
+# Software Updates — v1.2.6
 
-Zero1Local v1.2.4 gives software updates a dedicated owner-facing workspace at `/updates`. It is designed to answer four questions immediately: **what is installed, what is newest, what changed, and what is happening now?**
+Software Updates lives at **System → Updates** (`/updates`). It is designed to answer four owner questions immediately: **what is installed, what is newest, what changed, and what is happening now?**
+
+## Public update source
+
+The official public update source is GitHub Releases for `gigabytegrove/zero1local`.
+
+The updater installs the exact production asset:
+
+```text
+Zero1Local-v<version>-production.zip
+```
+
+The public GitHub repository does not publish Zero1Local implementation source code. Source archives maintained privately/off-GitHub are not part of update discovery or installation.
 
 ## What the page shows
 
 The normal page separates:
 
-- **Installed** — the version currently running on this NAS.
-- **Latest found** — the newest release Zero1Local actually received from the selected GitHub channel.
-- **Last checked** — when the NAS most recently contacted GitHub.
-- **Update available / You’re up to date / Couldn’t check** — a plain-language result instead of internal release-feed terminology.
+- **Installed** — the version currently running;
+- **Latest found** — newest eligible release received from the selected channel;
+- **Last checked** — last GitHub check time; and
+- a plain-language result such as **Update available**, **Up to date**, or **Couldn’t check**.
 
-When an update is available, the page shows the GitHub release notes, exact install package, package size when GitHub reports it, pre-install readiness, rollback protection, and an explicit Install button.
+When an update is available, the page shows release notes, package metadata, readiness information, rollback protection, and an explicit Install action.
 
 ## Discovery behavior
 
-The official repository is `gigabytegrove/zero1local`. A Stable check ignores drafts and prereleases.
+A user-triggered **Check now** bypasses saved response-cache state. The running version and latest release found are tracked separately so the UI never substitutes the installed version for a failed/empty discovery result.
 
-To prevent a newly published stable release from being hidden by stale release-list metadata, v1.2.3 combines:
-
-1. GitHub's **Latest Release** endpoint for the newest published stable release; and
-2. the normal GitHub Releases history endpoint for channel history and beta/alpha selection.
-
-A user-triggered **Check now** bypasses saved ETag/cache state and sends no-cache request headers. Results are merged by tag/version before version selection. The running version and the newest release received from GitHub are retained as separate fields so the UI never substitutes the installed version for the latest version found.
-
-The updater still requires an exact `Zero1Local-v<version>-production.zip` asset before the release can be installed. If a newer release exists without its install package, the page says that the version is published but the package is not attached yet.
-
-## Consumer states
-
-### Checking
-`Looking for updates` while GitHub is being contacted.
-
-### Update available
-Shows the newer version, release notes, install package, readiness checks and Install action.
-
-### Up to date
-Shows the installed version and confirms it is the newest release found for the selected channel.
-
-### Cannot check
-The installed version is left untouched. The page provides **Try again**, Diagnostics, and an Advanced technical-details section.
-
-### Downloading and installing
-The page stays live and reports the current stage and percentage. During package download it reports downloaded bytes when known. Stages use owner language such as `Downloading update`, `Opening update package`, `Verifying package and checking this NAS`, and `Installing and checking the new version`.
-
-The web interface may briefly disconnect while Zero1Local restarts. The updater page automatically attempts to reconnect.
-
-### Failed update
-The page reports that the update did not finish and exposes technical details on demand. The transactional installer keeps or restores the previous working release when rollback is possible.
-
-## Automatic checking
-
-Owners can choose whether Zero1Local checks automatically and how often it checks. Checking for a new version does not install it.
-
-`Ask me first` remains the recommended installation mode. Automatic installation is opt-in and still uses package verification, preflight checks and rollback protection.
+A release is installable only when its exact `Zero1Local-v<version>-production.zip` asset is present.
 
 ## Release channels
 
-- **Stable (recommended):** published stable releases only.
-- **Beta / Release Candidate:** stable plus eligible prereleases.
+- **Stable:** published stable releases only.
+- **Beta / Release Candidate:** stable releases plus eligible prereleases.
 - **Alpha:** all published release classes.
-- Draft GitHub releases are always ignored.
+- Draft releases are ignored.
 
-Release channel selection is kept under **Advanced release channel** so normal owners do not have to understand prerelease terminology.
+Channel selection is an Advanced setting. Checking for an update never installs it by itself.
 
-## Technical diagnostics
+## Installation flow
 
-Normal users do not need HTTP/feed details. The collapsed **Technical update details** section records the official repository, last successful GitHub contact, discovery path, HTTP response, request duration and next automatic check. This information is intended for support and troubleshooting.
+After the owner starts an update, Zero1Local:
 
-## Package safety
+1. downloads the production package;
+2. validates the package layout and checksums;
+3. extracts and validates the runtime payload;
+4. checks appliance/storage/update readiness;
+5. captures rollback state where supported;
+6. validates staged UI/service contracts before activation;
+7. activates the release;
+8. restarts the required services;
+9. verifies management/recovery health; and
+10. cleans up or rolls back according to the transaction outcome.
 
-Dashboard updates use the same release-owned transactional install path as manual upgrades. Canonical five-file production archives have their outer checksum manifest verified before the inner release payload is extracted and the exact payload tree is verified.
+A failed staged validation must stop activation. A failed activation must restore the previous working release where rollback is available.
 
-See also:
+## Session-independent update progress
 
-- [UPDATE-PATH.md](UPDATE-PATH.md)
-- [UPGRADING-AND-ROLLBACK.md](UPGRADING-AND-ROLLBACK.md)
-- [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+The primary management daemon may restart during an update. Zero1Local therefore exposes a separate read-only Update Monitor on TCP/8090. The browser can follow persisted transaction state there while the ordinary authenticated management service restarts.
 
+The monitor does not make installation/rollback decisions and does not expose owner data. It is a progress surface only.
 
-## Linux-native updater in v1.2.4
+## Failure behavior
 
-Online updates now use the managed cache `/var/cache/zero1-local/updates` instead of `/root`. Once a package passes download, archive, checksum and appliance checks, Zero1Local starts a detached Linux updater on the NAS. That updater runs the same transactional `scripts/install.sh` path used by the cumulative manual installer, survives the expected management-service restart, checks the running version and `/healthz`, and then cleans the update workspace.
+A failed update should report the failed stage and preserve the transaction evidence needed for troubleshooting. The previous working release remains or is restored when rollback is available.
 
-PowerShell remains the manual/factory-stock entry point; it is not required by the online updater.
+## Package cleanup
 
-### Update artifact cleanup
+Verified update staging lives outside ordinary owner data. Cleanup must not remove manual deployment staging, owner files, or the persistent rollback/evidence needed by an active transaction.
 
-Zero1Local removes completed/failed transaction workspaces and prunes superseded Zero1Local-owned cache entries. Installing v1.2.4 also removes the legacy `/root/Zero1Local-update-*` archives/directories created by the v1.2.3 updater bug. The separate manual deployment directory `/root/zero1local-deploy-*` is not part of this cleanup policy.
+See [Update Path](UPDATE-PATH.md) for the public release contract.

@@ -1,60 +1,36 @@
-# Zero1Local v1.2 Documentation
+# Zero1Local Documentation
 
-Use this index as the documentation home for the current stable release.
+This folder contains the public documentation for **Zero1Local v1.2.6**.
+
+Zero1Local is local-first NAS software for supported Zero1 NAS hardware. The public GitHub repository is used for documentation, branding, issue/support information, and production release packages. **Implementation source code is maintained privately/off-GitHub and is not published in the public repository.**
 
 ## Start here
 
-- [Getting started](GETTING-STARTED.md)
-- [Installation](INSTALLATION.md)
-- [Hardware support](HARDWARE-SUPPORT.md)
-- [Known limitations](KNOWN-LIMITATIONS.md)
+- [Installation](INSTALLATION.md) — fresh installation, factory bootstrap, upgrades, endpoints, and backup requirements.
+- [Software Updates](SOFTWARE-UPDATES.md) — update channels, package validation, rollback, and update progress.
+- [Update Path](UPDATE-PATH.md) — public GitHub release/update contract.
+- [User Experience](USER-EXPERIENCE.md) — owner-facing terminology and information architecture.
+- [UI / UX](UI-UX.md) — presentation, branding, layout, and notification rules.
+- [File Manager](FILE-MANAGER.md) — previews, media, text/code viewing, and path confinement.
+- [Phone Transfer](PHONE-TRANSFER.md) — automatic and manual phone-to-NAS workflows.
+- [Zero1Connect](ZERO1CONNECT.md) — pairing, access control, authentication, and managed remote access.
+- [Task Center](TASK-CENTER.md) — background jobs, progress, transfer controls, and update tasks.
+- [LED Status](LED-STATUS.md) — supported chassis LED states and Phone Transfer overlays.
+- [Warranty and Risk](WARRANTY-AND-RISK.md) — installation and data-loss risk notice.
+- [Public Release Gate](PUBLIC-RELEASE-GATE.md) — qualification and documentation requirements for public builds.
+- [Documentation Provenance](DOCUMENTATION-PROVENANCE.md) — how the public documentation is produced and reviewed.
 
-## Files and storage
+## Current product organization
 
-- [Storage and RAID](STORAGE-AND-RAID.md)
-- [Files, users and shares](FILES-USERS-AND-SHARES.md)
-- [SMB and NFS](SMB-AND-NFS.md)
-- [File Manager](FILE-MANAGER.md)
+| Product area | Owner-facing purpose |
+| --- | --- |
+| Home | Appliance status, Action Center, tasks, and notifications |
+| Files & Sharing | File Manager, shared folders, users, groups, and secure links |
+| Storage | Drives, RAID / Drive Protection, USB storage, and Analytics |
+| Sync & Backup | Synchronization, **Phone Transfer**, restore, backups, and snapshots |
+| Zero1Connect | Pair phones, assign mobile access, and manage automatic private remote connectivity |
+| Apps | App catalog, containers, and **Docker Compose** |
+| Connectivity | Network, **VLANs**, advanced networking, remote access, and desktop integration |
+| System | Updates, System & Power, Access & API, Office, Security, Administrators, Automation, Hardware, Services, Advanced Stats, Logs, and Recovery |
 
-## Phone and tasks
-
-- [Phone Transfer](PHONE-TRANSFER.md)
-- [Task Center](TASK-CENTER.md)
-- [LED status](LED-STATUS.md)
-
-## Apps and protection
-
-- [Docker and Apps](DOCKER-AND-APPS.md)
-- [Backup, sync and replication](BACKUP-SYNC-AND-REPLICATION.md)
-- [Office integration](OFFICE.md)
-
-## Connectivity
-
-- [Networking, DNS and VLANs](NETWORKING.md)
-- [Remote access](REMOTE-ACCESS.md)
-- [Notifications](NOTIFICATIONS.md)
-
-## Administration and recovery
-
-- [Architecture and services](ARCHITECTURE.md)
-- [Security model](SECURITY-MODEL.md)
-- [Upgrading and rollback](UPGRADING-AND-ROLLBACK.md)
-- [Recovery](RECOVERY.md)
-- [Ports and services](PORTS-AND-SERVICES.md)
-- [Troubleshooting](TROUBLESHOOTING.md)
-- [Logging and maintenance](LOGGING-AND-MAINTENANCE.md)
-- [Support evidence](SUPPORT-EVIDENCE.md)
-- [FAQ](FAQ.md)
-
-## Development and release
-
-- [Distribution model](DISTRIBUTION.md)
-- [Release verification](RELEASE-VERIFICATION.md)
-- [Documentation provenance](DOCUMENTATION-PROVENANCE.md)
-
-## Release and legal
-
-- [GitHub update path](UPDATE-PATH.md)
-- [Warranty disclaimer and assumption of risk](WARRANTY-AND-RISK.md)
-
-- [Software Updates](SOFTWARE-UPDATES.md) — update discovery, version status, release notes, progress, rollback and troubleshooting.
+Developer/qualification information belongs under **Advanced**, **Feature checks**, logs, or support diagnostics rather than normal owner workflows.

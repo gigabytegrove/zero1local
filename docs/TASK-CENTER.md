@@ -1,65 +1,54 @@
-# Task Center
+# Zero1Local Task Center — v1.2.6
 
-Task Center is the owner-facing view for long-running work.
+Task Center is the owner-facing place for background work that can outlive the current page or browser session.
 
-## Mobile transfer metrics
+## Task summaries
 
-A running Manual Phone Transfer can show:
+Normal task rows should answer:
 
-- current file
-- completed / total files
-- transferred / total bytes
-- overall percentage complete
-- percentage remaining
-- current-file progress
-- ordered remaining-file queue
-- average effective transfer speed
-- estimated time remaining
+- what is running;
+- current state;
+- progress when measurable;
+- current item/stage when useful;
+- whether owner action is required; and
+- final outcome.
 
-The queue preserves the original selection order. The UI may paginate the displayed queue for browser performance; this is **not** a transfer-count limit.
+Developer diagnostics and feature checks belong under Advanced details rather than the primary task row.
 
-## Average speed
+## Transfer speed and ETA
 
-Average speed is an end-to-end effective throughput measurement: transferred bytes divided by active transfer time.
+Phone Transfer and other byte-oriented jobs may show transfer speed and approximate ETA when enough progress exists to make the estimate meaningful. ETA remains approximate because phone storage, USB behavior, file sizes, verification, and destination storage can change throughput during a run.
 
-- deliberate Pause time is excluded;
-- transfer/storage/verification overhead is included;
-- this makes the number closer to the time the owner actually experiences than a raw USB-link speed claim.
+Paused tasks show **Paused** rather than an elapsed-time ETA.
 
-## ETA
+## Automatic Phone Transfer waiting state
 
-ETA is byte-based, not file-count based. It uses known remaining bytes and a smoothed combination of recent throughput and whole-transfer average. Early in a transfer it may display **Calculating…** until enough real progress exists.
+A saved Phone Transfer rule may create a running/waiting task before file transfer begins. Examples:
 
-The estimate should settle as more bytes are transferred. It is still an estimate: a queue that moves from small photos into very large videos, storage contention or a slower phone can change the effective rate.
+- **Phone connected · waiting for Transferring files / Android Auto mode**;
+- **Phone ready · waiting for Manual Phone Transfer to finish**; and
+- **Phone ready · starting automatic transfer**.
 
-## Controls
+Wrong USB mode is not an immediate transfer failure. Disconnecting before transfer begins ends the pending attempt cleanly; reconnecting later may retrigger the saved rule.
 
-### Pause
+## Phone Transfer controls
 
-Pause takes effect at the next safe verified file boundary. Zero1Local does not intentionally freeze a file halfway through destination verification.
+When supported safely by the active backend job, Phone Transfer may expose:
 
-### Resume
+- **Pause** — pause at the next verified file boundary;
+- **Resume** — continue the same transfer job;
+- **Stop after current file** — finish/verify the current file, then stop; and
+- **Cancel now** — cancel the active file as safely as possible and clean its partial destination.
 
-Resume continues the same server-side task/session and remaining queue.
+For Move operations, source deletion occurs only after destination verification. A cancellation before verified deletion must leave the source intact.
 
-### Stop after current file
+## Task outcomes
 
-The current file is allowed to finish safely; the task stops before the next selected file.
+Task states may include `running`, `pause_pending`, `paused`, `stop_pending`, `canceling`, `completed`, `stopped`, `cancelled`, or `failed`. Stopped/cancelled tasks are not failures. A failed task retains its actual progress instead of being rendered as 100% complete.
 
-### Cancel now
+## Software Update tasks
 
-Cancel aborts the active file, removes its private `.zero1-part-*` destination and leaves already-verified completed files intact. For Move, an unverified source file is not deleted from the phone.
-
-## Browser sessions
-
-Once a transfer is a server-side running task, browser/login session expiration or closing the page does not terminate it. Returning to Task Center after authentication shows the current backend task state.
-
-
-## Software update tasks
-
-Software-update tasks use their own detail layout. They do not display mobile-transfer concepts such as remaining files, current-file speed, transfer ETA, Pause, or Stop-after-current-file.
-
-The update timeline is:
+Software Update tasks use update-specific stages rather than file-transfer terminology:
 
 1. Downloading update
 2. Opening update package
@@ -69,4 +58,4 @@ The update timeline is:
 6. Restarting Zero1Local
 7. Verifying and cleaning up
 
-The transaction state is persisted independently of the management process so Task Center can rehydrate the same software-update task after Zero1Local restarts.
+Update progress persists across the expected management-service restart and is available through the session-independent Update Monitor.
