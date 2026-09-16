@@ -27,6 +27,7 @@ Zero1Local-v<version>-production.zip
 - A reorganized owner-facing UI with fewer stacked cards, fewer redundant cross-links, and implementation checks moved behind **Advanced** surfaces.
 - **Phone Transfer** as a dedicated Sync & Backup workflow for automatic rules and manual phone-to-NAS transfers.
 - **Zero1Connect** as its own first-class application area using native shared-folder permissions, root master administration, and automatic managed WireGuard provisioning.
+- WireGuard/Zero1Connect capability advertising is now gated by a live create/configure/activate/verify backend probe; unsupported kernels report remote access unavailable instead of claiming support.
 - Storage maintenance fixes, including RAID consistency-check control and integrated drive replacement.
 - Expanded Storage Analytics with file-type counts/storage visualization, capacity trend, share usage, largest files, and duplicate candidates.
 - Consistent terminology including **Docker Compose**, **VLANs**, and **Advanced Stats**.

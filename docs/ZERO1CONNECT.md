@@ -53,6 +53,8 @@ Pairing offers an owner-facing choice:
 
 The pairing intent is stored with the single-use pairing request. A current Android client may also explicitly confirm or change the choice in `POST /pair/complete`. Older compatible clients that omit the field inherit the NAS-side pairing choice. If neither side supplies a choice, automatic remote access remains the compatibility default.
 
+WireGuard support is capability-gated by the runtime, not by package presence alone. Zero1Local advertises `features.wireguard=true` and `managed_remote_access=true` only after a temporary nonpersistent interface can be created, configured with a private key, activated, verified, and removed successfully. If that backend test fails, the dedicated provisioning path returns HTTP 503 with `wireguard_backend_unavailable`; LAN pairing remains valid.
+
 When remote access is enabled, the user is **not** expected to configure WireGuard manually. Zero1Local and Zero1Connect own the tunnel lifecycle. Zero1Local can:
 
 1. install required `wireguard-tools` and `iproute2` packages when missing;
