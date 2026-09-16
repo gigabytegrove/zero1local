@@ -1,6 +1,3 @@
-# Zero1Local License
-
-```text
 Zero1Local Free Attribution License
 Version 1.0
 
@@ -64,5 +61,4 @@ following conditions:
    SOFTWARE.
 
 Credits do not alter the license terms above. Public documentation accompanying Zero1Local was generated with assistance from ChatGPT by OpenAI after project planning and implementation documentation was supplied to it. AI was not used in the design or implementation of the Zero1Local software.
-```
 

@@ -1,120 +1,78 @@
 <p align="center">
-  <img src="docs/assets/zero1-local-logo.png" alt="Zero1Local" width="520">
+  <img src="web/assets/zero1-local-logo-light.png" alt="Zero1Local — Local-First NAS Software" width="520">
 </p>
 
 # Zero1Local
 
-**Take Back Control.** Zero1Local converts the supported IronCow Zero1 NAS into a local-first NAS platform while preserving the appliance's validated Debian 11 / RK3568 hardware foundation.
+**Local-first NAS software for supported Zero1 NAS hardware.**
 
-Current stable release: **v1.2.4**
+Zero1Local replaces the original appliance management experience with an owner-controlled NAS interface while preserving the supported Debian 11 / ARM64 platform and established storage layout. Core NAS management is designed to remain usable locally without requiring a vendor cloud account.
 
-Zero1Local is a Gigabyte Grove project originally created by Brad Trammell.
+> **v1.2.6 is a pre-release.** It is intended for qualification on the project test appliance before wider deployment.
 
-## What Zero1Local does
+## What v1.2.6 focuses on
 
-Zero1Local replaces the cloud-dependent appliance-management experience with a locally managed NAS interface and services. The v1.2 feature baseline includes storage and RAID management, SMB/NFS sharing, users and groups, File Manager, Docker/apps, backup/synchronization, networking, notifications, recovery, phone transfer and system administration.
+- A reorganized owner-facing UI with fewer stacked cards, fewer redundant cross-links, and feature checks moved behind **Advanced** surfaces.
+- **Phone Transfer** as a dedicated Sync & Backup workflow for automatic rules and manual phone-to-NAS transfers.
+- **Zero1Connect** as its own first-class application with paired-device access assignments and automatic managed WireGuard provisioning.
+- Storage maintenance fixes, including RAID consistency-check control and integrated drive replacement.
+- Expanded Storage Analytics with file-type counts, file-type storage visualization, capacity trend, share usage, largest files, and duplicate candidates.
+- Consistent terminology including **Docker Compose** and **VLANs**.
+- System organization that keeps Office, Access & API, security, administrators, automation, advanced stats, logs, and recovery in clear ownership boundaries.
+- Theme-correct Zero1Local branding using the supplied transparent light/dark logo assets.
 
-The release is cumulative: you do not install a chain of older Zero1Local versions first.
+## Main product areas
 
-The public GitHub repository is a production distribution/support repository. Compiled runtime artifacts are published; the private application source and developer build/test tree are not. See [Distribution model](docs/DISTRIBUTION.md).
-
-## Before you install
-
-**Back up or move all important data off the NAS before installing Zero1Local.** Zero1Local may rewrite or reinitialize disk/storage structures for the supported layout and performance model. Existing data can be lost. A copy that exists only on the NAS is not an independent backup.
-
-## Quick install
-
-For a Zero1Local appliance or an already-rooted supported IronCow Zero1:
-
-```powershell
-.\Install-Zero1Local.ps1 <NAS-IP>
-```
-
-For a supported factory-stock IronCow Zero1 requiring the root bootstrap, scan the QR code on the product sticker on the **bottom of the NAS** to obtain the serial number, then run:
-
-```powershell
-.\Install-Zero1Local.ps1 <NAS-IP> -Serial '<NAS_SERIAL>'
-```
-
-Read [Installation](docs/INSTALLATION.md) before deploying to a factory-stock appliance.
-
-## Core areas
-
-| Area | v1.2 capability |
+| Area | Purpose |
 | --- | --- |
-| Storage | Main Storage identity protection, RAID adoption/management, guarded `/disk0`, disk health and analytics |
-| Files | SMB, userspace NFSv3, FTP/Time Machine where supported, File Manager, Recycle Bin, secure links |
-| Users | Users, groups, Samba access, account policy and delegated administrators |
-| Apps | Existing Docker engine adoption, container management, Compose and App Catalog |
-| Protection | Backup, restore, synchronization, replication, cloud/off-site workflows |
-| Phone | Manual Android MTP transfer, automatic offload, nicknames, progress/ETA/controls |
-| Network | Hostname, DNS, VLANs, advanced network configuration and optional WireGuard |
-| Recovery | Independent recovery service, Recovery Key, emergency SSH and rollback-safe installation |
+| Home | Appliance status, current actions, tasks, and notifications |
+| Files & Sharing | File Manager, shared folders, users, groups, and secure links |
+| Storage | Drives, RAID, USB storage, and analytics |
+| Sync & Backup | Synchronization, Phone Transfer, restore, backups, and snapshots |
+| Zero1Connect | Pairing, device access control, and managed remote connectivity |
+| Apps | App catalog, containers, and Docker Compose |
+| Connectivity | Network, VLANs, advanced networking, remote access, and desktop integration |
+| System | Updates, power, Access & API, Office, security, administrators, automation, hardware, advanced stats, logs, and recovery |
 
-## Software Updates in v1.2.4
+## Zero1Connect
 
-v1.2.4 completes the Linux-native online update path. Update downloads are staged under `/var/cache/zero1-local/updates`, verified on the NAS, and handed to a detached Linux updater that uses the same rollback-safe transactional installer as manual deployment. The updater persists status through the expected management-service restart and removes its managed package/extraction workspace on success or failure.
+Zero1Connect is developed as a separate Android client. Zero1Local provides the server-side `/api/connect/v1` integration, pairing, per-device access scopes, authentication, and managed WireGuard provisioning. A successful pairing is intended to configure the phone's private remote-access path automatically when the appliance can establish a usable endpoint.
 
-Task Center now presents software updates as software updates: download, package opening, verification, appliance checks, installation, restart, and final verification/cleanup. It no longer reuses phone-transfer/file-copy fields for update work. See [Software Updates](docs/SOFTWARE-UPDATES.md) and [GitHub Update Path](docs/UPDATE-PATH.md).
+Each paired phone has an independent identity. Mobile access can be restricted to specific shared folders or folder roots and is always further constrained by the bound Zero1Local user's underlying permissions.
+
+## Phone Transfer
+
+Phone Transfer lives under **Sync & Backup**. It supports automatic device-specific transfer rules and manual transfer from connected phones. The product UI uses one consistent name; historical internal API names may remain for compatibility.
+
+## Recovery and notifications
+
+Recovery verification is optional. When disabled, it does not lower protection scoring or create verification reminders. A manual verification attempt with no usable source returns:
+
+```text
+No recovery source was available to verify.
+```
+
+Owner-facing advisory notifications can be dismissed, snoozed, or ignored so repeated recommendations do not continue to occupy Action Center after the owner has made a decision.
+
+## Installation and updates
+
+Official production packages contain a compiled ARM64 runtime and the established Windows bootstrap installer. In-place updates use Zero1Local's staged validation and rollback path.
+
+The accepted Windows installer from v1.2.4.27 remains authoritative and byte-for-byte unchanged unless the project owner explicitly changes it.
+
+For the current release package, see [`RELEASE.md`](RELEASE.md).
 
 ## Documentation
 
-The repository documentation is organized for owners, installers and support:
+- [`CHANGELOG.md`](CHANGELOG.md) — release changes
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — contribution expectations
+- [`SECURITY.md`](SECURITY.md) — security reporting and security boundaries
+- [`SUPPORT.md`](SUPPORT.md) — support and troubleshooting information
+- [`LICENSE.md`](LICENSE.md) — Zero1Local Free Attribution License v1.0
+- [`docs/`](docs/) — product and implementation documentation
 
-- [Documentation home](docs/README.md)
-- [Getting started](docs/GETTING-STARTED.md)
-- [Installation](docs/INSTALLATION.md)
-- [Hardware support](docs/HARDWARE-SUPPORT.md)
-- [Architecture and services](docs/ARCHITECTURE.md)
-- [Storage and RAID](docs/STORAGE-AND-RAID.md)
-- [Files, users and shares](docs/FILES-USERS-AND-SHARES.md)
-- [SMB and NFS](docs/SMB-AND-NFS.md)
-- [File Manager](docs/FILE-MANAGER.md)
-- [Phone Transfer](docs/PHONE-TRANSFER.md)
-- [Task Center](docs/TASK-CENTER.md)
-- [Docker and Apps](docs/DOCKER-AND-APPS.md)
-- [Backup, sync and replication](docs/BACKUP-SYNC-AND-REPLICATION.md)
-- [Networking](docs/NETWORKING.md)
-- [Remote access](docs/REMOTE-ACCESS.md)
-- [Office integration](docs/OFFICE.md)
-- [Notifications](docs/NOTIFICATIONS.md)
-- [Security model](docs/SECURITY-MODEL.md)
-- [Recovery](docs/RECOVERY.md)
-- [LED status](docs/LED-STATUS.md)
-- [Troubleshooting](docs/TROUBLESHOOTING.md)
-- [Evidence collection](docs/SUPPORT-EVIDENCE.md)
-- [Known limitations](docs/KNOWN-LIMITATIONS.md)
-- [FAQ](docs/FAQ.md)
-- [Distribution model](docs/DISTRIBUTION.md)
-- [Documentation provenance](docs/DOCUMENTATION-PROVENANCE.md)
+## Project attribution
 
-## Important design principles
+Zero1Local originally created by **Brad Trammell**, a **Gigabyte Grove** project.
 
-- **Local first.** Core NAS operation does not require a Zero1Local cloud account.
-- **Evidence first.** Zero1Local should fail closed when storage, identity or recovery state cannot be proven.
-- **Owner data first.** Existing data is not assumed disposable.
-- **Rollback safe.** Installation snapshots state and rolls back when final verification fails.
-- **No kernel replacement.** v1.2 preserves the validated vendor kernel/bootloader/DTB.
-- **Recovery independent of the main UI.** The Recovery Environment listens separately on TCP/8089.
-
-## Support
-
-Before opening an issue, read [SUPPORT.md](SUPPORT.md) and [Troubleshooting](docs/TROUBLESHOOTING.md). Never publish passwords, recovery keys, OAuth credentials, GitHub tokens or private SSH keys in an issue.
-
-## Documentation Provenance
-
-Zero1Local public documentation was generated with assistance from **OpenAI ChatGPT** after project planning and implementation documentation was supplied to it. **AI was not used in the design or implementation of the Zero1Local software.** Documentation is reviewed against the actual production distribution artifacts before publication.
-
-See [Documentation provenance](docs/DOCUMENTATION-PROVENANCE.md).
-
-## Warranty Disclaimer and Assumption of Risk
-
-Zero1Local modifies software on the target NAS and is used at the device owner's risk. Potential consequences include data loss, service interruption, failed boot, filesystem or hardware damage, and a partially or completely unusable ("bricked") device.
-
-Zero1Local is provided **AS IS** and **AS AVAILABLE**, without warranty of any kind. To the maximum extent permitted by applicable law, **Brad Trammell, Gigabyte Grove, the Zero1Local developers, contributors, copyright holders and distributors are not responsible or liable for hardware damage, data loss, service interruption, loss of use, financial loss, or other damages or losses arising from installation, modification, distribution or use of Zero1Local.**
-
-The device owner is responsible for complete independent backups, moving irreplaceable data off the NAS before installation, confirming target compatibility and deciding whether to install or use the software. See [Warranty and assumption of risk](docs/WARRANTY-AND-RISK.md) and [LICENSE.md](LICENSE.md).
-
-## License
-
-See [LICENSE.md](LICENSE.md). Attribution to Brad Trammell and Gigabyte Grove must be retained as specified by the license.
+See [`LICENSE.md`](LICENSE.md) for the complete license terms and required attribution.
