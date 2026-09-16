@@ -1,26 +1,41 @@
 # Security Policy
 
-## Supported release
+Zero1Local manages a storage appliance and should be treated as security-sensitive infrastructure.
 
-Security fixes are targeted at the current stable Zero1Local release. At the time of this documentation set, that release is **v1.2.4**.
+## Supported security posture
+
+Zero1Local is designed primarily for trusted local networks and private VPN access. Plain HTTP is acceptable on a trusted LAN or inside an encrypted WireGuard tunnel. HTTPS should use certificates trusted by the client operating system/browser; the project does not require trust-all TLS behavior or mandatory self-signed certificates.
+
+Do not expose SMB, NFS, SSH, the recovery service, or the raw NAS management plane directly to the public Internet. When intentionally publishing a web application, use an appropriate reverse proxy and restrict trusted source networks where practical.
 
 ## Reporting a vulnerability
 
-Do not disclose a suspected vulnerability in a public issue while it is still exploitable. Prefer a private GitHub Security Advisory for the repository when available. If the repository does not expose private advisory reporting, contact the project maintainer privately through the maintainer's GitHub contact path before publishing technical exploit details.
+Please do not publish exploit details, credentials, tokens, private keys, or a working attack path in a public issue.
 
-Include:
+Use GitHub private vulnerability reporting / a private security advisory when it is available for the repository. If that feature is not available, contact the project maintainer through a private channel associated with the repository before disclosing technical details publicly.
 
-- affected Zero1Local version
-- affected hardware/platform
-- exact preconditions
-- impact
-- minimal reproduction steps
-- whether the issue is reachable only from the private LAN or from an explicitly configured remote-access path
+A useful report includes:
 
-Do not send real credentials, Recovery Keys, private keys, OAuth tokens or production user data unless a private channel has been explicitly established.
+- affected Zero1Local version;
+- affected route/service/component;
+- exact reproduction steps;
+- expected vs. actual behavior;
+- security impact;
+- logs with passwords, tokens, private keys, recovery keys, and personal file paths removed;
+- whether the behavior was reproduced on real Zero1 NAS hardware or only in a development environment.
 
-## Security model notes
+## Security-sensitive areas
 
-Zero1Local is local-first. v1.2 uses a strict firewall model, a separate Recovery Environment on TCP/8089 and a separate public-key-only emergency SSH service on TCP/22222 restricted to RFC1918/private-LAN and IPv6 link-local source ranges. These recovery paths are intentional safety boundaries, not substitutes for normal administration.
+Extra care is required for changes involving:
 
-The validated IronCow target retains the vendor Debian 11 base and kernel 5.10.198. Debian 11 reached the end of Debian LTS on 2026-08-31. Zero1Local can repair Bullseye package-source reachability for required dependencies, but doing so does not restore upstream security support for the vendor operating-system base. Owners should treat that platform constraint as part of their risk model and avoid exposing NAS management or file-sharing services directly to the public Internet.
+- authentication, sessions, 2FA, administrator delegation, SSH, and API keys;
+- Zero1Connect pairing, device authentication, access scopes, and WireGuard;
+- filesystem/path confinement, share ACLs, uploads/downloads, and file IDs;
+- update signing/validation, staged activation, rollback, and recovery;
+- firewall/network exposure;
+- Docker/app isolation and host bind mounts;
+- backup/restore, RAID, and destructive storage actions.
+
+## Secrets
+
+Never include passwords, bearer tokens, pairing tokens, private keys, recovery keys, API secrets, or full secret-bearing configuration files in public bug reports or support bundles.
