@@ -1,11 +1,11 @@
-# Zero1Local v1.2.6.1 — Zero1Connect Integration Corrections
+# Zero1Local v1.2.6.2 — WireGuard Backend Qualification Gate
 
-**Git tag:** `v1.2.6.1`  
+**Git tag:** `v1.2.6.2`  
 **GitHub status:** **Pre-release**
 
 ## Release notes
 
-Zero1Local v1.2.6.1 is a corrective pre-release built on v1.2.6, focused on Zero1Connect administration, native file authorization, automatic remote-access setup, and presentation fixes discovered during live appliance testing.
+Zero1Local v1.2.6.2 is the corrective release candidate built on v1.2.6.1 after real-device evidence proved that installed WireGuard userspace tools did not necessarily mean the NAS kernel could create a WireGuard interface.
 
 ### Product organization and UI/UX
 
@@ -39,6 +39,17 @@ Zero1Local v1.2.6.1 is a corrective pre-release built on v1.2.6, focused on Zero
 - Reworked the page into an approximately 80/20 desktop workspace: phones/rules on the left, guidance/manual-transfer information on the right.
 - Moved Phone Transfer feature checks behind Advanced disclosure.
 
+### WireGuard backend qualification correction
+
+- Replaces binary-presence detection with a live temporary backend probe that creates a WireGuard interface, configures a private key, brings the interface up, verifies it through `wg show`, and removes it.
+- `features.wireguard` and `managed_remote_access` are true only when that backend probe succeeds.
+- The real `.145` failure signature `Error: Unknown device type` is covered by regression tests and must result in the feature being unavailable rather than falsely advertised.
+- Managed WireGuard provisioning returns `wireguard_backend_unavailable`; the dedicated device provisioning path returns HTTP 503 for this condition.
+- LAN pairing remains usable even if remote setup cannot be completed.
+- Manual Remote Access enable and managed retry also return structured HTTP 503 when the backend is unavailable.
+- `applyWireGuard` now fails on address-assignment errors, reports activation failures with context, and cleans up newly-created partial interfaces.
+- The production qualifier independently probes the backend and verifies that Connect advertises the same truth. Strict qualification also requires a usable backend before managed off-LAN access can be promoted.
+
 ### Zero1Connect corrections
 
 - Treats authenticated `root` as the master appliance administrator throughout Zero1Connect.
@@ -57,7 +68,7 @@ Zero1Local v1.2.6.1 is a corrective pre-release built on v1.2.6, focused on Zero
 
 ## Qualification status
 
-This remains a **pre-release**. The qualification target is the Zero1Local test appliance. Do not treat v1.2.6.1 as production-qualified until the current server release and Zero1Connect Android client have completed real-device testing.
+This remains a **pre-release**. The qualification target is the Zero1Local test appliance. Do not treat v1.2.6.2 as production-qualified until the current server release and Zero1Connect Android client have completed real-device testing.
 
 The accepted v1.2.4.27 Windows installer remains byte-for-byte unchanged.
 
@@ -67,16 +78,16 @@ The public repository contains documentation/branding and production release mat
 
 ### GitHub Release asset
 
-Upload this installation asset to the v1.2.6.1 GitHub Release:
+Upload this installation asset to the v1.2.6.2 GitHub Release:
 
 ```text
-Zero1Local-v1.2.6.1-production.zip
+Zero1Local-v1.2.6.2-production.zip
 ```
 
 SHA-256:
 
 ```text
-9d9186a27bcd47a4bd9bf9c5c3c0792d6a63bae804927840f27db511908e6075
+f15f10c863e8764263e2e8fd57d5f2fecc726a18ba4508af957aeff0d975dcbf
 ```
 
-Do **not** upload `Zero1Local-v1.2.6.1-source.tar.gz` or private source/build workspaces to GitHub. Documentation files and branding are committed to the repository as normal files rather than attached as source release artifacts.
+Do **not** upload `Zero1Local-v1.2.6.2-source.tar.gz` or private source/build workspaces to GitHub. Documentation files and branding are committed to the repository as normal files rather than attached as source release artifacts.

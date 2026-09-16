@@ -1,4 +1,4 @@
-# Zero1Local UI / UX design system — v1.2.6.1
+# Zero1Local UI / UX design system — v1.2.6.2
 
 This document records the owner-facing presentation rules for Zero1Local.
 

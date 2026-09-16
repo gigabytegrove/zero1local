@@ -1,5 +1,30 @@
 # Zero1Local Changelog
 
+## v1.2.6.2 — Pre-Release
+
+v1.2.6.2 closes the WireGuard backend truth gap found during v1.2.6.1 qualification. Installed `wg` and `ip` commands are no longer treated as proof that the NAS can actually create and operate a WireGuard interface.
+
+### WireGuard backend readiness
+
+- Adds a live temporary backend probe: generate a temporary key, create a WireGuard interface, apply the key, activate the interface, verify it with `wg show`, and remove it.
+- Caches normal capability probe results briefly while forcing a fresh probe for provisioning/retry operations.
+- Gates Zero1Connect `features.wireguard` and `managed_remote_access` on the live backend result.
+- Preserves the real `Error: Unknown device type` failure evidence in diagnostics and regression coverage.
+- Returns structured `wireguard_backend_unavailable` failures and HTTP 503 on the dedicated provisioning path when the kernel/backend cannot create or configure the interface.
+- Keeps LAN pairing usable when automatic remote access cannot be established.
+
+### Runtime hardening
+
+- `applyWireGuard` now checks address assignment instead of silently ignoring it.
+- Newly-created WireGuard interfaces are removed when configuration or activation fails, preventing partial runtime state.
+- Browser API error handling now displays structured backend error messages correctly.
+
+### Production qualification
+
+- Adds an independent real-hardware WireGuard backend probe to `scripts/qualify-production.sh`.
+- Qualification compares the independent probe result with `/api/connect/v1/capabilities` and fails on any truth mismatch.
+- Strict production qualification also fails when no usable WireGuard backend exists, because managed off-LAN Zero1Connect cannot be end-to-end qualified on that runtime.
+
 ## v1.2.6.1 — Pre-Release
 
 v1.2.6.1 is a corrective pre-release based on live v1.2.6 appliance testing. It keeps the v1.2.6 product reorganization while correcting Zero1Connect authorization, pairing/remote-access behavior, and presentation.

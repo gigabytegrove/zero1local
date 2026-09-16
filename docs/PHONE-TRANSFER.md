@@ -1,4 +1,4 @@
-# Zero1Local Phone Transfer — v1.2.6.1
+# Zero1Local Phone Transfer — v1.2.6.2
 
 Phone Transfer is a first-class workflow under **Sync & Backup → Phone Transfer**. The owner-facing product uses the name **Phone Transfer** consistently; older internal `/api/mobile-offload` identifiers may remain only for compatibility.
 
@@ -72,7 +72,7 @@ Phone Transfer can temporarily use the power/status LED for waiting, active, com
 
 Apple/AFC support may exist in the inherited transfer path, but it must not be described as hardware-qualified until exercised successfully on real supported hardware.
 
-Wi-Fi and Bluetooth phone transfer are not documented as supported Phone Transfer transports in v1.2.6.1.
+Wi-Fi and Bluetooth phone transfer are not documented as supported Phone Transfer transports in v1.2.6.2.
 
 ## Qualification boundary
 
