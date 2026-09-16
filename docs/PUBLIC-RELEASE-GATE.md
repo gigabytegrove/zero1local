@@ -15,7 +15,7 @@ Every public release should document, as applicable:
 - Main Storage / RAID safeguards and destructive-operation warnings;
 - SMB/NFS users, shares, permissions, and account behavior;
 - Phone Transfer behavior and its hardware-qualification boundary;
-- Zero1Connect pairing, device ACL/access scopes, and managed remote-access behavior;
+- Zero1Connect pairing, native shared-folder ACL inheritance, root master behavior, and managed remote-access behavior;
 - networking, DNS, VLANs, firewall, and remote-access boundaries;
 - Docker/App Catalog, Docker Compose, and Office integration;
 - staged updates, rollback, Recovery, and session-independent update progress;
@@ -27,10 +27,10 @@ Public documentation follows Zero1Local's evidence-first rule. Do not claim univ
 
 ## GitHub publication policy
 
-For v1.2.6, the GitHub Release asset intended for installation is:
+For v1.2.6.1, the GitHub Release asset intended for installation is:
 
 ```text
-Zero1Local-v1.2.6-production.zip
+Zero1Local-v1.2.6.1-production.zip
 ```
 
 Repository documentation and branding are committed as normal GitHub files. Local/private source archives, build workspaces, source manifests, and internal validation artifacts are **not** GitHub release assets.
@@ -57,7 +57,7 @@ Package/install success alone does not qualify hardware-specific Phone Transfer 
 
 ## Zero1Connect evidence boundary
 
-Package/install success alone does not qualify the Android integration. Real-device testing is required for QR pairing, one-time token use, P-256 challenge/session authentication, per-device access scopes, file operations, resumable transfers, managed WireGuard provisioning, off-LAN connectivity, revocation, multiple phones, and reboot/update persistence.
+Package/install success alone does not qualify the Android integration. Real-device testing is required for QR pairing, LAN-only and automatic-remote choices, one-time token use, P-256 challenge/session authentication, root master access, native shared-folder ACL inheritance, file operations, resumable transfers, managed WireGuard provisioning, off-LAN connectivity, revocation, multiple phones, and reboot/update persistence.
 
 ## Factory-bootstrap evidence boundary
 

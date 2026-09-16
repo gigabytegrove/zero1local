@@ -1,4 +1,4 @@
-# Zero1Local chassis LED status reference — v1.2.6
+# Zero1Local chassis LED status reference — v1.2.6.1
 
 ## Proven hardware capability
 

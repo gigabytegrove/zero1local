@@ -1,6 +1,6 @@
 # Zero1Local Documentation
 
-This folder contains the public documentation for **Zero1Local v1.2.6**.
+This folder contains the public documentation for **Zero1Local v1.2.6.1**.
 
 Zero1Local is local-first NAS software for supported Zero1 NAS hardware. The public GitHub repository is used for documentation, branding, issue/support information, and production release packages. **Implementation source code is maintained privately/off-GitHub and is not published in the public repository.**
 
@@ -28,7 +28,7 @@ Zero1Local is local-first NAS software for supported Zero1 NAS hardware. The pub
 | Files & Sharing | File Manager, shared folders, users, groups, and secure links |
 | Storage | Drives, RAID / Drive Protection, USB storage, and Analytics |
 | Sync & Backup | Synchronization, **Phone Transfer**, restore, backups, and snapshots |
-| Zero1Connect | Pair phones, assign mobile access, and manage automatic private remote connectivity |
+| Zero1Connect | Pair phones, inherit native shared-folder access, and manage automatic private remote connectivity |
 | Apps | App catalog, containers, and **Docker Compose** |
 | Connectivity | Network, **VLANs**, advanced networking, remote access, and desktop integration |
 | System | Updates, System & Power, Access & API, Office, Security, Administrators, Automation, Hardware, Services, Advanced Stats, Logs, and Recovery |

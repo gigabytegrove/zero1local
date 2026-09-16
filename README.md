@@ -8,7 +8,7 @@
 
 Zero1Local replaces the original appliance management experience with an owner-controlled NAS interface while preserving the supported Debian 11 / ARM64 platform and established storage model. Core NAS management is designed to remain usable locally without requiring a vendor cloud account.
 
-> **v1.2.6 is a pre-release.** It is intended for qualification on the project test appliance before wider deployment.
+> **v1.2.6.1 is a pre-release.** It is intended for qualification on the project test appliance before wider deployment.
 
 ## Public repository scope
 
@@ -22,11 +22,11 @@ For installation or updates, use the production release package attached to the 
 Zero1Local-v<version>-production.zip
 ```
 
-## What v1.2.6 focuses on
+## What v1.2.6.1 focuses on
 
 - A reorganized owner-facing UI with fewer stacked cards, fewer redundant cross-links, and implementation checks moved behind **Advanced** surfaces.
 - **Phone Transfer** as a dedicated Sync & Backup workflow for automatic rules and manual phone-to-NAS transfers.
-- **Zero1Connect** as its own first-class application area with paired-device access assignments and automatic managed WireGuard provisioning.
+- **Zero1Connect** as its own first-class application area using native shared-folder permissions, root master administration, and automatic managed WireGuard provisioning.
 - Storage maintenance fixes, including RAID consistency-check control and integrated drive replacement.
 - Expanded Storage Analytics with file-type counts/storage visualization, capacity trend, share usage, largest files, and duplicate candidates.
 - Consistent terminology including **Docker Compose**, **VLANs**, and **Advanced Stats**.
@@ -42,16 +42,16 @@ Zero1Local-v<version>-production.zip
 | Files & Sharing | File Manager, shared folders, users, groups, and secure links |
 | Storage | Drives, RAID / Drive Protection, USB storage, and Analytics |
 | Sync & Backup | Synchronization, Phone Transfer, restore, backups, and snapshots |
-| Zero1Connect | Pairing, device access control, and managed private remote connectivity |
+| Zero1Connect | Pairing, native shared-folder access, root master administration, and managed private remote connectivity |
 | Apps | App catalog, containers, and Docker Compose |
 | Connectivity | Network, VLANs, advanced networking, remote access, and desktop integration |
 | System | Updates, power, Access & API, Office, Security, Administrators, Automation, Hardware, Services, Advanced Stats, Logs, and Recovery |
 
 ## Zero1Connect
 
-Zero1Connect is developed as a separate Android client. Zero1Local provides `/api/connect/v1`, pairing, per-device access scopes, authentication, file/transfer services, and managed WireGuard provisioning. Normal pairing is intended to configure the phone's private remote-access path automatically when a usable external endpoint can be established.
+Zero1Connect is developed as a separate Android client. Zero1Local provides `/api/connect/v1`, pairing, authentication, file/transfer services, native shared-folder authorization, and managed WireGuard provisioning. There is no second Zero1Connect file-permission system: a paired phone inherits the same effective shared-folder access as its bound Zero1Local user. A phone paired to `root` receives master file authority.
 
-Each paired phone has an independent identity. Mobile access can be restricted to specific shared folders or folder roots and is always further constrained by the bound Zero1Local user's underlying permissions.
+Pairing asks whether the owner wants managed remote access. When enabled, Zero1Local and the phone configure the private split-tunnel path automatically; the owner is not expected to create WireGuard keys, peers, subnets, or routes manually. Remote status is presented as Automatic setup, Ready, Needs attention, or Off by choice rather than an ambiguous Not configured state.
 
 ## Phone Transfer
 

@@ -1,11 +1,11 @@
-# Zero1Local v1.2.6 — Product UX, Phone Transfer & Zero1Connect Update
+# Zero1Local v1.2.6.1 — Zero1Connect Integration Corrections
 
-**Git tag:** `v1.2.6`  
+**Git tag:** `v1.2.6.1`  
 **GitHub status:** **Pre-release**
 
 ## Release notes
 
-Zero1Local v1.2.6 is a substantial pre-release update focused on product organization, recovery behavior, Phone Transfer, storage maintenance, Analytics, and Zero1Connect integration.
+Zero1Local v1.2.6.1 is a corrective pre-release built on v1.2.6, focused on Zero1Connect administration, native file authorization, automatic remote-access setup, and presentation fixes discovered during live appliance testing.
 
 ### Product organization and UI/UX
 
@@ -39,14 +39,16 @@ Zero1Local v1.2.6 is a substantial pre-release update focused on product organiz
 - Reworked the page into an approximately 80/20 desktop workspace: phones/rules on the left, guidance/manual-transfer information on the right.
 - Moved Phone Transfer feature checks behind Advanced disclosure.
 
-### Zero1Connect
+### Zero1Connect corrections
 
-- Zero1Connect is now a first-class top-level product section.
-- Added dedicated Devices & Access and Remote Access views.
-- Added per-device mobile access assignments and permission presets.
-- Normal pairing attempts to provision managed WireGuard automatically.
-- Zero1Local can install missing `wireguard-tools` and `iproute2` for managed Zero1Connect remote access.
-- Manual WireGuard setup is not intended to be part of the normal scan-QR-and-connect workflow.
+- Treats authenticated `root` as the master appliance administrator throughout Zero1Connect.
+- Removes the parallel Zero1Connect file-permission authority. Mobile file access now derives directly from the native Zero1Local shared-folder valid/read and write ACLs used by Files & Sharing.
+- A phone paired to `root` receives master native shared-folder access; other phones can never exceed their bound Zero1Local user's current rights.
+- Legacy prerelease scope IDs remain compatibility aliases only; their old stored permission flags are ignored.
+- Pairing now asks on the NAS whether the owner wants automatic remote access or LAN-only pairing. The pairing intent is stored with the single-use token, while current Android clients may also explicitly confirm/change the choice.
+- When remote access is enabled, Zero1Local installs/reconciles WireGuard, keys, peer, tunnel address, split routes and firewall state automatically.
+- Removes the dead-end owner-facing `Not configured` state. Remote state is Automatic setup, Ready, Needs attention, or Off by choice.
+- Fixes missing Zero1Connect status/layout styles that caused labels and values to run together.
 
 ### Routing and branding
 
@@ -55,7 +57,7 @@ Zero1Local v1.2.6 is a substantial pre-release update focused on product organiz
 
 ## Qualification status
 
-This remains a **pre-release**. The qualification target is the Zero1Local test appliance. Do not treat v1.2.6 as production-qualified until the current server release and Zero1Connect Android client have completed real-device testing.
+This remains a **pre-release**. The qualification target is the Zero1Local test appliance. Do not treat v1.2.6.1 as production-qualified until the current server release and Zero1Connect Android client have completed real-device testing.
 
 The accepted v1.2.4.27 Windows installer remains byte-for-byte unchanged.
 
@@ -65,16 +67,16 @@ The public repository contains documentation/branding and production release mat
 
 ### GitHub Release asset
 
-Upload this installation asset to the v1.2.6 GitHub Release:
+Upload this installation asset to the v1.2.6.1 GitHub Release:
 
 ```text
-Zero1Local-v1.2.6-production.zip
+Zero1Local-v1.2.6.1-production.zip
 ```
 
 SHA-256:
 
 ```text
-adcaa2d4a493dd25de6973a3b01536b572202063be2b8978ca2c51a0c05f8c3f
+9d9186a27bcd47a4bd9bf9c5c3c0792d6a63bae804927840f27db511908e6075
 ```
 
-Do **not** upload `Zero1Local-v1.2.6-source.tar.gz` or private source/build workspaces to GitHub. Documentation files and branding are committed to the repository as normal files rather than attached as source release artifacts.
+Do **not** upload `Zero1Local-v1.2.6.1-source.tar.gz` or private source/build workspaces to GitHub. Documentation files and branding are committed to the repository as normal files rather than attached as source release artifacts.

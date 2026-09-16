@@ -1,5 +1,38 @@
 # Zero1Local Changelog
 
+## v1.2.6.1 — Pre-Release
+
+v1.2.6.1 is a corrective pre-release based on live v1.2.6 appliance testing. It keeps the v1.2.6 product reorganization while correcting Zero1Connect authorization, pairing/remote-access behavior, and presentation.
+
+### Zero1Connect administration and native ACL
+
+- Treats authenticated `root` as the master appliance administrator for Zero1Connect management.
+- A phone paired to `root` receives full native shared-folder read/write authority.
+- Removes the parallel Zero1Connect file-permission authority introduced during the prerelease integration work.
+- Mobile file access is now derived from the same native Files & Sharing shared-folder ACL used elsewhere in Zero1Local: valid/read users determine read/download rights and write users determine mutation rights.
+- Legacy prerelease mobile scope IDs are accepted only as aliases to the underlying shared folder; their old stored permission flags cannot expand current native rights.
+- Devices & Access is now an effective-access view with a direct path to manage the authoritative shared-folder permissions.
+
+### Automatic remote access
+
+- Pairing asks whether the owner wants **Set up remote access** or **Pair LAN only**.
+- The NAS records that choice in the single-use pairing intent. A current Android client may explicitly confirm/change it in `/pair/complete`; older compatible clients inherit the NAS-side choice.
+- Automatic remote access remains the compatibility default when no explicit choice is supplied.
+- Zero1Local continues to install/reconcile required WireGuard tooling, server identity, peer, address, split routes, firewall state and endpoint discovery automatically.
+- Replaces the ambiguous/dead-end `Not configured` presentation with Automatic setup, Ready, Needs attention, or Off by choice.
+- If router/NAT conditions prevent automatic endpoint establishment, the UI explains the remaining network action without asking the owner to manually build a WireGuard tunnel.
+
+### UI correction
+
+- Adds the missing Zero1Connect metric/status layout styles so labels, values and supporting text no longer run together.
+- Makes root/master and native shared-folder permission source explicit in the owner-facing interface.
+
+### Security and regression coverage
+
+- Preserves per-request authorization against the current native share ACL rather than trusting cached/stored mobile permission flags.
+- Preserves path confinement and adds/retains coverage for slash, backslash and encoded traversal attempts.
+- Keeps the v1.2.6 public-repository policy: production releases and documentation/branding are public; source archives remain local/private and off GitHub.
+
 ## v1.2.6 — Pre-Release
 
 v1.2.6 is a product-organization, UX, recovery, storage-maintenance, Phone Transfer, Analytics, and Zero1Connect integration release. It is intended for real-hardware qualification before promotion.

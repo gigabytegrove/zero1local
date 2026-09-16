@@ -1,4 +1,4 @@
-# GitHub Update Path — v1.2.6
+# GitHub Update Path — v1.2.6.1
 
 Zero1Local uses GitHub Releases from `gigabytegrove/zero1local` as the public production-update source.
 
