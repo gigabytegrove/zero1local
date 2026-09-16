@@ -1,4 +1,4 @@
-# Software Updates — v1.2.6.2
+# Software Updates — v1.2.6.3
 
 Software Updates lives at **System → Updates** (`/updates`). It is designed to answer four owner questions immediately: **what is installed, what is newest, what changed, and what is happening now?**
 
@@ -59,9 +59,11 @@ A failed staged validation must stop activation. A failed activation must restor
 
 ## Session-independent update progress
 
-The primary management daemon may restart during an update. Zero1Local therefore exposes a separate read-only Update Monitor on TCP/8090. The browser can follow persisted transaction state there while the ordinary authenticated management service restarts.
+The primary management daemon may restart during an update. Zero1Local therefore exposes a separate status-only Update Monitor on TCP/8090. The browser can follow persisted transaction state there while the ordinary authenticated management service restarts.
 
-The monitor does not make installation/rollback decisions and does not expose owner data. It is a progress surface only.
+The monitor uses the canonical Zero1Local light/dark branding, converts persisted UTC timestamps to the browser owner's local time zone, and keeps visible activity moving during long-running stages through a working spinner, animated progress track, active-stage indicator, live status-refresh heartbeat, and elapsed update time. A stable percentage during installation or restart does not by itself mean the update is frozen.
+
+While an update is active, the monitor explicitly warns the owner not to power off or unplug the NAS. The monitor does not make installation/rollback decisions and does not expose owner data; it is a progress/status surface only.
 
 ## Failure behavior
 

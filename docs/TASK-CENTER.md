@@ -1,4 +1,4 @@
-# Zero1Local Task Center — v1.2.6.2
+# Zero1Local Task Center — v1.2.6.3
 
 Task Center is the owner-facing place for background work that can outlive the current page or browser session.
 
@@ -58,4 +58,4 @@ Software Update tasks use update-specific stages rather than file-transfer termi
 6. Restarting Zero1Local
 7. Verifying and cleaning up
 
-Update progress persists across the expected management-service restart and is available through the session-independent Update Monitor.
+Update progress persists across the expected management-service restart and is available through the session-independent Update Monitor. The monitor includes local-time timestamps, an animated determinate progress track, active-stage spinner, live status-refresh heartbeat, elapsed update time, and a persistent warning not to power off or unplug the NAS while the update is active.

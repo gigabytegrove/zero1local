@@ -1,5 +1,31 @@
 # Zero1Local Changelog
 
+## v1.2.6.3 — Pre-Release
+
+v1.2.6.3 is a focused Update Monitor owner-experience correction based on live v1.2.6.2 in-place update testing. It preserves the v1.2.6.2 WireGuard qualification gate and all existing 1.2.6.x behavior.
+
+### Update Monitor branding and time
+
+- Replaces the temporary `Z1` tile/text treatment with the canonical Zero1Local light/dark logo assets.
+- Removes owner-facing implementation copy about read-only/admin-session behavior.
+- Converts persisted UTC/RFC3339 update timestamps to the browser owner's local time zone with local time-zone labeling.
+- Passes the current light/dark theme from the main Zero1Local UI into the independent monitor during update handoff.
+
+### Visible activity and power-loss protection
+
+- Adds a continuously visible working badge/spinner during active update transactions.
+- Adds an animated determinate progress track so a stable percentage still has visible motion.
+- Adds an active-step spinner/pulse in the seven-stage update timeline.
+- Adds a live status-refresh heartbeat and continuously updating elapsed update time.
+- Explicitly warns not to power off or unplug the NAS while updating, and explains that install/restart can remain at one percentage for several minutes.
+- Adds a distinct reconnecting state that continues to warn against power interruption while the monitor retries.
+
+### Regression protection
+
+- Extends web capability validation to require canonical monitor branding, browser-local time formatting, activity/heartbeat fingerprints, and theme-aware monitor handoff.
+- Rejects the old temporary tile, old administrator-session subtitle, and raw UTC timestamp rendering.
+- Keeps the independent monitor status-only: GET/HEAD status and canonical logo assets only; mutation methods remain rejected.
+
 ## v1.2.6.2 — Pre-Release
 
 v1.2.6.2 closes the WireGuard backend truth gap found during v1.2.6.1 qualification. Installed `wg` and `ip` commands are no longer treated as proof that the NAS can actually create and operate a WireGuard interface.

@@ -8,7 +8,7 @@
 
 Zero1Local replaces the original appliance management experience with an owner-controlled NAS interface while preserving the supported Debian 11 / ARM64 platform and established storage model. Core NAS management is designed to remain usable locally without requiring a vendor cloud account.
 
-> **v1.2.6.2 is a pre-release.** It is intended for qualification on the project test appliance before wider deployment.
+> **v1.2.6.3 is a pre-release.** It is intended for qualification on the project test appliance before wider deployment.
 
 ## Public repository scope
 
@@ -22,8 +22,10 @@ For installation or updates, use the production release package attached to the 
 Zero1Local-v<version>-production.zip
 ```
 
-## What v1.2.6.2 focuses on
+## What v1.2.6.3 focuses on
 
+- A corrected independent **Update Monitor** with canonical Zero1Local light/dark branding, browser-local timestamps, persistent working spinners/motion, an animated determinate progress track, a live status-refresh heartbeat, elapsed update time, and an explicit do-not-power-off warning.
+- The monitor remains status-only and independent of the primary management daemon so it continues through the expected management-service restart.
 - A reorganized owner-facing UI with fewer stacked cards, fewer redundant cross-links, and implementation checks moved behind **Advanced** surfaces.
 - **Phone Transfer** as a dedicated Sync & Backup workflow for automatic rules and manual phone-to-NAS transfers.
 - **Zero1Connect** as its own first-class application area using native shared-folder permissions, root master administration, and automatic managed WireGuard provisioning.

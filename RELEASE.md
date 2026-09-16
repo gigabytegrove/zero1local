@@ -1,11 +1,22 @@
-# Zero1Local v1.2.6.2 — WireGuard Backend Qualification Gate
+# Zero1Local v1.2.6.3 — Update Monitor Activity & Local-Time UX
 
-**Git tag:** `v1.2.6.2`  
+**Git tag:** `v1.2.6.3`  
 **GitHub status:** **Pre-release**
 
 ## Release notes
 
-Zero1Local v1.2.6.2 is the corrective release candidate built on v1.2.6.1 after real-device evidence proved that installed WireGuard userspace tools did not necessarily mean the NAS kernel could create a WireGuard interface.
+Zero1Local v1.2.6.3 is a focused corrective release candidate built on v1.2.6.2 after live in-place update testing exposed presentation problems in the independent Update Monitor. It preserves the v1.2.6.2 WireGuard backend qualification gate and all earlier v1.2.6.x behavior.
+
+### Update Monitor activity and safety UX
+
+- Replaces the temporary `Z1` tile/text treatment with the canonical Zero1Local light/dark logo assets already used by the primary interface.
+- Removes internal implementation copy about read-only/admin-session behavior from the owner-facing monitor.
+- Converts persisted UTC/RFC3339 update timestamps to the browser owner's local time zone, including the local time-zone abbreviation when available.
+- Adds a persistent working badge/spinner, animated determinate progress track, active-step spinner/pulse, and live status-refresh heartbeat.
+- Adds a continuously updating elapsed-time indicator so long-running safety/install/restart steps do not look frozen when the percentage is legitimately unchanged.
+- Strengthens the owner warning not to power off or unplug the NAS while an update is active.
+- Preserves the monitor's independent TCP/8090 status-only design and primary-management restart survivability.
+- Passes the active light/dark theme into the independent monitor when the update is launched from the main UI.
 
 ### Product organization and UI/UX
 
@@ -68,7 +79,7 @@ Zero1Local v1.2.6.2 is the corrective release candidate built on v1.2.6.1 after 
 
 ## Qualification status
 
-This remains a **pre-release**. The qualification target is the Zero1Local test appliance. Do not treat v1.2.6.2 as production-qualified until the current server release and Zero1Connect Android client have completed real-device testing.
+This remains a **pre-release**. The qualification target is the Zero1Local test appliance. Do not treat v1.2.6.3 as production-qualified until the current server release and Zero1Connect Android client have completed real-device testing.
 
 The accepted v1.2.4.27 Windows installer remains byte-for-byte unchanged.
 
@@ -78,16 +89,16 @@ The public repository contains documentation/branding and production release mat
 
 ### GitHub Release asset
 
-Upload this installation asset to the v1.2.6.2 GitHub Release:
+Upload this installation asset to the v1.2.6.3 GitHub Release:
 
 ```text
-Zero1Local-v1.2.6.2-production.zip
+Zero1Local-v1.2.6.3-production.zip
 ```
 
 SHA-256:
 
 ```text
-f15f10c863e8764263e2e8fd57d5f2fecc726a18ba4508af957aeff0d975dcbf
+e532c69d8c3948874e3958d3cdd69d66ae3eec50a92b1c392069a033c7c60835
 ```
 
-Do **not** upload `Zero1Local-v1.2.6.2-source.tar.gz` or private source/build workspaces to GitHub. Documentation files and branding are committed to the repository as normal files rather than attached as source release artifacts.
+Do **not** upload `Zero1Local-v1.2.6.3-source.tar.gz` or private source/build workspaces to GitHub. Documentation files and branding are committed to the repository as normal files rather than attached as source release artifacts.
