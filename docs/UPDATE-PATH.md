@@ -1,39 +1,61 @@
-# GitHub Update Path
+# GitHub Update Path — v1.2.6
 
-## v1.2.4 Linux-native installation path
+Zero1Local uses GitHub Releases from `gigabytegrove/zero1local` as the public production-update source.
 
-v1.2.4 retains the resilient GitHub discovery introduced in v1.2.3 but replaces the broken `/root` staging/install handoff. The management service downloads to `/var/cache/zero1-local/updates`, verifies the canonical five-file production distribution, validates the inner release, and hands the release to a detached Linux-native updater. The updater invokes the existing rollback-safe transactional installer and cleans its managed workspace afterward.
+## Public repository boundary
 
-The Windows PowerShell installer remains the manual/factory-stock deployment entry point; online updates do not execute PowerShell.
+GitHub contains documentation, branding, support/security information, and production release packages. **Implementation source code and local source archives are maintained privately/off-GitHub.**
 
-## v1.2.3 discovery correction
+The update client does not require or consume a source archive.
 
-v1.2.3 makes update discovery resilient to a stale GitHub release-list response by combining the GitHub Latest Release endpoint with the normal release-history endpoint. A user-triggered check bypasses saved ETag/cache state. The newest GitHub release seen is recorded independently from the installed version and exposed to the dedicated `/updates` workspace.
+## Production asset contract
 
-Starting with v1.2.3, the exact `Zero1Local-v<version>-production.zip` asset may use the canonical five-file distribution layout because the updater support added during the v1.2.2 transition is retained.
+An installable GitHub release must include the exact asset:
 
+```text
+Zero1Local-v<version>-production.zip
+```
 
-Zero1Local uses GitHub Releases from `gigabytegrove/zero1local` as the stable public update source.
+The production ZIP uses the established five-file root layout:
 
-## v1.2.2 transition
+```text
+Install-Zero1Local.ps1
+README.txt
+SHA256SUMS.txt
+Zero1Local-v<version>.tar.gz
+deploy-on-nas.sh
+```
 
-v1.2.1 can discover GitHub Releases but its dashboard installer expects the selected `*-production.zip` asset to contain the versioned Zero1Local release tree directly. The canonical manual distribution, however, is intentionally a five-file wrapper containing the payload as `Zero1Local-v<version>.tar.gz`.
-
-For v1.2.2 only, publish both assets:
-
-- `Zero1Local-v1.2.2-production.zip` — dashboard-updater asset. Contains the checksummed `Zero1Local-v1.2.2/` release tree directly so v1.2.1 can install it.
-- `Zero1Local-v1.2.2-distribution.zip` — canonical manual/factory-stock distribution. Contains exactly `Install-Zero1Local.ps1`, `README.txt`, `SHA256SUMS.txt`, `Zero1Local-v1.2.2.tar.gz`, and `deploy-on-nas.sh`.
-
-v1.2.2 adds updater support for the canonical five-file distribution. Therefore subsequent releases may return to using the canonical distribution as the exact `Zero1Local-v<version>-production.zip` dashboard/update asset.
+The updater validates the outer package and the runtime payload before staged activation.
 
 ## Update selection
 
-Stable update checks query the GitHub Releases API and ignore drafts/prereleases on the Stable channel. A candidate must be newer than the running version and must provide an exact `Zero1Local-v<version>-production.zip` asset.
+Version comparison uses the published release version/tag and the selected release channel. Draft releases are ignored. Prereleases are considered only by channels that permit them.
 
-## Validation before installation
+The user-triggered update check bypasses saved discovery cache state so a newly published release is not hidden by stale metadata.
 
-The dashboard updater validates the selected version, approved HTTPS GitHub asset host, archive paths, release manifest, SHA-256 release tree and appliance preflight before handing installation to the detached transactional installer. Canonical five-file distributions also have their outer `SHA256SUMS.txt` verified before the inner payload tarball is extracted.
+## Validation before activation
 
-## Manual installation remains supported
+Before the new release is activated, Zero1Local verifies the package tree, runtime checksums, unit/service contracts, storage/update readiness, and UI route/capability contracts. A staged validation failure must stop the update before the new service is activated.
 
-The dashboard updater does not replace the cumulative installer. The five-file distribution remains the canonical path for a manual upgrade or factory-stock installation.
+## Direct-refresh route protection
+
+Release validation compares:
+
+1. the frontend SPA route table;
+2. the packaged UI route manifest; and
+3. the actual Go `uiRoute` handler.
+
+All three must match. This prevents a page that works through client navigation from returning raw HTTP 404 on browser refresh/direct load.
+
+## Rollback
+
+The update runner captures/restores rollback state where supported and verifies the previous management endpoint if activation fails. Rollback evidence is retained in the update transaction log/state.
+
+## Session-independent progress
+
+The read-only Update Monitor on TCP/8090 reads persisted transaction state independently of the primary management daemon. This allows progress to remain visible across management-service restarts without weakening normal authenticated session behavior.
+
+## Manual installation
+
+Manual/factory deployment through the Windows installer remains supported. Normal in-place upgrades from a healthy Zero1Local appliance should use **System → Updates**.

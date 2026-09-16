@@ -1,25 +1,42 @@
-# LED Status
+# Zero1Local chassis LED status reference — v1.2.6
 
-Zero1Local uses the IronCow chassis LED backend only when that hardware path is positively identified.
+## Proven hardware capability
 
-## Phone-transfer overlay
+The IronCow Zero1 chassis LED controller exposes separate red and green channels for the power/status LED and the two disk LEDs. Hardware evidence supports:
 
-The **power/status LED** is used for phone state. Disk LEDs remain storage-oriented.
+- green;
+- red;
+- yellow (red + green together);
+- off;
+- solid;
+- fast flash; and
+- slow flash where the underlying Twinkle command supports it.
 
-| Phone state | LED |
+There is no evidence that these indicators are RGB LEDs. Blue or arbitrary RGB colors must not be documented or exposed as available.
+
+## Phone Transfer overlay policy
+
+Phone Transfer status is a temporary overlay on the **power/status LED**. Disk 1 and Disk 2 retain their storage-health role.
+
+| Phone Transfer state | Power/status LED |
 | --- | --- |
-| Saved phone physically connected but wrong/not-ready USB mode | Slow-flashing yellow |
-| Transferable mode detected/device acquired | Green |
-| Transfer active | Fast-flashing green |
-| Verified completion | Solid green for five seconds |
-| Transfer/verification failure | Flashing red |
+| Active automatic/manual transfer | Fast flashing green |
+| Transfer completed | Solid green for 5 seconds, then normal state |
+| Phone needs user action / wrong USB mode | Slow flashing yellow |
+| Transfer or verification failed | Fast flashing red |
 
-A pending automatic job must not overwrite the LED state of a phone currently owned by Manual Phone Transfer.
+Storage and thermal critical states outrank Phone Transfer overlays. When a phone overlay ends, Zero1Local restores the normal chassis status policy.
 
-## Priority
+## Automatic readiness
 
-Critical storage, thermal or system conditions retain priority over cosmetic/phone overlays. The LED controller should never hide a more important hardware warning just to display a phone event.
+A saved automatic Phone Transfer rule may wait without failing while the phone is physically connected but Android MTP / Apple file access is not ready. In that state, the power/status LED may slow-flash yellow until the phone becomes transferable.
 
-## Qualification note
+An active Manual Phone Transfer session owns the phone while it is browsing/transferring. An automatic rule must wait rather than stealing the session or overwriting its active transfer indication.
 
-Software state and physical LED observation are separate evidence. A software task entering `waiting` is not by itself proof that the chassis visibly displayed the correct color/pattern on every hardware revision.
+## Error semantics
+
+A red Phone Transfer indication must correspond to a visible task/UI failure. For Move operations, a verification failure leaves the source file on the phone. A disconnect during transfer is a transfer failure and must never be represented as success.
+
+## Qualification boundary
+
+The basic red/green/yellow/off channel behavior is based on exercised chassis controls. Specific Phone Transfer event sequences remain subject to real-hardware acceptance testing for the exact phone/USB path in use.

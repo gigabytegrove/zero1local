@@ -85,6 +85,16 @@ v1.2.6 is a product-organization, UX, recovery, storage-maintenance, Phone Trans
 - Preserves the v1.2.5.5 direct-refresh fix that synchronized frontend SPA routes, packaged route manifest, and the Go server route allowlist.
 - Release tests exercise the actual Go UI route handler for the packaged route set, preventing authenticated direct-refresh pages from silently regressing to raw `404 page not found` responses.
 
+### Documentation and public repository
+
+- Refreshed the complete public `docs/` set for the v1.2.6 information architecture and terminology.
+- Added `docs/README.md` as the documentation index.
+- Corrected Zero1Connect documentation to reflect its new top-level product section.
+- Removed obsolete v1.2.2/v1.2.4 transition-era update documentation from the current owner guides while preserving the current updater/rollback architecture.
+- Removed broken documentation links and consolidated duplicated File Manager image documentation.
+- Corrected documentation provenance to accurately disclose AI-assisted work in documentation and portions of design/implementation/review.
+- Documented the public-repository boundary: GitHub carries documentation, branding, support/security material, and production releases; implementation source remains privately maintained/off-GitHub.
+
 ### Release engineering
 
 - Version advanced to 1.2.6 for the new feature/organization push.

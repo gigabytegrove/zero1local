@@ -50,7 +50,7 @@ Zero1Local v1.2.6 is a substantial pre-release update focused on product organiz
 
 ### Routing and branding
 
-- Retains the direct-refresh route parity protection introduced after the 1.2.5.5 authenticated 404 issue.
+- Retains three-way direct-refresh route parity validation between the frontend, packaged route manifest, and actual Go route handler.
 - Uses the supplied transparent theme-correct Zero1Local logos and the supplied Zero1Connect integration logo.
 
 ## Qualification status
@@ -59,17 +59,22 @@ This remains a **pre-release**. The qualification target is the Zero1Local test 
 
 The accepted v1.2.4.27 Windows installer remains byte-for-byte unchanged.
 
-## GitHub release assets
+## GitHub publication boundary
 
-- `Zero1Local-v1.2.6-production.zip`
-- `Zero1Local-v1.2.6-source.tar.gz`
-- `Zero1Local-v1.2.6-github.zip`
+The public repository contains documentation/branding and production release material. **Implementation source code is maintained privately/off-GitHub.**
 
-Primary production package SHA-256:
+### GitHub Release asset
+
+Upload this installation asset to the v1.2.6 GitHub Release:
 
 ```text
 Zero1Local-v1.2.6-production.zip
+```
+
+SHA-256:
+
+```text
 adcaa2d4a493dd25de6973a3b01536b572202063be2b8978ca2c51a0c05f8c3f
 ```
 
-The source-archive and GitHub-documentation bundle hashes are published with the GitHub Release and the final checksum file generated alongside the artifacts.
+Do **not** upload `Zero1Local-v1.2.6-source.tar.gz` or private source/build workspaces to GitHub. Documentation files and branding are committed to the repository as normal files rather than attached as source release artifacts.
