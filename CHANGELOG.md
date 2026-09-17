@@ -1,5 +1,26 @@
 # Zero1Local Changelog
 
+## vredacted.invalid — Zero1Connect LAN discovery / Omada UPnP correction
+
+Real-hardware qualification confirmed the Omada gateway has UPnP enabled for the NAS Management network while Zero1Local still reported no UPnP IGD, and a fresh Zero1Connect client could neither reach the NAS from the pairing QR nor find it under Nearby devices.
+
+- Pairing QR/deep links now prefer the numeric NAS IPv4 address on the browser client's subnet instead of copying the browser hostname.
+- Pairing fails with `lan_address_unavailable` rather than emitting an endpoint Zero1Local cannot identify as a LAN IPv4 address.
+- Adds a packaged `_zero1local._tcp` Avahi service and requires active `avahi-daemon` before mDNS is reported as Running.
+- Reconciles Avahi at runtime and adds installer/rollback handling for the Connect advertisement.
+- Expands SSDP discovery across every active IPv4 LAN interface with interface-bound multicast, two request rounds, five-second parallel discovery, IGD v1/v2, WANIPConnection v1/v2, WANPPPConnection, root-device and `ssdp:all` targets.
+- Replaces the misleading no-IGD message with interface-specific SSDP diagnostics when the router still cannot be discovered.
+- Preserves the proven userspace WireGuard fallback and the vredacted.invalid stale-binary anti-regression gates.
+
+## vredacted.invalid — stale-binary packaging correction
+
+vredacted.invalid is rejected and must not be deployed. Real-hardware installation on three appliances proved that its source/runtime metadata was labeled redacted.invalid while both shipped ARM64 service binaries were still the vredacted.invalid executables. The installer correctly detected the health-version mismatch and rolled back.
+
+vredacted.invalid rebuilds both service binaries from the current source and adds permanent binary-identity gates. Exact release-tree verification now requires the VERSION string to be embedded in both packaged binaries, and the NAS installer executes both staged candidates with `--version` before quiescing the active management service. A stale or mismatched binary therefore fails before release handoff.
+
+Real-hardware evidence also confirms the release-installed ARM64 `wireguard-go` userspace fallback can create a TUN interface on the RK3568 vendor kernel when the native `ip link ... type wireguard` path returns `Unknown device type`.
+
+
 ## vredacted.invalid — Pre-Release
 
 vredacted.invalid is a focused WireGuard fallback packaging correction based on live vredacted.invalid hardware evidence. The target RK3568 vendor kernel rejects native WireGuard interface creation with `Error: Unknown device type`, and the vredacted.invalid runtime correctly attempted the userspace path but could not find `wireguard-go`.
