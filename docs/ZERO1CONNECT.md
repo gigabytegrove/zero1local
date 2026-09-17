@@ -1,8 +1,8 @@
-# Zero1Connect server support — Zero1Local v1.2.6.5
+# Zero1Connect server support — Zero1Local v1.2.6.7
 
 **Zero1Connect** is a first-class top-level Zero1Local product area. The Android application is developed independently; Zero1Local owns the NAS-side `/api/connect/v1` contract, device identity, native file authorization, transfer services, and managed private remote-access path.
 
-The current integration target is Zero1Connect Android `0.1.0-dev18`. Package/build compatibility does not by itself qualify the complete Android/NAS workflow.
+The current integration target is Zero1Connect Android `0.2.3`. Package/build compatibility does not by itself qualify the complete Android/NAS workflow.
 
 ## Zero1Local workspace
 
@@ -38,7 +38,9 @@ Legacy prerelease `scope_...` IDs may be accepted temporarily as compatibility a
 
 ## Pairing and device ownership
 
-A pairing QR contains a short-lived, single-use token and the NAS endpoint information required by the Android client. It must never contain a NAS password, Android private key, WireGuard private key, or permanent bearer token.
+A pairing QR contains a short-lived, single-use token and the NAS endpoint information required by the Android client. The NAS host embedded in that URI is a numeric LAN IPv4 address selected from the requesting browser client's subnet whenever one is available; Zero1Local does not assume that an Android phone can resolve the same local hostname the browser used. If Zero1Local cannot determine a usable numeric LAN IPv4 address, pairing fails explicitly instead of emitting a known-bad QR code. The QR must never contain a NAS password, Android private key, WireGuard private key, or permanent bearer token.
+
+Nearby discovery uses `_zero1local._tcp` over mDNS/Avahi. A service file alone is not treated as healthy discovery: owner-facing status is Running only when the advertisement exists and `avahi-daemon` is active.
 
 Each paired phone remains bound to a Zero1Local user/account context. A phone does not become an independent super-user identity.
 
@@ -64,7 +66,7 @@ When remote access is enabled, the user is **not** expected to configure WireGua
 5. preserve the peer across reboot/update; and
 6. discover or establish a usable external UDP endpoint where the network permits it.
 
-Endpoint selection can use an explicitly configured valid endpoint, a globally routable address directly assigned to the NAS, or a router-confirmed UPnP UDP mapping when appropriate.
+Endpoint selection can use an explicitly configured valid endpoint, a globally routable address directly assigned to the NAS, or a router-confirmed UPnP UDP mapping when appropriate. UPnP discovery is performed independently on each active LAN IPv4 address with interface-bound SSDP multicast, retries, and IGD/WANIPConnection/WANPPPConnection/root-device/`ssdp:all` search targets so a multi-interface NAS does not silently probe the wrong network path.
 
 There is no ambiguous **Not configured** normal state. Owner-facing remote state is expressed as **Automatic setup**, **Ready**, **Needs attention**, or **Off by choice**.
 
@@ -83,7 +85,7 @@ The current request includes the single-use token, Android device identity, P-25
     "id": "client-generated-uuid",
     "name": "Samsung SM-...",
     "platform": "android",
-    "app_version": "0.1.0-dev18"
+    "app_version": "0.2.3"
   },
   "auth_public_key": "BASE64-X509-SPKI-P256-PUBLIC-KEY",
   "auth_algorithm": "EC_P256_SHA256",
@@ -114,4 +116,4 @@ Revoking one phone invalidates its future authentication authority and managed W
 
 ## Qualification boundary
 
-Real-device qualification must prove QR/manual pairing, both remote-access choices, one-time token behavior, root master behavior, normal-user native ACL inheritance, traversal confinement, file operations, resumable upload/download, managed WireGuard off-LAN access, full-tunnel rejection, multiple phones, revocation, and reboot/update persistence against the exact Android client under test.
+Real-device qualification must prove numeric-LAN QR pairing, Nearby `_zero1local._tcp` discovery, manual pairing, both remote-access choices, one-time token behavior, root master behavior, normal-user native ACL inheritance, traversal confinement, file operations, resumable upload/download, managed WireGuard off-LAN access, full-tunnel rejection, multiple phones, revocation, and reboot/update persistence against the exact Android client under test.

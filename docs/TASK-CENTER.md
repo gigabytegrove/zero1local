@@ -1,4 +1,4 @@
-# Zero1Local Task Center — v1.2.6.5
+# Zero1Local Task Center — v1.2.6.7
 
 Task Center is the owner-facing place for background work that can outlive the current page or browser session.
 

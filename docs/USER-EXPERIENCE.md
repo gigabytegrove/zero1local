@@ -1,4 +1,4 @@
-# Zero1Local owner-facing language and organization — v1.2.6.5
+# Zero1Local owner-facing language and organization — v1.2.6.7
 
 Zero1Local presents owner tasks first. Internal protocol names, qualification output, implementation evidence, raw checks, and developer terminology belong under **Advanced**, **Feature checks**, diagnostics, logs, or support bundles unless they are necessary to complete the task safely.
 

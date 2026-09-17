@@ -8,7 +8,7 @@
 
 Zero1Local replaces the original appliance management experience with an owner-controlled NAS interface while preserving the supported Debian 11 / ARM64 platform and established storage model. Core NAS management is designed to remain usable locally without requiring a vendor cloud account.
 
-> **v1.2.6.5 is a pre-release.** It is intended for qualification on the project test appliance before wider deployment.
+> **v1.2.6.7 is a pre-release.** It is intended for qualification on the project test appliance before wider deployment.
 
 ## Public repository scope
 
@@ -22,13 +22,13 @@ For installation or updates, use the production release package attached to the 
 Zero1Local-v<version>-production.zip
 ```
 
-## What v1.2.6.5 focuses on
+## What v1.2.6.7 focuses on
 
-- Live SMART self-test state/progress, including safe attachment to a test already running in drive firmware.
-- RAID consistency checks that work with the vendor image's read-only sysfs mount and expose live md progress.
-- Managed Zero1Connect remote access with `wireguard-go` fallback when the vendor kernel lacks the native WireGuard link type.
-- Google Drive public-client device authorization without an incorrect per-NAS OAuth client-secret requirement.
-- Preservation of the v1.2.6.3 independent animated Update Monitor and all already-qualified v1.2.6.x owner workflows.
+- Zero1Connect QR pairing now advertises a numeric LAN IPv4 address selected from the browser client's subnet instead of blindly reusing a browser hostname.
+- Nearby Zero1Local discovery now has a packaged `_zero1local._tcp` Avahi advertisement and only reports Running when `avahi-daemon` is actually active.
+- Managed remote endpoint discovery now sends SSDP/UPnP searches from every active LAN IPv4 interface, retries them, covers IGD/WANIP/WANPPP/root/`ssdp:all` targets, and reports interface-specific diagnostics.
+- Preserves the proven `wireguard-go` fallback for the RK3568 vendor kernel, plus the v1.2.6.6 stale-binary anti-regression gates.
+- Preserves SMART progress, RAID consistency, Google Drive public-client authorization, Phone Transfer, the independent Update Monitor, and existing native ACL behavior.
 
 ## Main product areas
 

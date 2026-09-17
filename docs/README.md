@@ -1,6 +1,6 @@
 # Zero1Local Documentation
 
-This folder contains the public documentation for **Zero1Local v1.2.6.5**.
+This folder contains the public documentation for **Zero1Local v1.2.6.7**.
 
 Zero1Local is local-first NAS software for supported Zero1 NAS hardware. The public GitHub repository is used for documentation, branding, issue/support information, and production release packages. **Implementation source code is maintained privately/off-GitHub and is not published in the public repository.**
 

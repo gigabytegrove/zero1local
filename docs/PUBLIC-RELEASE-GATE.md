@@ -27,10 +27,10 @@ Public documentation follows Zero1Local's evidence-first rule. Do not claim univ
 
 ## GitHub publication policy
 
-For v1.2.6.5, the GitHub Release asset intended for installation is:
+For v1.2.6.7, the GitHub Release asset intended for installation is:
 
 ```text
-Zero1Local-v1.2.6.5-production.zip
+Zero1Local-v1.2.6.7-production.zip
 ```
 
 Repository documentation and branding are committed as normal GitHub files. Local/private source archives, build workspaces, source manifests, and internal validation artifacts are **not** GitHub release assets.

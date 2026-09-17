@@ -1,4 +1,4 @@
-# Software Updates — v1.2.6.5
+# Software Updates — v1.2.6.7
 
 Software Updates lives at **System → Updates** (`/updates`). It is designed to answer four owner questions immediately: **what is installed, what is newest, what changed, and what is happening now?**
 

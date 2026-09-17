@@ -1,48 +1,58 @@
-# Zero1Local v1.2.6.5 — WireGuard Fallback Packaging Correction
+# Zero1Local v1.2.6.7 — LAN Pairing / Nearby Discovery / UPnP Interoperability Correction
 
-**Git tag:** `v1.2.6.5`  
+**Git tag:** `v1.2.6.7`  
 **Status:** Pre-release / real-hardware qualification candidate
 
-Zero1Local v1.2.6.5 is a focused correction based on live v1.2.6.4 testing on the Zero1 RK3568 appliance. The appliance's vendor kernel does not expose the native WireGuard link type and returns `Error: Unknown device type`. v1.2.6.4 correctly attempted to use the userspace fallback, but the fallback binary was not present on the appliance.
+Zero1Local v1.2.6.7 is a focused Zero1Connect interoperability correction based on live LAN and router evidence from the qualification appliance. The Omada gateway has UPnP enabled for the Management (Default) 192.168.0.0/24 network, yet Zero1Local reported that no UPnP Internet Gateway Device was advertised. At the same time, QR pairing returned an unreachable-host error in Zero1Connect and Nearby discovery returned no Zero1Local devices.
 
-## WireGuard correction
+## Numeric LAN QR pairing
 
-v1.2.6.5 moves fallback provisioning into the release installation transaction instead of trying to mutate system packages from the hardened `zero1d` management daemon.
+The pairing deep link no longer copies the browser `Host` value as the phone endpoint. Zero1Local now enumerates active IPv4 LAN addresses and prefers the address whose subnet contains the browser client. A browser opened as `nas1` or another local hostname therefore produces a pairing URI containing the actual NAS IPv4 address (for example `192.168.0.145`) rather than assuming Android can resolve the same hostname.
 
-During installation, after both primary SSH and the independent emergency recovery path are verified, Zero1Local now:
+If no usable numeric LAN IPv4 address can be determined, pairing fails explicitly with `lan_address_unavailable` instead of emitting a QR code known to be unusable.
 
-- ensures `wireguard-tools` and `iproute2` are present;
-- installs a pinned Linux/arm64 `wireguard-go` userspace fallback when it is absent;
-- downloads and verifies the corresponding SHA-256 sidecar before installation;
-- installs the fallback as `/usr/local/sbin/wireguard-go` before the hardened management service starts;
-- fails the update transaction rather than activating a release that advertises a fallback it cannot execute.
+## Nearby Zero1Local discovery
 
-The running `zero1d` service no longer attempts `apt` or system-binary installation from an API request. It only validates the already-installed backend.
+- Adds a packaged `_zero1local._tcp` Avahi service definition so Nearby discovery does not depend on a runtime-generated file appearing successfully.
+- Preserves the runtime-generated service metadata with persistent NAS ID/name when available.
+- Starts/reloads Avahi when the Connect advertisement is reconciled.
+- `mDNS status=Running` now requires both the service definition and an actually active `avahi-daemon`; file existence alone is no longer reported as success.
+- Installer rollback/uninstall paths preserve or restore the Connect Avahi service transactionally.
+- Production verification/qualification now fails when the advertisement exists but Avahi is not actually active.
 
-Manual Remote Access VPN enablement and Zero1Connect managed remote provisioning now use the same readiness contract. If neither native nor userspace WireGuard can create a usable interface, the API returns HTTP 503 with `wireguard_backend_unavailable`.
+## Omada / UPnP interoperability
 
-## Preserved v1.2.6.x qualification work
+The previous SSDP implementation used one wildcard UDP socket, three search targets, a single send round and a 2.5-second response window. On a multi-interface NAS this can select the wrong egress path and can miss gateways that advertise a WAN connection service without replying to the narrow IGD search.
 
-This patch preserves the accepted v1.2.6.4 behavior for SMART self-test attachment/progress, RAID consistency progress and read-only-sysfs handling, Google Drive public-client OAuth flow, Phone Transfer, LAN Zero1Connect ACL behavior, analytics, recovery, and the independent Software Update Monitor.
+v1.2.6.7 now:
+
+- sends SSDP discovery independently from every active non-loopback IPv4 LAN address;
+- binds multicast transmission to the corresponding source interface;
+- searches IGD v1/v2, WANIPConnection v1/v2, WANPPPConnection, root-device and `ssdp:all` targets;
+- performs two discovery rounds;
+- uses a five-second response window in parallel across interfaces; and
+- reports which LAN interfaces were actually scanned when no usable gateway response is received.
+
+No WireGuard keys, peers, ACLs or routes are weakened by this change. A remotely reachable endpoint is still required before Zero1Local returns a managed profile as Ready.
+
+## WireGuard result carried forward
+
+Real-hardware testing already proved that the RK3568 vendor kernel rejects the native WireGuard link type while the installed ARM64 `wireguard-go` fallback successfully creates a TUN-backed WireGuard interface that `wg` can configure and inspect. v1.2.6.7 preserves that userspace fallback path.
 
 ## Hardware validation after installation
 
-The immediate test sequence on the qualification NAS is:
+1. Scan a fresh Zero1Connect pairing QR and confirm the phone reaches the NAS over its numeric 192.168.0.x address.
+2. Confirm the NAS appears under Nearby Zero1Local devices.
+3. Confirm Remote Access retry discovers the Omada UPnP gateway and creates the UDP mapping, or returns the new interface-specific SSDP diagnostic.
+4. Confirm the returned endpoint is usable from cellular/off-LAN and the WireGuard tunnel handshakes.
+5. Continue SMART progress, RAID consistency and Google Drive sign-in hardware checks.
 
-1. Observe the v1.2.6.4 → v1.2.6.5 update with the corrected independent Update Monitor.
-2. Confirm `wireguard-go` exists at `/usr/local/sbin/wireguard-go`.
-3. Enable Remote Access VPN manually and confirm `wg-zero1` is created through the userspace backend when the kernel rejects the native link type.
-4. Enable automatic Zero1Connect remote access and confirm peer provisioning plus an actual handshake.
-5. Test Zero1Connect from a genuinely off-LAN connection.
-6. Reboot and confirm the managed WireGuard configuration and Connect access recover.
-7. Continue the remaining SMART-progress, RAID-consistency, and Google Drive sign-in hardware checks.
-
-Phone Transfer has already been exercised successfully with two physical devices, and LAN Zero1Connect access has already been confirmed during this qualification campaign.
+Phone Transfer has already passed with two physical devices. Zero1Connect LAN API/file behavior has also previously passed; this release specifically corrects the pairing/discovery path that prevents a fresh client from reaching that working LAN API.
 
 ## Release asset
 
 Public installation asset:
 
-`Zero1Local-v1.2.6.5-production.zip`
+`Zero1Local-v1.2.6.7-production.zip`
 
-SHA-256: `4f4c818f2f77c8c82ab8ef27fc582636e1acc55fc3bcd0ac4524c10ffc3bc28d`
+SHA-256: `42f82a669b92b82346172d7d6ab5ebcfb463847e5fd1f094b3d62a15bf95a6a6`
