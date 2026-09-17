@@ -24,18 +24,11 @@ Zero1Local-v<version>-production.zip
 
 ## What vredacted.invalid focuses on
 
-- A corrected independent **Update Monitor** with canonical Zero1Local light/dark branding, browser-local timestamps, persistent working spinners/motion, an animated determinate progress track, a live status-refresh heartbeat, elapsed update time, and an explicit do-not-power-off warning.
-- The monitor remains status-only and independent of the primary management daemon so it continues through the expected management-service restart.
-- A reorganized owner-facing UI with fewer stacked cards, fewer redundant cross-links, and implementation checks moved behind **Advanced** surfaces.
-- **Phone Transfer** as a dedicated Sync & Backup workflow for automatic rules and manual phone-to-NAS transfers.
-- **Zero1Connect** as its own first-class application area using native shared-folder permissions, root master administration, and automatic managed WireGuard provisioning.
-- WireGuard/Zero1Connect capability advertising is now gated by a live create/configure/activate/verify backend probe; unsupported kernels report remote access unavailable instead of claiming support.
-- Storage maintenance fixes, including RAID consistency-check control and integrated drive replacement.
-- Expanded Storage Analytics with file-type counts/storage visualization, capacity trend, share usage, largest files, and duplicate candidates.
-- Consistent terminology including **Docker Compose**, **VLANs**, and **Advanced Stats**.
-- System organization that separates **Access & API** from Security and keeps Office under System.
-- Optional recovery verification and suppressible repeated advisory notices.
-- Theme-correct Zero1Local branding using the supplied transparent light/dark logo assets.
+- Live SMART self-test state/progress, including safe attachment to a test already running in drive firmware.
+- RAID consistency checks that work with the vendor image's read-only sysfs mount and expose live md progress.
+- Managed Zero1Connect remote access with `wireguard-go` fallback when the vendor kernel lacks the native WireGuard link type.
+- Google Drive public-client device authorization without an incorrect per-NAS OAuth client-secret requirement.
+- Preservation of the vredacted.invalid independent animated Update Monitor and all already-qualified v1.2.6.x owner workflows.
 
 ## Main product areas
 

@@ -2,6 +2,49 @@
 
 ## vredacted.invalid — Pre-Release
 
+vredacted.invalid is a focused WireGuard fallback packaging correction based on live vredacted.invalid hardware evidence. The target RK3568 vendor kernel rejects native WireGuard interface creation with `Error: Unknown device type`, and the vredacted.invalid runtime correctly attempted the userspace path but could not find `wireguard-go`.
+
+- Moves userspace WireGuard fallback installation out of the hardened `zero1d` API process and into the recovery-safe release installation transaction.
+- Installs the fixed Linux arm64 `wireguard-go` fallback before `zero1d` starts, after primary and emergency SSH recovery paths are proven.
+- Downloads both the pinned fallback archive and its SHA-256 sidecar and refuses installation when verification fails.
+- Removes runtime package-manager mutation from `zero1d`; the service now reports a clear installation/backend error rather than attempting `apt` under `ProtectSystem=true`.
+- Makes manual Remote Access VPN enablement use the same backend-readiness gate and structured `503 wireguard_backend_unavailable` response as managed Zero1Connect provisioning.
+- Preserves all vredacted.invalid SMART, RAID consistency, Google Drive, Phone Transfer, LAN Zero1Connect, and Update Monitor behavior.
+
+## vredacted.invalid — Pre-Release
+
+vredacted.invalid is a targeted hardware-qualification correction based on live vredacted.invalid testing. It preserves the accepted update-monitor behavior, Phone Transfer behavior, LAN Zero1Connect behavior, and existing 1.2.6.x architecture.
+
+### Drive diagnostics
+
+- Detects an already-running SMART self-test before attempting to start another test.
+- Treats smartctl's existing-test condition as attachable state instead of a generic start failure.
+- Adds a dedicated live SMART-test status API with percent complete / percent remaining reporting.
+- Adds automatic progress polling on the Drives page and disables duplicate test starts while a drive test is active.
+- Never forces or aborts an existing drive self-test just to satisfy a UI action.
+
+### RAID consistency
+
+- Adds a live RAID consistency status API using md `sync_action`, `sync_completed`, and `mismatch_cnt`.
+- Adds visible progress and automatic polling to the RAID page.
+- Handles the vendor image's read-only `/sys` mount by temporarily remounting sysfs read-write only for the validated md `sync_action` write, then immediately restoring read-only state.
+- Reuses the same safe start path for scheduled RAID maintenance.
+
+### Zero1Connect remote access
+
+- Preserves native in-kernel WireGuard as the preferred backend.
+- Adds automatic `wireguard-go` userspace fallback when the vendor kernel returns `Error: Unknown device type`.
+- Managed provisioning can install `wireguard-go` automatically when the kernel backend is unavailable.
+- Capability probing validates the userspace fallback with the same create/configure/activate/verify/cleanup contract before advertising remote access.
+
+### Google Drive authorization
+
+- Corrects Google Drive OAuth to match the product's installed/public-client device-flow design.
+- Removes the incorrect requirement for a per-NAS Google OAuth client-secret file.
+- Uses the built-in Zero1Local Google client ID for device authorization; an explicitly configured client secret remains optional rather than mandatory.
+
+## vredacted.invalid — Pre-Release
+
 vredacted.invalid is a focused Update Monitor owner-experience correction based on live vredacted.invalid in-place update testing. It preserves the vredacted.invalid WireGuard qualification gate and all existing 1.2.6.x behavior.
 
 ### Update Monitor branding and time
