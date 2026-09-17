@@ -1,4 +1,4 @@
-# Zero1Local File Manager — v1.2.6.3
+# Zero1Local File Manager — v1.2.6.5
 
 Zero1Local File Manager remains confined to authorized shared-folder roots. Browser-visible file IDs and relative paths are not permission boundaries by themselves; every operation is re-authorized server-side against the active user/session and share scope.
 

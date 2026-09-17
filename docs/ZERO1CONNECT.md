@@ -1,4 +1,4 @@
-# Zero1Connect server support — Zero1Local v1.2.6.3
+# Zero1Connect server support — Zero1Local v1.2.6.5
 
 **Zero1Connect** is a first-class top-level Zero1Local product area. The Android application is developed independently; Zero1Local owns the NAS-side `/api/connect/v1` contract, device identity, native file authorization, transfer services, and managed private remote-access path.
 

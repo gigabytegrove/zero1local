@@ -1,104 +1,48 @@
-# Zero1Local v1.2.6.3 — Update Monitor Activity & Local-Time UX
+# Zero1Local v1.2.6.5 — WireGuard Fallback Packaging Correction
 
-**Git tag:** `v1.2.6.3`  
-**GitHub status:** **Pre-release**
+**Git tag:** `v1.2.6.5`  
+**Status:** Pre-release / real-hardware qualification candidate
 
-## Release notes
+Zero1Local v1.2.6.5 is a focused correction based on live v1.2.6.4 testing on the Zero1 RK3568 appliance. The appliance's vendor kernel does not expose the native WireGuard link type and returns `Error: Unknown device type`. v1.2.6.4 correctly attempted to use the userspace fallback, but the fallback binary was not present on the appliance.
 
-Zero1Local v1.2.6.3 is a focused corrective release candidate built on v1.2.6.2 after live in-place update testing exposed presentation problems in the independent Update Monitor. It preserves the v1.2.6.2 WireGuard backend qualification gate and all earlier v1.2.6.x behavior.
+## WireGuard correction
 
-### Update Monitor activity and safety UX
+v1.2.6.5 moves fallback provisioning into the release installation transaction instead of trying to mutate system packages from the hardened `zero1d` management daemon.
 
-- Replaces the temporary `Z1` tile/text treatment with the canonical Zero1Local light/dark logo assets already used by the primary interface.
-- Removes internal implementation copy about read-only/admin-session behavior from the owner-facing monitor.
-- Converts persisted UTC/RFC3339 update timestamps to the browser owner's local time zone, including the local time-zone abbreviation when available.
-- Adds a persistent working badge/spinner, animated determinate progress track, active-step spinner/pulse, and live status-refresh heartbeat.
-- Adds a continuously updating elapsed-time indicator so long-running safety/install/restart steps do not look frozen when the percentage is legitimately unchanged.
-- Strengthens the owner warning not to power off or unplug the NAS while an update is active.
-- Preserves the monitor's independent TCP/8090 status-only design and primary-management restart survivability.
-- Passes the active light/dark theme into the independent monitor when the update is launched from the main UI.
+During installation, after both primary SSH and the independent emergency recovery path are verified, Zero1Local now:
 
-### Product organization and UI/UX
+- ensures `wireguard-tools` and `iproute2` are present;
+- installs a pinned Linux/arm64 `wireguard-go` userspace fallback when it is absent;
+- downloads and verifies the corresponding SHA-256 sidecar before installation;
+- installs the fallback as `/usr/local/sbin/wireguard-go` before the hardened management service starts;
+- fails the update transaction rather than activating a release that advertises a fallback it cannot execute.
 
-- Reorganized the UI around clear owner workflows instead of broad catch-all categories.
-- Reduced redundant cross-linking and unnecessary stacked/nested card presentation.
-- Moved implementation/feature-check material behind Advanced disclosure controls.
-- Moved Office to System.
-- Added System → Access & API for browser sessions, SSH administration, and API credentials.
-- Kept Security focused on actual security policy and exposure.
-- Moved restart history into Advanced Stats.
-- Renamed Multi-App Setups / Compose Stacks to Docker Compose.
-- Restored Network Segments terminology to VLANs and removed Local resolver path from the normal Network display.
+The running `zero1d` service no longer attempts `apt` or system-binary installation from an API request. It only validates the already-installed backend.
 
-### Recovery and repeated notices
+Manual Remote Access VPN enablement and Zero1Connect managed remote provisioning now use the same readiness contract. If neither native nor userspace WireGuard can create a usable interface, the API returns HTTP 503 with `wireguard_backend_unavailable`.
 
-- Recovery verification is optional and defaults to off.
-- Disabled recovery verification no longer affects protection scores or creates verification reminders.
-- No-source verification returns: `No recovery source was available to verify.`
-- Recurring advisory notices can be dismissed, snoozed, or ignored so they stay out of Action Center until restored or their suppression expires.
+## Preserved v1.2.6.x qualification work
 
-### Storage
+This patch preserves the accepted v1.2.6.4 behavior for SMART self-test attachment/progress, RAID consistency progress and read-only-sysfs handling, Google Drive public-client OAuth flow, Phone Transfer, LAN Zero1Connect ACL behavior, analytics, recovery, and the independent Software Update Monitor.
 
-- Fixed RAID Check consistency writes to `/sys/block/.../md/sync_action` so the existing sysfs control is opened for writing without create/truncate semantics.
-- Integrated drive replacement into the RAID workflow and retired the separate Replace Drive page from primary navigation.
-- Expanded Analytics with file-type counts/storage visualization, capacity trend, share usage, largest files, and duplicate candidates.
+## Hardware validation after installation
 
-### Phone Transfer
+The immediate test sequence on the qualification NAS is:
 
-- Standardized the owner-facing name to Phone Transfer.
-- Phone Transfer is now a dedicated Sync & Backup section.
-- Reworked the page into an approximately 80/20 desktop workspace: phones/rules on the left, guidance/manual-transfer information on the right.
-- Moved Phone Transfer feature checks behind Advanced disclosure.
+1. Observe the v1.2.6.4 → v1.2.6.5 update with the corrected independent Update Monitor.
+2. Confirm `wireguard-go` exists at `/usr/local/sbin/wireguard-go`.
+3. Enable Remote Access VPN manually and confirm `wg-zero1` is created through the userspace backend when the kernel rejects the native link type.
+4. Enable automatic Zero1Connect remote access and confirm peer provisioning plus an actual handshake.
+5. Test Zero1Connect from a genuinely off-LAN connection.
+6. Reboot and confirm the managed WireGuard configuration and Connect access recover.
+7. Continue the remaining SMART-progress, RAID-consistency, and Google Drive sign-in hardware checks.
 
-### WireGuard backend qualification correction
+Phone Transfer has already been exercised successfully with two physical devices, and LAN Zero1Connect access has already been confirmed during this qualification campaign.
 
-- Replaces binary-presence detection with a live temporary backend probe that creates a WireGuard interface, configures a private key, brings the interface up, verifies it through `wg show`, and removes it.
-- `features.wireguard` and `managed_remote_access` are true only when that backend probe succeeds.
-- The real `.145` failure signature `Error: Unknown device type` is covered by regression tests and must result in the feature being unavailable rather than falsely advertised.
-- Managed WireGuard provisioning returns `wireguard_backend_unavailable`; the dedicated device provisioning path returns HTTP 503 for this condition.
-- LAN pairing remains usable even if remote setup cannot be completed.
-- Manual Remote Access enable and managed retry also return structured HTTP 503 when the backend is unavailable.
-- `applyWireGuard` now fails on address-assignment errors, reports activation failures with context, and cleans up newly-created partial interfaces.
-- The production qualifier independently probes the backend and verifies that Connect advertises the same truth. Strict qualification also requires a usable backend before managed off-LAN access can be promoted.
+## Release asset
 
-### Zero1Connect corrections
+Public installation asset:
 
-- Treats authenticated `root` as the master appliance administrator throughout Zero1Connect.
-- Removes the parallel Zero1Connect file-permission authority. Mobile file access now derives directly from the native Zero1Local shared-folder valid/read and write ACLs used by Files & Sharing.
-- A phone paired to `root` receives master native shared-folder access; other phones can never exceed their bound Zero1Local user's current rights.
-- Legacy prerelease scope IDs remain compatibility aliases only; their old stored permission flags are ignored.
-- Pairing now asks on the NAS whether the owner wants automatic remote access or LAN-only pairing. The pairing intent is stored with the single-use token, while current Android clients may also explicitly confirm/change the choice.
-- When remote access is enabled, Zero1Local installs/reconciles WireGuard, keys, peer, tunnel address, split routes and firewall state automatically.
-- Removes the dead-end owner-facing `Not configured` state. Remote state is Automatic setup, Ready, Needs attention, or Off by choice.
-- Fixes missing Zero1Connect status/layout styles that caused labels and values to run together.
+`Zero1Local-v1.2.6.5-production.zip`
 
-### Routing and branding
-
-- Retains three-way direct-refresh route parity validation between the frontend, packaged route manifest, and actual Go route handler.
-- Uses the supplied transparent theme-correct Zero1Local logos and the supplied Zero1Connect integration logo.
-
-## Qualification status
-
-This remains a **pre-release**. The qualification target is the Zero1Local test appliance. Do not treat v1.2.6.3 as production-qualified until the current server release and Zero1Connect Android client have completed real-device testing.
-
-The accepted v1.2.4.27 Windows installer remains byte-for-byte unchanged.
-
-## GitHub publication boundary
-
-The public repository contains documentation/branding and production release material. **Implementation source code is maintained privately/off-GitHub.**
-
-### GitHub Release asset
-
-Upload this installation asset to the v1.2.6.3 GitHub Release:
-
-```text
-Zero1Local-v1.2.6.3-production.zip
-```
-
-SHA-256:
-
-```text
-e532c69d8c3948874e3958d3cdd69d66ae3eec50a92b1c392069a033c7c60835
-```
-
-Do **not** upload `Zero1Local-v1.2.6.3-source.tar.gz` or private source/build workspaces to GitHub. Documentation files and branding are committed to the repository as normal files rather than attached as source release artifacts.
+SHA-256: `4f4c818f2f77c8c82ab8ef27fc582636e1acc55fc3bcd0ac4524c10ffc3bc28d`
