@@ -1,119 +1,29 @@
-# Zero1Connect server support — Zero1Local v1.2.6.7
+# Zero1Connect server support — Zero1Local v1.2.9
 
-**Zero1Connect** is a first-class top-level Zero1Local product area. The Android application is developed independently; Zero1Local owns the NAS-side `/api/connect/v1` contract, device identity, native file authorization, transfer services, and managed private remote-access path.
+Zero1Local v1.2.9 targets Zero1Connect 0.2.6+ and incorporates both the direct-remote/multi-NAS contract and the routed-LAN/VLAN addendum.
 
-The current integration target is Zero1Connect Android `0.2.3`. Package/build compatibility does not by itself qualify the complete Android/NAS workflow.
+The private mobile API remains `/api/connect/v1`. Direct remote pairing adds only one public HTTPS route: `POST /api/connect/bootstrap/v1/pair`. The bootstrap listener is separate from the normal management/Connect listener and does not expose files, shares, sessions, administration, SMB/NFS, or the web UI.
 
-## Zero1Local workspace
+## Routed LAN / VLAN behavior
 
-Use **Zero1Connect** from the primary navigation. The product area contains:
+A phone does not need to share the NAS's directly attached subnet. The private Connect listener accepts routed LAN transport from `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, and IPv6 ULA `fc00::/7` when the upstream site router/firewall permits the path. These ranges are a transport boundary only; normal pairing, device authentication, session, ACL, and revocation enforcement remain in force.
 
-- **Overview** — Connect API, discovery, administration state, paired phones, and remote-access state;
-- **Devices & Access** — paired phones, the bound Zero1Local user, effective native shared-folder access, and revocation; and
-- **Remote Access** — managed WireGuard state, endpoint status, and automatic setup/retry guidance.
+The broader Connect transport scope is separate from the owner's general trusted-service CIDRs. SMB, NFS, SSH and other services are not automatically opened to every routed private VLAN.
 
-Pairing is initiated from this product area rather than from a buried System subsection.
+Pairing QR v2 continues to use the NAS numeric LAN IPv4 address. For example, a phone at `172.16.0.13/24` may pair to `http://192.168.0.145/api/connect/v1` through the site's router without Zero1Local substituting a `172.16.0.x` address.
 
-## Root is the appliance master administrator
+`_zero1local._tcp` mDNS remains advertised locally, but cross-VLAN discovery requires a site mDNS reflector/repeater. QR/manual unicast pairing does not depend on multicast crossing VLANs.
 
-An authenticated Zero1Local `root` administrator is the appliance owner and has master administrative authority over Zero1Connect management.
+The Zero1Connect administration diagnostics expose effective listeners, interface addresses/prefixes, routed-LAN trust ranges, mDNS advertisement information, and recent accepted Connect source addresses. `/capabilities` and `/pair/complete` also log the actual source address seen by Zero1Local.
 
-A phone paired to `root` receives the same full native shared-folder file authority that `root` has on the appliance. It is not restricted by a second Zero1Connect-specific ACL.
+## Direct remote and aggregate WireGuard
 
-Other paired phones remain bound to their selected Zero1Local user and can never exceed that user's native file rights.
+Pairing QR v2 retains the numeric LAN endpoint and, only when direct remote access is actually ready, includes the public bootstrap endpoint, pinned bootstrap leaf-certificate SHA-256, public WireGuard endpoint, and expiry.
 
-## One file-permission authority
+Each NAS derives a stable RFC4193 ULA prefix from `SHA256("zero1local-wireguard-server:" + device_id)`. Zero1Local uses subnet `:1::/64` within that prefix, assigns the NAS `::1`, and assigns managed phones stable persistent `/128` addresses from the same per-NAS subnet. Therefore the phone address and NAS/API address share IPv6, and each NAS returns a unique `/128` AllowedIP suitable for Zero1Connect's aggregate multi-peer tunnel.
 
-Zero1Connect does **not** maintain a separate file/ACL permission system.
+A successful remote bootstrap must return a complete usable managed WireGuard profile. If an externally reachable bootstrap or WireGuard endpoint is unavailable, the public bootstrap fails with a structured error instead of creating a stranded remote-only pairing.
 
-The authoritative source for mobile file access is the same native shared-folder access configuration used by **Files & Sharing**:
+## Automatic gateway discovery in 1.2.9
 
-- shared-folder valid/read users determine read/download access;
-- shared-folder write users determine write operations; and
-- `root` has master read/write authority.
-
-`GET /api/connect/v1/shares` is therefore an effective view of the bound user's current native shared-folder access. Changes made in **Files & Sharing** automatically change what that paired phone can access.
-
-Legacy prerelease `scope_...` IDs may be accepted temporarily as compatibility aliases to their original shared folder, but their old stored permission flags are ignored and can never expand the current native ACL.
-
-## Pairing and device ownership
-
-A pairing QR contains a short-lived, single-use token and the NAS endpoint information required by the Android client. The NAS host embedded in that URI is a numeric LAN IPv4 address selected from the requesting browser client's subnet whenever one is available; Zero1Local does not assume that an Android phone can resolve the same local hostname the browser used. If Zero1Local cannot determine a usable numeric LAN IPv4 address, pairing fails explicitly instead of emitting a known-bad QR code. The QR must never contain a NAS password, Android private key, WireGuard private key, or permanent bearer token.
-
-Nearby discovery uses `_zero1local._tcp` over mDNS/Avahi. A service file alone is not treated as healthy discovery: owner-facing status is Running only when the advertisement exists and `avahi-daemon` is active.
-
-Each paired phone remains bound to a Zero1Local user/account context. A phone does not become an independent super-user identity.
-
-If an administrator pairs a phone for another user, the intended user must be selected explicitly where that workflow is offered.
-
-## Remote-access choice and zero-configuration setup
-
-Pairing offers an owner-facing choice:
-
-- **Set up remote access** — recommended; or
-- **Pair LAN only** — explicitly disables the managed remote tunnel for that phone.
-
-The pairing intent is stored with the single-use pairing request. A current Android client may also explicitly confirm or change the choice in `POST /pair/complete`. Older compatible clients that omit the field inherit the NAS-side pairing choice. If neither side supplies a choice, automatic remote access remains the compatibility default.
-
-WireGuard support is capability-gated by the runtime, not by package presence alone. Zero1Local advertises `features.wireguard=true` and `managed_remote_access=true` only after a temporary nonpersistent interface can be created, configured with a private key, activated, verified, and removed successfully. If that backend test fails, the dedicated provisioning path returns HTTP 503 with `wireguard_backend_unavailable`; LAN pairing remains valid.
-
-When remote access is enabled, the user is **not** expected to configure WireGuard manually. Zero1Local and Zero1Connect own the tunnel lifecycle. Zero1Local can:
-
-1. install required `wireguard-tools` and `iproute2` packages when missing;
-2. create/reconcile the managed `wg-zero1` server identity/interface;
-3. assign a unique per-phone tunnel address;
-4. install/reconcile that phone's peer and trusted firewall scope;
-5. preserve the peer across reboot/update; and
-6. discover or establish a usable external UDP endpoint where the network permits it.
-
-Endpoint selection can use an explicitly configured valid endpoint, a globally routable address directly assigned to the NAS, or a router-confirmed UPnP UDP mapping when appropriate. UPnP discovery is performed independently on each active LAN IPv4 address with interface-bound SSDP multicast, retries, and IGD/WANIPConnection/WANPPPConnection/root-device/`ssdp:all` search targets so a multi-interface NAS does not silently probe the wrong network path.
-
-There is no ambiguous **Not configured** normal state. Owner-facing remote state is expressed as **Automatic setup**, **Ready**, **Needs attention**, or **Off by choice**.
-
-If the NAS cannot establish an external endpoint automatically, LAN pairing remains valid. Zero1Local reports the concrete network problem and what remains for the network owner (for example, allowing/forwarding the displayed UDP port). The user still does not manually create WireGuard keys, peers, subnets, or routes.
-
-The Android WireGuard private key never leaves the phone. Managed routes are **split tunnel only** and must never require `0.0.0.0/0` or `::/0`.
-
-## Pair completion contract
-
-The current request includes the single-use token, Android device identity, P-256 authentication public key, and Android WireGuard public key. `remote_access` is optional:
-
-```json
-{
-  "pairing_token": "single-use-token",
-  "device": {
-    "id": "client-generated-uuid",
-    "name": "Samsung SM-...",
-    "platform": "android",
-    "app_version": "0.2.3"
-  },
-  "auth_public_key": "BASE64-X509-SPKI-P256-PUBLIC-KEY",
-  "auth_algorithm": "EC_P256_SHA256",
-  "wireguard_public_key": "BASE64-WIREGUARD-PUBLIC-KEY",
-  "remote_access": true
-}
-```
-
-When automatic remote access is ready, `/pair/complete` returns the managed WireGuard configuration directly. When automatic endpoint setup needs attention, pairing still succeeds for LAN use and the response reports `action_required` with the real failure reason. An explicit LAN-only choice reports `disabled` / off by choice rather than “not configured.”
-
-## Authentication
-
-Pair completion receives the Android P-256 authentication public key (X.509 SPKI) and the phone's WireGuard public key. Private keys remain on Android.
-
-Challenge/session authentication uses short-lived random challenges and `SHA256withECDSA`. Successful authentication issues a short-lived bearer session. Revoked devices cannot establish new sessions.
-
-## File and transfer confinement
-
-The Connect API supports native-share browsing, folder creation, rename, move, copy, delete/recycle behavior, duplicate checks, streaming downloads, and resumable uploads according to the bound user's effective native permissions.
-
-Mobile-visible paths are relative to the selected shared folder. Zero1Local rejects `..` traversal, backslash/alternate-separator traversal, alternate encoding traversal, symlink/mount escape, stale IDs, IDs from another device/user, and unauthorized cross-share operations.
-
-Possessing an opaque file ID is not authorization; the object is re-authorized on every request.
-
-## Revocation
-
-Revoking one phone invalidates its future authentication authority and managed WireGuard peer without changing the native Zero1Local shared-folder ACL or revoking other phones.
-
-## Qualification boundary
-
-Real-device qualification must prove numeric-LAN QR pairing, Nearby `_zero1local._tcp` discovery, manual pairing, both remote-access choices, one-time token behavior, root master behavior, normal-user native ACL inheritance, traversal confinement, file operations, resumable upload/download, managed WireGuard off-LAN access, full-tunnel rejection, multiple phones, revocation, and reboot/update persistence against the exact Android client under test.
+Automatic remote-access setup now discovers the router through the NAS IPv4 default route. Docker bridges, WireGuard interfaces, and other virtual interfaces are excluded from Internet-gateway discovery. Zero1Local sends standard multicast SSDP plus a gateway-directed probe and can use NAT-PMP when UPnP mapping is unavailable. Diagnostics report the selected LAN interface, source address, gateway path, and mapping result.

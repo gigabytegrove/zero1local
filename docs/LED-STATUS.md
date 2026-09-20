@@ -1,4 +1,4 @@
-# Zero1Local chassis LED status reference — v1.2.6.7
+# Zero1Local chassis LED status reference — v1.2.9
 
 ## Proven hardware capability
 
@@ -40,3 +40,9 @@ A red Phone Transfer indication must correspond to a visible task/UI failure. Fo
 ## Qualification boundary
 
 The basic red/green/yellow/off channel behavior is based on exercised chassis controls. Specific Phone Transfer event sequences remain subject to real-hardware acceptance testing for the exact phone/USB path in use.
+
+## Drive warning lights and SMART health
+
+Zero1Local 1.2.9 uses one shared drive-health assessment for both the chassis drive LEDs and the Storage interface. A yellow drive light is no longer a separate unexplained signal: open **Storage → Drives** to see the condition that triggered attention, including reallocated sectors, pending or uncorrectable sectors, command timeouts, or interface CRC errors.
+
+SMART short and long tests use the detected device/bridge type. If a self-test is already running, Zero1Local attaches to it and shows its progress rather than trying to start a second test.

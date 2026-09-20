@@ -1,4 +1,4 @@
-# Zero1Local Task Center — v1.2.6.7
+# Zero1Local Task Center — v1.2.9
 
 Task Center is the owner-facing place for background work that can outlive the current page or browser session.
 
@@ -59,3 +59,7 @@ Software Update tasks use update-specific stages rather than file-transfer termi
 7. Verifying and cleaning up
 
 Update progress persists across the expected management-service restart and is available through the session-independent Update Monitor. The monitor includes local-time timestamps, an animated determinate progress track, active-stage spinner, live status-refresh heartbeat, elapsed update time, and a persistent warning not to power off or unplug the NAS while the update is active.
+
+## Dismissing finished work
+
+Zero1Local 1.2.9 keeps completed and failed tasks visible until you decide you are finished with them. Use **Dismiss** on one finished task or **Clear finished** to remove all terminal history at once. Active work cannot be dismissed. The dismissal is persistent, including for completed software-update tasks that are reconstructed from update state after a service restart.

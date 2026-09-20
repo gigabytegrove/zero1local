@@ -1,4 +1,4 @@
-# Zero1Local UI / UX design system — v1.2.6.7
+# Zero1Local UI / UX design system — v1.2.9
 
 This document records the owner-facing presentation rules for Zero1Local.
 
@@ -18,7 +18,7 @@ The primary navigation is the canonical way to move among major product areas. C
 
 Do not create a web of reciprocal “go to…” links between every related area.
 
-Current top-level areas are Home, Files & Sharing, Storage, Sync & Backup, Zero1Connect, Apps, Connectivity, and System.
+Current top-level areas are Home, Files & Sharing, Storage, Sync & Backup, Zero1Connect, Apps, Connectivity, System, and Help.
 
 ## Surface hierarchy
 
@@ -80,3 +80,9 @@ Recurring advisory notices must expose appropriate suppression controls where pr
 ## Non-removal rule
 
 UI simplification must not silently remove backend capability, routes, safety confirmations, recovery controls, storage operations, or server-side validation. Consolidation changes presentation/ownership; it does not bypass protection.
+
+## 1.2.9 organization and visual consistency
+
+The 1.2.9 interface keeps one consistent application/subnavigation model across pages, consolidates Remote Access under Zero1Connect, keeps Office editing with Files & Sharing, and adds a first-class Help area. System & Power now uses visual summaries for memory, storage, service health, temperature, and load while detailed controls remain in their dedicated workspaces.
+
+Layout rules also standardize page width, panel padding, action alignment, responsive button wrapping, and card stacking so related pages do not drift into different spacing conventions.

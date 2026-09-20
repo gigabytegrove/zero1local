@@ -1,58 +1,48 @@
-# Zero1Local v1.2.6.7 — LAN Pairing / Nearby Discovery / UPnP Interoperability Correction
+# Zero1Local v1.2.9 — Health, Tasks, Apps & Interface
 
-**Git tag:** `v1.2.6.7`  
-**Status:** Pre-release / real-hardware qualification candidate
+**Git tag:** `v1.2.9`
 
-Zero1Local v1.2.6.7 is a focused Zero1Connect interoperability correction based on live LAN and router evidence from the qualification appliance. The Omada gateway has UPnP enabled for the Management (Default) 192.168.0.0/24 network, yet Zero1Local reported that no UPnP Internet Gateway Device was advertised. At the same time, QR pairing returned an unreachable-host error in Zero1Connect and Nearby discovery returned no Zero1Local devices.
+Zero1Local 1.2.9 makes appliance health easier to understand, improves routine task management, expands the Docker application experience, and gives the web interface a more consistent structure.
 
-## Numeric LAN QR pairing
+## Drive health you can act on
 
-The pairing deep link no longer copies the browser `Host` value as the phone endpoint. Zero1Local now enumerates active IPv4 LAN addresses and prefers the address whose subnet contains the browser client. A browser opened as `nas1` or another local hostname therefore produces a pairing URI containing the actual NAS IPv4 address (for example `192.168.0.145`) rather than assuming Android can resolve the same hostname.
+The Storage interface and physical drive-light policy now share one SMART health assessment. A yellow or red drive light is accompanied by an owner-facing explanation in the UI, including conditions such as reallocated sectors, pending or uncorrectable sectors, command timeouts, and interface CRC errors.
 
-If no usable numeric LAN IPv4 address can be determined, pairing fails explicitly with `lan_address_unavailable` instead of emitting a QR code known to be unusable.
+SMART short and long tests also use the detected drive/bridge type. If a test is already running, Zero1Local attaches to that test instead of treating it as a start failure. When a drive genuinely rejects a test request, the actual diagnostic is shown.
 
-## Nearby Zero1Local discovery
+## Cleaner Task Center history
 
-- Adds a packaged `_zero1local._tcp` Avahi service definition so Nearby discovery does not depend on a runtime-generated file appearing successfully.
-- Preserves the runtime-generated service metadata with persistent NAS ID/name when available.
-- Starts/reloads Avahi when the Connect advertisement is reconciled.
-- `mDNS status=Running` now requires both the service definition and an actually active `avahi-daemon`; file existence alone is no longer reported as success.
-- Installer rollback/uninstall paths preserve or restore the Connect Avahi service transactionally.
-- Production verification/qualification now fails when the advertisement exists but Avahi is not actually active.
+Finished and failed jobs can now be dismissed individually. **Clear finished** removes all completed history at once, while active jobs remain protected. Dismissals are persisted so completed update tasks do not reappear simply because update state is reloaded.
 
-## Omada / UPnP interoperability
+## Better automatic remote-access discovery
 
-The previous SSDP implementation used one wildcard UDP socket, three search targets, a single send round and a 2.5-second response window. On a multi-interface NAS this can select the wrong egress path and can miss gateways that advertise a WAN connection service without replying to the narrow IGD search.
+Zero1Connect remote setup now performs Internet-gateway discovery through the NAS interface that owns the IPv4 default route. Docker bridges, WireGuard interfaces, and other virtual interfaces are not treated as gateway candidates.
 
-v1.2.6.7 now:
+UPnP discovery sends both multicast and gateway-directed SSDP probes. If UPnP cannot establish a mapping, Zero1Local can fall back to NAT-PMP for the WireGuard UDP mapping and direct-bootstrap TCP mapping. Diagnostics identify the selected LAN interface, source address, and gateway path instead of listing unrelated virtual interfaces.
 
-- sends SSDP discovery independently from every active non-loopback IPv4 LAN address;
-- binds multicast transmission to the corresponding source interface;
-- searches IGD v1/v2, WANIPConnection v1/v2, WANPPPConnection, root-device and `ssdp:all` targets;
-- performs two discovery rounds;
-- uses a five-second response window in parallel across interfaces; and
-- reports which LAN interfaces were actually scanned when no usable gateway response is received.
+## Expanded App Catalog
 
-No WireGuard keys, peers, ACLs or routes are weakened by this change. A remotely reachable endpoint is still required before Zero1Local returns a managed profile as Ready.
+The curated catalog now includes additional applications alongside the existing productivity, media, synchronization, security, monitoring, development, and home-automation options. Each curated application has its own local vector mark in the interface.
 
-## WireGuard result carried forward
+Owners can also save custom Docker image references from Docker Hub, GHCR, or another registry and pull those images directly from the catalog. Custom entries do not guess container settings or expose ports automatically. Docker Compose remains available for advanced and multi-container deployments.
 
-Real-hardware testing already proved that the RK3568 vendor kernel rejects the native WireGuard link type while the installed ARM64 `wireguard-go` fallback successfully creates a TUN-backed WireGuard interface that `wg` can configure and inspect. v1.2.6.7 preserves that userspace fallback path.
+## More deliberate navigation and layout
 
-## Hardware validation after installation
+Version 1.2.9 reduces duplicated navigation and keeps feature-specific controls with the feature they belong to:
 
-1. Scan a fresh Zero1Connect pairing QR and confirm the phone reaches the NAS over its numeric 192.168.0.x address.
-2. Confirm the NAS appears under Nearby Zero1Local devices.
-3. Confirm Remote Access retry discovers the Omada UPnP gateway and creates the UDP mapping, or returns the new interface-specific SSDP diagnostic.
-4. Confirm the returned endpoint is usable from cellular/off-LAN and the WireGuard tunnel handshakes.
-5. Continue SMART progress, RAID consistency and Google Drive sign-in hardware checks.
+- Remote Access is managed under Zero1Connect rather than duplicated under Connectivity.
+- Office editing stays with Files & Sharing and remains available contextually from File Manager.
+- System pages use consistent spacing, card sizing, button grouping, and responsive stacking.
+- System & Power now includes visual memory, storage, service-health, temperature, and load summaries.
 
-Phone Transfer has already passed with two physical devices. Zero1Connect LAN API/file behavior has also previously passed; this release specifically corrects the pairing/discovery path that prevents a fresh client from reaching that working LAN API.
+## Help Center
+
+A new Help section provides owner-facing guides for getting started, storage and drive health, Zero1Connect, applications, and troubleshooting. Contextual Help remains available from the top bar throughout the interface.
+
+## Compatibility
+
+This release keeps the existing Zero1Connect 0.2.6+ private API and direct-remote/multi-NAS design. Routed private LAN/VLAN support from 1.2.8 remains in place. Docker Compose, File Manager Office integration, Recovery, Phone Transfer, storage protection, and existing application-management workflows are retained.
 
 ## Release asset
 
-Public installation asset:
-
-`Zero1Local-v1.2.6.7-production.zip`
-
-SHA-256: `42f82a669b92b82346172d7d6ab5ebcfb463847e5fd1f094b3d62a15bf95a6a6`
+Use `Zero1Local-v1.2.9-production.zip` for installation or update. The package includes the approved Windows installer, exact ARM64 runtime payload, deployment helper, README, and checksum manifest.
