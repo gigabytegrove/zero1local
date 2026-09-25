@@ -2,6 +2,14 @@
 
 Zero1Local is a local-first management system for the IronCow Zero1 NAS. It replaces the original appliance management layer while preserving owner data and focuses on storage, file sharing, backups, applications, hardware health, recovery, and Zero1Connect integration.
 
+## Zero1Local 1.2.9.15 pre-release
+
+v1.2.9.15 is a narrowly scoped corrective build. Live v1.2.9.14 testing proved the new Google TVs and Limited Input devices client ID had been transcribed into the production build with one extra character, so Google's device-code endpoint returned `invalid_client` with `OAuth client was not found`.
+
+The exact owner-created device client ID is now embedded. Its matching client secret and the device-flow implementation are otherwise unchanged. The working v1.2.9.14 persistent Omada UPnP control path and Zero1Connect server-side remote access behavior are retained unchanged.
+
+The public installation artifact is `Zero1Local-v1.2.9.15-production.zip`. Implementation source and embedded application credentials remain private/off-GitHub.
+
 ## Zero1Local 1.2.9.14 pre-release
 
 v1.2.9.14 addresses two failures proven during live v1.2.9.13 testing.
