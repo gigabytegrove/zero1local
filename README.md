@@ -4,6 +4,17 @@ Zero1Local is a local-first management system for the IronCow Zero1 NAS. It repl
 
 ## Zero1Local redacted.invalid pre-release
 
+vredacted.invalid addresses two failures proven during live vredacted.invalid testing.
+
+- **Google device authorization.** The previously embedded client was proven in Google Cloud to be a Web application client. The production application now uses the newly created TVs and Limited Input devices client pair while keeping credentials embedded and owner-facing setup credential-free.
+- **Persistent UPnP WAN path.** Zero1Local now persists and validates the known-good IGD/WANIPConnection control path and reuses it for both WireGuard UDP and bootstrap TCP mapping instead of requiring a fresh SSDP response for every renewal.
+- **Truthful failure state.** Failed automatic publication clears stale active/lease/renewal state, while manual forwarding is presented as a fallback rather than an unsupported conclusion about the router.
+- **Evidence remains visible.** Cached UPnP description/control/service/gateway information and validation timing are available in direct-remote diagnostics.
+
+The public installation asset for this pre-release is `Zero1Local-vredacted.invalid-production.zip`. Implementation source and private build material remain off GitHub.
+
+## Zero1Local redacted.invalid pre-release
+
 vredacted.invalid is an evidence-driven corrective build. It does not claim an external provider or network success until the exact release artifact proves that behavior on the designated test NAS.
 
 ### What changed
