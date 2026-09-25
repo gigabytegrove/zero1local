@@ -1,6 +1,12 @@
-# Zero1Connect server support — Zero1Local v1.2.9
+# Zero1Connect server support — Zero1Local v1.2.9.13
 
 Zero1Local v1.2.9 targets Zero1Connect 0.2.6+ and incorporates both the direct-remote/multi-NAS contract and the routed-LAN/VLAN addendum.
+
+## v1.2.9.13 automatic-mapping diagnostics
+
+UPnP discovery uses dedicated local UDP reply port 43121. Strict firewall rules admit routed-private-LAN traffic to that destination before INVALID/conntrack filtering. Zero1Local records the selected interface, source address, default gateway, reply port, returned SSDP locations, chosen WAN control service, and exact UPnP SOAP faults so router behavior can be diagnosed from evidence.
+
+If a gateway explicitly reports UPnP error 725 (OnlyPermanentLeasesSupported), Zero1Local retries that mapping with a permanent lease. PCP and NAT-PMP remain independent fallbacks. Manual forwarding is used only after the automatic mechanisms actually fail.
 
 The private mobile API remains `/api/connect/v1`. Direct remote pairing adds only one public HTTPS route: `POST /api/connect/bootstrap/v1/pair`. The bootstrap listener is separate from the normal management/Connect listener and does not expose files, shares, sessions, administration, SMB/NFS, or the web UI.
 

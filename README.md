@@ -2,6 +2,20 @@
 
 Zero1Local is a local-first management system for the IronCow Zero1 NAS. It replaces the original appliance management layer while preserving owner data and focuses on storage, file sharing, backups, applications, hardware health, recovery, and Zero1Connect integration.
 
+## Zero1Local 1.2.9.13 pre-release
+
+v1.2.9.13 is an evidence-driven corrective build. It does not claim an external provider or network success until the exact release artifact proves that behavior on the designated test NAS.
+
+### What changed
+
+- **UPnP discovery firewall correction.** SSDP discovery now uses a dedicated local UDP reply port and admits private-LAN replies to that destination before INVALID/conntrack filtering.
+- **Exact UPnP fault handling.** Standard router SOAP fault codes are preserved, including permanent-lease-only handling when the gateway explicitly reports it.
+- **Network evidence in the journal.** The selected interface, source address, gateway, reply port, returned SSDP locations, WAN service selection, and mapping faults are retained for diagnosis.
+- **Google provider evidence.** The embedded Google application credential and ownerless sign-in flow remain. Provider HTTP status/code/detail are retained when Google rejects device authorization.
+- **Production installer repaired.** The Windows installer now names and SHA-256-pins the runtime payload from the same release.
+
+The public installation artifact is `Zero1Local-v1.2.9.13-production.zip`. Implementation source and private build material remain off GitHub.
+
 ## Zero1Local 1.2.9
 
 Version 1.2.9 focuses on clearer health information, a more organized interface, and easier day-to-day administration.
