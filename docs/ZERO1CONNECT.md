@@ -1,6 +1,14 @@
-# Zero1Connect server support — Zero1Local v1.2.9.13
+# Zero1Connect server support — Zero1Local v1.2.9.14
 
-Zero1Local v1.2.9 targets Zero1Connect 0.2.6+ and incorporates both the direct-remote/multi-NAS contract and the routed-LAN/VLAN addendum.
+Zero1Local v1.2.9.14 targets Zero1Connect v0.2.8+ and combines routed-LAN/VLAN pairing with first-time direct remote pairing over LTE/5G.
+
+## v1.2.9.14 persistent UPnP control path
+
+Live v1.2.9.13 evidence proved the site's Omada ER707-M2 exposes and answers a valid UPnP InternetGatewayDevice/WANIPConnection service and that Zero1Local previously established automatic UPnP publication. A later fresh SSDP discovery could nevertheless return no locations.
+
+v1.2.9.14 persists the validated IGD description URL, WAN control URL, service type and gateway. Before reuse, the cached control service is validated with GetExternalIPAddress. One validated service is then reused for both the WireGuard UDP mapping and bootstrap TCP mapping. SSDP becomes rediscovery/failover when the cached path is absent or invalid rather than a prerequisite for every renewal.
+
+Failed automatic publication clears stale endpoint, mapping-active, lease/expiry and last-successful-renewal state. The UI reports automatic mapping failure factually and offers manual forwarding as a fallback without claiming the router inherently requires it.
 
 ## v1.2.9.13 automatic-mapping diagnostics
 

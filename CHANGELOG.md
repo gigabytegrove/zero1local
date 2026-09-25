@@ -1,5 +1,14 @@
 # Zero1Local Changelog
 
+## v1.2.9.14 — Google Device Client & Persistent UPnP Control Path
+
+- Replaces the Google OAuth Web-application credential that live Google device authorization rejected with the newly created TVs and Limited Input devices client pair.
+- Persists and validates the last successful UPnP IGD/WANIPConnection control path instead of requiring fresh SSDP discovery for every port mapping and renewal.
+- Uses one validated UPnP WAN service for both WireGuard UDP and bootstrap TCP publication during a direct-remote transaction.
+- Clears stale public endpoints, mapping flags, lease/expiry state and last-successful-renewal data when a new automatic publication transaction fails.
+- Exposes cached UPnP path/validation evidence in diagnostics and no longer claims a router inherently requires manual forwarding merely because an automatic attempt failed.
+- Remains a pre-release until the exact package passes live Google authorization/token exchange, Omada mapping/renewal, LTE/5G WireGuard/bootstrap, reboot and update/rollback acceptance.
+
 ## v1.2.9 — Health, Tasks, Apps & Interface
 
 - Drive health in Storage now uses the same SMART assessment as the chassis drive lights, so warning LEDs are accompanied by a clear reason in the UI.
