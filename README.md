@@ -4,6 +4,14 @@ Zero1Local is a local-first management system for the IronCow Zero1 NAS. It repl
 
 ## Zero1Local redacted.invalid pre-release
 
+vredacted.invalid is a narrowly scoped corrective build. Live vredacted.invalid testing proved the new Google TVs and Limited Input devices client ID had been transcribed into the production build with one extra character, so Google's device-code endpoint returned `invalid_client` with `OAuth client was not found`.
+
+The exact owner-created device client ID is now embedded. Its matching client secret and the device-flow implementation are otherwise unchanged. The working vredacted.invalid persistent Omada UPnP control path and Zero1Connect server-side remote access behavior are retained unchanged.
+
+The public installation artifact is `Zero1Local-vredacted.invalid-production.zip`. Implementation source and embedded application credentials remain private/off-GitHub.
+
+## Zero1Local redacted.invalid pre-release
+
 vredacted.invalid addresses two failures proven during live vredacted.invalid testing.
 
 - **Google device authorization.** The previously embedded client was proven in Google Cloud to be a Web application client. The production application now uses the newly created TVs and Limited Input devices client pair while keeping credentials embedded and owner-facing setup credential-free.
