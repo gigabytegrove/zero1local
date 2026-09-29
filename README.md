@@ -4,7 +4,7 @@ Zero1Local is a local-first management system for the IronCow Zero1 NAS. It repl
 
 ## Current release
 
-**v1.2.9.15 is a pre-release / test build.**
+**v1.2.9.15 is the current stable release.**
 
 This corrective build fixes the Google TVs and Limited Input devices OAuth client ID used by Zero1Local's device authorization flow. The matching client secret and device-flow implementation are otherwise unchanged, and the persistent Omada UPnP control path introduced in v1.2.9.14 remains in place.
 
@@ -13,8 +13,6 @@ The public installation artifact is:
 `Zero1Local-v1.2.9.15-production.zip`
 
 Implementation source, private build material, and embedded application credentials are not published in this public repository.
-
-Provider success is not claimed until the exact release artifact completes live authorization and token exchange.
 
 For complete release history and technical changes, see [CHANGELOG.md](CHANGELOG.md) and the repository's GitHub Releases.
 
@@ -74,4 +72,4 @@ Project policies:
 
 Zero1Local release packages are evidence-driven. A build is not treated as proven merely because it was produced successfully; promotion depends on live acceptance of the exact artifact on supported hardware and workflows.
 
-Pre-release builds are clearly marked in GitHub Releases. Historical release notes belong in GitHub Releases and [CHANGELOG.md](CHANGELOG.md), keeping the repository root focused on current documentation.
+Stable and pre-release builds are identified by their GitHub Release status. Historical release notes belong in GitHub Releases and [CHANGELOG.md](CHANGELOG.md), keeping the repository root focused on current documentation.
