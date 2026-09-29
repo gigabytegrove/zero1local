@@ -68,4 +68,4 @@ Do not expose SMB, NFS, SSH, Recovery, or the management plane directly to the p
 
 ## Warranty and risk
 
-Installation is voluntary and at the device owner's risk. See [Warranty and Risk](WARRANTY-AND-RISK.md) and the repository [LICENSE.md](../LICENSE.md).
+Installation is voluntary and at the device owner's risk. See [Warranty and Risk](WARRANTY-AND-RISK.md) and the repository [LICENSE.md](../LICENSE.txt).
