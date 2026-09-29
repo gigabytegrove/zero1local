@@ -18,4 +18,4 @@ Before installation, the device owner is responsible for backing up or moving al
 
 The device owner is responsible for maintaining complete independent backups, reviewing release documentation, confirming that the target hardware is supported, and deciding whether installation or use is appropriate for that device and data.
 
-The complete license terms are controlling. See [`LICENSE.md`](../LICENSE.md).
+The complete license terms are controlling. See [`LICENSE.md`](../LICENSE.txt).
