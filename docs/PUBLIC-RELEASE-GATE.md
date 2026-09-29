@@ -27,7 +27,7 @@ Public documentation follows Zero1Local's evidence-first rule. Do not claim univ
 
 ## GitHub publication policy
 
-For vredacted.invalid, the GitHub Release asset intended for installation is:
+For the current stable release, the GitHub Release asset intended for installation is:
 
 ```text
 Zero1Local-vredacted.invalid-production.zip
