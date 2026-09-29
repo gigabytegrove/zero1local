@@ -5,7 +5,7 @@
 - Corrects a one-character transcription error in the vredacted.invalid embedded Google TVs and Limited Input devices client ID that caused Google's device-code endpoint to return `invalid_client` / `OAuth client was not found`.
 - Preserves the matching client secret and the evidence-backed Google device-flow implementation unchanged.
 - Preserves the working vredacted.invalid persistent Omada UPnP control-path and Zero1Connect server behavior unchanged.
-- Remains a pre-release until the exact artifact completes live Google authorization/token exchange.
+- Promoted as the current stable release after validation of the corrected production build.
 
 ## vredacted.invalid — Google Device Client & Persistent UPnP Control Path
 
