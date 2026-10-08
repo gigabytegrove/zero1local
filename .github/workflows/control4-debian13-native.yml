@@ -1,0 +1,56 @@
+name: Control4 EA-1 V2 native Debian 13 kernel
+
+on:
+  push:
+    branches:
+      - tmp-control4-debian13-native
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - name: Checkout build harness
+        uses: actions/checkout@v4
+
+      - name: Build Debian 13 amd64 CE5310 kernel
+        shell: bash
+        run: |
+          set -euxo pipefail
+          rm -rf dist .c4work
+          mkdir -p dist .c4work
+          docker run --rm \
+            -e DEBIAN_FRONTEND=noninteractive \
+            -v "$GITHUB_WORKSPACE:/repo:ro" \
+            -v "$GITHUB_WORKSPACE/.c4work:/work" \
+            -v "$GITHUB_WORKSPACE/dist:/artifacts" \
+            debian:13 \
+            bash /repo/tools/control4-debian13/build.sh
+
+      - name: Show deliverables
+        if: always()
+        shell: bash
+        run: |
+          find dist -maxdepth 2 -type f -printf '%p %s bytes\n' 2>/dev/null | sort || true
+
+      - name: Upload native Debian kernel bundle
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: control4-ea1-v2-debian13-native
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: control4-ea1-v2-build-diagnostics
+          path: dist/*
+          if-no-files-found: ignore
+          retention-days: 3
