@@ -1,0 +1,27 @@
+name: Diagnose private source checkout for Zero1Local release
+on:
+  push:
+    paths:
+      - ".github/workflows/check-source-access.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-access:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Attempt read-only checkout of private canonical source
+        uses: actions/checkout@v4
+        with:
+          repository: gigabytegrove/zero1local-source
+          ref: main
+          path: source
+          persist-credentials: false
+      - name: Verify private source identity without exposing it
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test -f source/go.mod
+          test -f source/VERSION
+          echo "Private source checkout worked. No source material was uploaded."
