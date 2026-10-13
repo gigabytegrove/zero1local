@@ -2,6 +2,10 @@
 
 Zero1Local uses GitHub Releases from `gigabytegrove/zero1local` as the public production-update source.
 
+## Superseded update downloads
+
+Thirty-six older production ZIP assets were retired on 2026-10-13 and are no longer installable from GitHub Releases. The sole remaining downloadable installer is vredacted.invalid; it retains the legacy native Google Drive implementation and has not been rebuilt. The future replacement is to remove that engine and offer [Syncria — Coming soon](SYNCRIA.md). See [legacy release retirement](LEGACY-RELEASE-RETIREMENT.md).
+
 ## Public repository boundary
 
 GitHub contains documentation, branding, support/security information, and production release packages. **Implementation source code and local source archives are maintained privately/off-GitHub.**
