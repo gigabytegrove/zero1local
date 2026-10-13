@@ -4,7 +4,7 @@ Software Updates lives at **System → Updates** (`/updates`). It is designed to
 
 ## Retired historical versions
 
-On 2026-10-13, all 36 superseded production ZIPs were removed from GitHub Releases. Their tags and notes remain for history but have no installable asset. The remaining stable v1.2.9.15 ZIP **still contains legacy built-in Google Drive** and is awaiting a tested replacement. Google Drive will belong to the optional [Syncria companion — Coming soon](SYNCRIA.md), not a future Zero1Local engine. See [legacy release retirement](LEGACY-RELEASE-RETIREMENT.md).
+On 2026-10-13, all 36 superseded production ZIPs were removed from GitHub Releases. Their tags and notes remain for history but have no installable asset. The remaining stable v1.2.9.15 ZIP **still contains legacy built-in Google Drive**. The cleaned **v1.3.0 Beta prerelease is now downloadable** for controlled appliance qualification; Stable promotion still requires NAS upgrade, rollback and data-preservation testing. Google Drive will belong to the optional [Syncria companion — Coming soon](SYNCRIA.md), not a future Zero1Local engine. See [legacy release retirement](LEGACY-RELEASE-RETIREMENT.md).
 
 ## Public update source
 
@@ -16,7 +16,7 @@ The updater installs the exact production asset:
 Zero1Local-v<version>-production.zip
 ```
 
-The public GitHub repository does not publish Zero1Local implementation source code. Source archives maintained privately/off-GitHub are not part of update discovery or installation.
+The public GitHub repository does not publish Zero1Local implementation source code. The complete editable source is maintained at the **private** `gigabytegrove/zero1local-source` GitHub repository, not part of update discovery or installation.
 
 ## What the page shows
 
