@@ -1,0 +1,158 @@
+name: Build and publish Zero1Local v1.3.1
+run-name: Build verified v1.3.1 from private source to public Releases
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/build-and-publish-v131.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: zero1local-v131-public-release
+  cancel-in-progress: false
+
+jobs:
+  build-verify-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      VERSION: "1.3.1"
+      SOURCE_REPOSITORY: gigabytegrove/zero1local-source
+      PUBLIC_REPOSITORY: gigabytegrove/zero1local
+      RELEASE_TAG: v1.3.1
+      RELEASE_ASSET: Zero1Local-v1.3.1-production.zip
+      Z1L_BUILD_DIR: ${{ runner.temp }}/zero1local-v131
+    steps:
+      - name: Verify secure, read-only private source access
+        env:
+          SOURCE_TOKEN: ${{ secrets.ZERO1LOCAL_SOURCE_TOKEN }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          if [[ -z "$SOURCE_TOKEN" ]]; then
+            echo "::error::Repository secret ZERO1LOCAL_SOURCE_TOKEN is missing. It must be a read-only fine-grained token for gigabytegrove/zero1local-source."
+            exit 1
+          fi
+          echo "A private-source checkout credential has been configured."
+      - name: Check out canonical private source (never publish source)
+        uses: actions/checkout@v4
+        with:
+          repository: gigabytegrove/zero1local-source
+          ref: main
+          path: source
+          token: ${{ secrets.ZERO1LOCAL_SOURCE_TOKEN }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: source/go.mod
+          cache: false
+      - name: Verify source, run tests and static checks
+        shell: bash
+        working-directory: source
+        run: |
+          set -Eeuo pipefail
+          test "$(cat VERSION)" = "$VERSION"
+          git rev-parse HEAD | tee "$RUNNER_TEMP/source-commit.txt"
+          go test ./...
+          go test -race ./...
+          go vet ./...
+          node --check web/app.js
+          node scripts/test-v131-ux-contract.js
+          bash helpers/validate-web-capabilities.sh web/app.js packaging/ui-routes.txt
+          find helpers scripts -name '*.sh' -type f -print0 | xargs -0 -r -n1 bash -n
+      - name: Compile and package from current source
+        shell: bash
+        working-directory: source
+        run: |
+          set -Eeuo pipefail
+          python3 .github/release/build-v131.py
+      - name: Verify production ZIP, checksums and ARM64 binaries
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          FILE="$Z1L_BUILD_DIR/$RELEASE_ASSET"
+          test -s "$FILE"
+          python3 - "$FILE" "$VERSION" <<'PY'
+          import hashlib,io,re,sys,tarfile,zipfile
+          archive,version=sys.argv[1:]
+          stem=f'Zero1Local-v{version}'
+          expected={'Install-Zero1Local.ps1','README.txt','SHA256SUMS.txt',
+                    f'{stem}.tar.gz','deploy-on-nas.sh'}
+          with zipfile.ZipFile(archive) as z:
+              assert z.testzip() is None, 'Corrupted ZIP member'
+              assert set(z.namelist()) == expected, 'Unexpected production archive layout'
+              checks=z.read('SHA256SUMS.txt').decode().splitlines()
+              assert len(checks)==4, 'Expected four checksum manifest entries'
+              observed=set()
+              for entry in checks:
+                  digest,name=entry.split(maxsplit=1)
+                  assert re.fullmatch('[0-9a-fA-F]{64}',digest)
+                  assert name in expected and name!='SHA256SUMS.txt' and name not in observed
+                  observed.add(name)
+                  assert hashlib.sha256(z.read(name)).hexdigest()==digest.lower(), name
+              with tarfile.open(fileobj=io.BytesIO(z.read(f'{stem}.tar.gz')), mode='r:gz') as tar:
+                  for binary in ('zero1d-linux-arm64','zero1-recovery-linux-arm64'):
+                      matches=[m for m in tar.getmembers() if m.name.endswith('/bin/'+binary)]
+                      assert len(matches)==1, f'Incorrect number of {binary} binaries'
+                      obj=tar.extractfile(matches[0]).read()
+                      assert obj[:4]==b'\x7fELF' and int.from_bytes(obj[18:20],'little')==183, f'{binary} is not AArch64 ELF'
+                  assert not any(m.name.endswith('.go') for m in tar.getmembers()),'Go source in public installer'
+          print('Verified ZIP layout, internal SHA-256 manifest, ARM64 binaries and source exclusion.')
+          PY
+          sha256sum "$FILE" | tee "$RUNNER_TEMP/production-sha256.txt"
+          unzip -t "$FILE" > /dev/null
+      - name: Publish v1.3.1 release candidate to the updater repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          [[ "$GITHUB_REPOSITORY" == "$PUBLIC_REPOSITORY" ]]
+          if gh release view "$RELEASE_TAG" --repo "$PUBLIC_REPOSITORY" >/dev/null 2>&1; then
+            echo "::error::Release $RELEASE_TAG already exists. Refusing to overwrite."
+            exit 1
+          fi
+          SHA256="$(cut -d' ' -f1 "$RUNNER_TEMP/production-sha256.txt")"
+          SOURCE_SHA="$(cat "$RUNNER_TEMP/source-commit.txt")"
+          cat > "$RUNNER_TEMP/release-notes.md" <<EOF
+          ## Zero1Local v1.3.1 — Release Candidate
+
+          An installable candidate for supported YXS / IronCow Zero1 NAS devices.
+
+          Includes browser-based NAS administration, storage, sharing, Docker, built-in
+          NAS-to-NAS replication, independent recovery, and in-app software updates.
+          For cloud/NAS synchronization, see [Syncria](https://github.com/gigabytegrove/syncria).
+
+          - Source commit: $SOURCE_SHA
+          - Production package: $RELEASE_ASSET
+          - SHA-256: $SHA256
+          - Channel: Beta / Release Candidate
+
+          **Hardware acceptance pending.** Install on an independently backed-up
+          test NAS. Verify boot, shares, storage, backup/restore, native replication,
+          recovery and rollback before promoting this version to Stable.
+          EOF
+          gh release create "$RELEASE_TAG" "$Z1L_BUILD_DIR/$RELEASE_ASSET" \
+            --repo "$PUBLIC_REPOSITORY" \
+            --title "Zero1Local v1.3.1 (Release Candidate)" \
+            --notes-file "$RUNNER_TEMP/release-notes.md" \
+            --prerelease --target main
+      - name: Download GitHub release asset and verify bytes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          mkdir -p "$RUNNER_TEMP/verify-published"
+          gh release download "$RELEASE_TAG" --repo "$PUBLIC_REPOSITORY" \
+            --pattern "$RELEASE_ASSET" --dir "$RUNNER_TEMP/verify-published"
+          cmp "$Z1L_BUILD_DIR/$RELEASE_ASSET" "$RUNNER_TEMP/verify-published/$RELEASE_ASSET"
+          sha256sum "$RUNNER_TEMP/verify-published/$RELEASE_ASSET"
+          gh api "repos/$PUBLIC_REPOSITORY/releases/tags/$RELEASE_TAG" | \
+            python3 -c 'import json,os,sys; x=json.load(sys.stdin); assert not x["draft"] and x["prerelease"]; a=[v for v in x["assets"] if v["name"]==os.environ["RELEASE_ASSET"]]; assert len(a)==1'
+          echo "Published and byte-verified: https://github.com/$PUBLIC_REPOSITORY/releases/tag/$RELEASE_TAG"
