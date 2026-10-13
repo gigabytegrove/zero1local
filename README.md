@@ -6,7 +6,7 @@ Zero1Local is a local-first management system for the IronCow Zero1 NAS. It repl
 
 **v1.2.9.15 remains Stable. [v1.3.0 is now available as a Beta prerelease](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.0) for controlled NAS qualification.**
 
-**Historical package notice:** v1.2.9.15 still includes the legacy native Google Drive and experimental Zero1Connect integration. This published binary has **not** been rebuilt or scrubbed. The planned product direction removes built-in Google Drive in favor of the separate [Syncria companion](docs/SYNCRIA.md), currently **Coming soon**. The 36 superseded ZIPs were withdrawn on October 13, 2026. See the [legacy release retirement register](docs/LEGACY-RELEASE-RETIREMENT.md) before installing the remaining current package.
+**Release status (2026-10-13):** The failed v1.3.0 prerelease and all 37 older GitHub Releases (including their tags/assets) have been withdrawn. **There is currently no supported downloadable release.** A corrected, hardware-qualified v1.3.0 will be the only new release. Legacy Google Drive is removed from the v1.3.0 source; Syncria remains a separate optional future companion. See [release readiness](docs/RELEASE-CANDIDATE-READINESS.md) for current blockers.
 
 Public install/update packages:
 
