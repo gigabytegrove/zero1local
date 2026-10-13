@@ -4,6 +4,10 @@ The official public repository is `gigabytegrove/zero1local`.
 
 The public repository intentionally contains **documentation, branding, issue/support material, and production release packages only**. Zero1Local implementation source code is maintained privately/off-GitHub and must not be published as a GitHub source archive unless the project owner explicitly changes that policy.
 
+## Native Google Drive removal / historical asset gate
+
+Native Google Drive OAuth and sync are retired from the future product architecture; only an optional [Syncria companion](SYNCRIA.md) is planned (**Coming soon**). All historical binaries, including vredacted.invalid, remain unchanged until superseded. A clean replacement must pass checks for removed UI/API routes, OAuth credentials, backend workers, source dependencies and old upgrade state before release. **Do not re-label or rewrite historical artifacts as clean.** After the clean release is verified, retire old affected downloadable assets while preserving historical tags/release notes with explicit archive warnings. See [legacy release retirement](LEGACY-RELEASE-RETIREMENT.md).
+
 ## Public release documentation requirements
 
 Every public release should document, as applicable:
@@ -27,7 +31,7 @@ Public documentation follows Zero1Local's evidence-first rule. Do not claim univ
 
 ## GitHub publication policy
 
-For the current stable release, the GitHub Release asset intended for installation is:
+For the last published stable release (which **still contains legacy Google Drive functionality**), the GitHub Release asset is:
 
 ```text
 Zero1Local-vredacted.invalid-production.zip
