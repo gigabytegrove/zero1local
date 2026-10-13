@@ -1,6 +1,6 @@
 # Historical Zero1Local production archives — retirement register
 
-**Recorded 2026-10-13. Current published archives are not yet scrubbed.** This is the authoritative tracking register for withdrawing legacy Google Drive implementation from public distribution.
+**Recorded and updated 2026-10-13.** Thirty-six superseded ZIP assets have been removed from GitHub Releases; their release pages/tags and archived SHA-256 values remain. The current vredacted.invalid ZIP remains downloadable and **still contains the legacy Google Drive implementation**. This register tracks the remaining removal work.
 
 Zero1Local's final product architecture removes its native Google Drive integration entirely. [Syncria](SYNCRIA.md) will be marketed as a separate, optional companion, **Coming soon**. This document does not say any current ZIP has been remediated.
 
@@ -9,22 +9,32 @@ Zero1Local's final product architecture removes its native Google Drive integrat
 - The public repository intentionally does not contain the private application source. Historical production ZIPs include compiled binaries and runtime files. **Changing the README, GitHub Release description, or ZIP filename cannot remove embedded functionality**.
 - The stable `vredacted.invalid` explicitly shipped a Google OAuth credential correction and must be treated as containing the legacy feature.
 - The archived release notes for 7 release(s) explicitly refer to Google functionality. Silence in other release notes is **not evidence of absence**.
-- `vredacted.invalid` is currently the last published mainline stable artifact. Withdrawal of **all** release ZIPs before a tested replacement would leave users without a supported downloadable installer and break the public update path.
+- `vredacted.invalid` is currently the last published mainline stable artifact. Withdrawal of the **last current** release ZIP before a tested replacement would leave users without a supported downloadable installer and break the public update path.
 - Deletion of GitHub Release assets is a distribution control, **not** sanitization of previously downloaded copies, forked assets, public CDN caches, commit history or devices with an existing installation.
 - Never overwrite an existing tag, silently mutate the binary bytes under an existing checksum, or describe a historical binary as Google-free.
 
-## Required execution sequence
+## Completed historical asset withdrawal
+
+- [x] Retained a checksum and asset-name register for all 37 historical production ZIPs in [Legacy package checksums](LEGACY-PACKAGE-CHECKSUMS.md).
+- [x] Annotated all 37 GitHub release pages with a prominent warning that the old native Google Drive engine is present or unverified.
+- [x] Deleted the 36 **superseded** production ZIP assets using an inventory-pinned and checksum-validated GitHub Actions workflow; its run completed successfully on 2026-10-13.
+- [x] Verified that only the current vredacted.invalid production ZIP remains downloadable.
+- [ ] Build/publish a tested Google-Drive-free successor, then retire the last legacy vredacted.invalid ZIP.
+
+[Asset withdrawal workflow](https://github.com/gigabytegrove/zero1local/actions/workflows/retire-superseded-production-assets.yml) · [release-page warning workflow](https://github.com/gigabytegrove/zero1local/actions/workflows/flag-legacy-google-drive-releases.yml)
+
+## Remaining execution sequence
 
 1. Rebuild from the canonical **private** Zero1Local source without built-in Google Drive features, routes, scheduler, OAuth flow or credentials; implement the user-facing Syncria **Coming soon** message.
 2. Test source/binary/runtime/package with a feature-removal checklist, including historical upgrade paths and live NAS health, restore/rollback, shares and storage. Do not remove unrelated backup or cloud-independent features.
 3. Publish a **new** versioned clean release and SHA-256 checksum. Explicitly qualify the GitHub updater to choose the new release.
-4. Mark affected old release notes **Historical / retired — native Google Drive present — do not install** and remove their downloadable `*-production.zip` assets via authorized release administration. Preserve tags/notes for provenance.
+4. Already completed for the 36 superseded releases. When the clean successor is published, mark vredacted.invalid fully retired and remove its remaining legacy ZIP asset. Preserve tags/notes for provenance.
 5. Re-query all GitHub Releases and verify every legacy production asset is absent. Test that the updater cannot select retired assetless releases or downgrade into one.
 6. Clean current repository documentation to reflect the actual version, while preserving honest historical changelog entries and Git provenance. Do not rewrite Git history to falsely claim the features were never shipped.
 
 ## Public release inventory (verified against GitHub API on 2026-10-13)
 
-**37 release pages, each with a production ZIP currently published.** None of these ZIPs was unpacked or binary-audited during this documentation pass, and no existing asset was deleted.
+**37 historical release pages; only vredacted.invalid still has a production ZIP attached.** The 36 superseded ZIP assets were removed on 2026-10-13. None of the historical ZIPs was unpacked or binary-audited during this documentation pass.
 
 | Release | Public package | Evidence classification |
 | --- | --- | --- |
