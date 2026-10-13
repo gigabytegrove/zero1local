@@ -1,5 +1,8 @@
 # Zero1Local v1.3.0 — beta release and Stable promotion gate
 
+**Current status after failed hardware attempt (2026-10-13):** The user attempted the v1.3.0 dashboard upgrade. It reached the install/restart steps but the updater reported a failed installer at final verification and rollback was available. The exact failure must be taken from `/var/lib/zero1-local/update-apply-*.log`; the screenshot alone does not identify the failing health gate. The v1.3.0 GitHub prerelease and all 37 historical releases/tags have now been **deleted by explicit owner request**. There are currently **zero** published GitHub Releases. Do not republish v1.3.0 until the logged installer cause is fixed and the exact corrected artifact is qualified.
+
+
 Updated October 13, 2026.
 
 ## Verified distribution status
@@ -33,7 +36,7 @@ The recovered **v1.2.9.12 source archive** was sanitized and used as the baselin
 - [x] Full sanitized source imported to private `main` with 196/196 byte-identical file verification.
 - [x] Exact candidate ZIP transferred without committing the production binary into public Git history.
 - [x] [Publication workflow](https://github.com/gigabytegrove/zero1local/actions/runs/38407090364) reconstructed the ZIP, validated its exact size and SHA-256, created the GitHub v1.3.0 **prerelease**, and independently downloaded the published asset and verified the same SHA-256.
-- [x] Existing Stable v1.2.9.15 package remains available while the prerelease is tested; older 36 superseded ZIPs remain withdrawn.
+- [x] All older release pages, assets and associated tags, and failed v1.3.0 prerelease, withdrawn per owner request; **no installer is currently published**.
 
 **These checks permit Beta publication, not a Stable promotion.** Static scanning cannot prove absence of dynamically assembled routes, credentials, functionality, or real-world regressions.
 
