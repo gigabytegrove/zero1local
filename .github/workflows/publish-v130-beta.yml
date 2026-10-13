@@ -1,0 +1,159 @@
+name: Publish Zero1Local v1.3.0 Beta installer
+
+on:
+  push:
+    paths:
+      - ".github/workflows/publish-v130-beta.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: zero1local-v130-beta
+  cancel-in-progress: false
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout public distribution verification scripts
+        uses: actions/checkout@v4
+        with:
+          path: distribution
+          persist-credentials: false
+
+      - name: Checkout exact private source commit (never publish source)
+        uses: actions/checkout@v4
+        with:
+          repository: gigabytegrove/zero1local-source
+          ref: 26caaeab3df6c33ea259be1c7ad54dcdd10cd60e
+          path: private-source
+          persist-credentials: false
+          token: ${{ secrets.ZERO1LOCAL_PRIVATE_SOURCE_TOKEN || github.token }}
+
+      - name: Check private source provenance
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          test "$(git -C private-source rev-parse HEAD)" = 26caaeab3df6c33ea259be1c7ad54dcdd10cd60e
+          test "$(cat private-source/VERSION)" = 1.3.0
+          echo "Private source commit confirmed (hash only)."
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: private-source/go.mod
+          cache: false
+
+      - name: Test original source and validate UI/shell scripts
+        shell: bash
+        working-directory: private-source
+        run: |
+          set -Eeuo pipefail
+          go test ./...
+          go vet ./...
+          node --check web/app.js
+          bash helpers/validate-web-capabilities.sh web/app.js packaging/ui-routes.txt
+          find helpers scripts -type f -name '*.sh' -print0 | xargs -0 -n1 bash -n
+
+      - name: Compile ARM64 daemon and recovery service
+        working-directory: private-source
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          mkdir -p bin
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -trimpath -ldflags='-s -w' -o bin/zero1d-linux-arm64 ./cmd/zero1d
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -trimpath -ldflags='-s -w' -o bin/zero1-recovery-linux-arm64 ./cmd/zero1-recovery
+
+      - name: Package full installer including payload checksums
+        shell: bash
+        working-directory: private-source
+        env:
+          Z1L_BUILD_DIR: ${{ runner.temp }}/zero1local-publish
+        run: |
+          set -Eeuo pipefail
+          python3 .github/release/build-v130.py
+
+      - name: Inspect exact final release package (fail closed)
+        shell: bash
+        env:
+          OUT: ${{ runner.temp }}/zero1local-publish
+        run: |
+          set -Eeuo pipefail
+          python3 distribution/.github/scripts/verify-production-package.py \
+            "$OUT/Zero1Local-v1.3.0-production.zip" --version 1.3.0 \
+            --json-out "$OUT/verification.json"
+          python3 - <<'PY'
+          import os, pathlib, zipfile, hashlib
+          out=pathlib.Path(os.environ["OUT"])
+          p=out/"Zero1Local-v1.3.0-production.zip"
+          with zipfile.ZipFile(p) as z:
+              tar=z.read("Zero1Local-v1.3.0.tar.gz")
+              tarhash=hashlib.sha256(tar).hexdigest()
+              win=z.read("Install-Zero1Local.ps1").decode("utf-8-sig")
+              sh=z.read("deploy-on-nas.sh").decode()
+              assert "$PayloadName = 'Zero1Local-v1.3.0.tar.gz'" in win
+              assert win.count(tarhash)==1
+              assert 'PAYLOAD="$DEPLOY_ROOT/Zero1Local-v1.3.0.tar.gz"' in sh
+              assert tarhash in sh
+              assert "v1.2.4.27.tar.gz" not in win
+          print("Windows installer, NAS deploy script and payload checksum match.")
+          PY
+
+      - name: Upload candidate verification artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zero1local-v130-beta-validation
+          path: |
+            ${{ runner.temp }}/zero1local-publish/candidate-report.json
+            ${{ runner.temp }}/zero1local-publish/verification.json
+          if-no-files-found: error
+
+      - name: Publish public prerelease (not stable)
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          OUT: ${{ runner.temp }}/zero1local-publish
+        run: |
+          set -Eeuo pipefail
+          if gh release view v1.3.0 --repo "$GH_REPO" >/dev/null 2>&1; then
+            echo "ERROR: v1.3.0 Release already exists. Refusing silent overwrite."
+            exit 1
+          fi
+          cat > "$RUNNER_TEMP/v130-beta-notes.md" <<'MD'
+          ## Zero1Local v1.3.0 — Beta / Hardware Qualification Candidate
+
+          **Prerelease:** For controlled updates on supported IronCow Zero1 appliances only.
+          Stable installations remain on v1.2.9.15 until NAS-specific upgrade, rollback, and core-data verification are complete.
+
+          - Retires native Google Drive OAuth/jobs. Syncria is planned for a later release.
+          - Experimental Zero1Connect remote enrollment/tunnel features are unavailable in the public production interface.
+          - Retains NAS management, storage, shares, local backup/replication, file services, updates and recovery.
+          - Source tests, Go vet, ARM64 builds, installer checksums and static package audit passed.
+
+          **Install:** Select Beta / Release Candidate in System → Updates → Advanced, then Check now. Maintain a verified external backup before installing this candidate.
+          **Source provenance:** private gigabytegrove/zero1local-source commit 26caaeab3df6c33ea259be1c7ad54dcdd10cd60e.
+          MD
+          gh release create v1.3.0 "$OUT/Zero1Local-v1.3.0-production.zip" \
+            --repo "$GH_REPO" \
+            --target "$GITHUB_SHA" \
+            --title "Zero1Local v1.3.0 — Beta / Qualification Candidate" \
+            --notes-file "$RUNNER_TEMP/v130-beta-notes.md" \
+            --prerelease
+          gh api "repos/$GH_REPO/releases/tags/v1.3.0" > "$OUT/published-release.json"
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib
+          out=pathlib.Path(os.environ["OUT"])
+          local=out/"Zero1Local-v1.3.0-production.zip"
+          release=json.loads((out/"published-release.json").read_text())
+          assets=[a for a in release["assets"] if a["name"]==local.name]
+          assert release["prerelease"] is True and release["draft"] is False
+          assert len(assets)==1
+          assert assets[0]["size"]==local.stat().st_size
+          digest="sha256:"+hashlib.sha256(local.read_bytes()).hexdigest()
+          assert assets[0]["digest"]==digest, (assets[0].get("digest"),digest)
+          print("PUBLISHED AND VERIFIED:",release["html_url"])
+          print("INSTALLABLE ASSET:",assets[0]["browser_download_url"])
+          print("VERIFIED SHA256:",digest)
+          PY
