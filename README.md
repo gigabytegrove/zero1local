@@ -57,6 +57,7 @@ Useful guides include:
 - [Task Center](docs/TASK-CENTER.md)
 - [Syncria companion — Coming soon](docs/SYNCRIA.md)
 - [Legacy release retirement](docs/LEGACY-RELEASE-RETIREMENT.md)
+- [Production promotion readiness and current blockers](docs/RELEASE-CANDIDATE-READINESS.md)
 - [Zero1Connect — historical/experimental](docs/ZERO1CONNECT.md)
 - [LED Status](docs/LED-STATUS.md)
 - [Phone Transfer](docs/PHONE-TRANSFER.md)
