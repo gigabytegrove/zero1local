@@ -25,6 +25,18 @@ A release owner must identify a **complete private source tree** corresponding t
 - [ ] Zero1Connect experimental mode is disabled by default and cannot publish ports or run enrollment/tunnel APIs in production. Developer access must require server-side authorization, optional allowlisted IP/CIDR and owner-controlled opt-in. Verify direct requests fail when disabled, regardless of browser UI.
 - [ ] Confirm the new core UI works directly, including refreshing each route, sessions and permissions, in both themes and on narrow viewports.
 
+## Verified v1.2.9.15 packaged-artifact evidence (2026-10-13)
+
+A GitHub-hosted audit downloaded the actual stable ZIP, matched its public asset SHA-256 digest, and inspected 104 runtime files in the internal production archive. The result was **FAIL**: executable/runtime Google Drive markers were detected in:
+
+- `Zero1Local-v1.2.9.15/bin/zero1d-linux-arm64` (compiled ARM64 Go daemon)
+- `Zero1Local-v1.2.9.15/helpers/validate-web-capabilities.sh`
+- `Zero1Local-v1.2.9.15/manifest.json`
+- `Zero1Local-v1.2.9.15/web/app.css`
+- `Zero1Local-v1.2.9.15/web/app.js`
+
+This confirms the package is **not** a Google-free release. It does not by itself establish that every runtime route is reachable or reveal implementation source. [Review the audited GitHub workflow log](https://github.com/gigabytegrove/zero1local/actions/runs/38388257044).
+
 ## Binary package gate
 
 The public repository includes [a fail-closed static package verifier](../.github/scripts/verify-production-package.py), [synthetic regression tests](../.github/scripts/test-verify-production-package.py) and [a GitHub Actions production ZIP audit](../.github/workflows/production-package-audit.yml).
