@@ -2,7 +2,7 @@
 
 The official public repository is `gigabytegrove/zero1local`.
 
-The public repository intentionally contains **documentation, branding, issue/support material, and production release packages only**. Zero1Local implementation source code is maintained privately/off-GitHub and must not be published as a GitHub source archive unless the project owner explicitly changes that policy.
+The public repository intentionally contains **documentation, branding, issue/support material, and production release packages only**. Zero1Local implementation source code belongs in the **private** `gigabytegrove/zero1local-source` GitHub repository. Never publish it as a public source archive or production Release asset unless the project owner explicitly changes that policy.
 
 ## Native Google Drive removal / historical asset gate
 
