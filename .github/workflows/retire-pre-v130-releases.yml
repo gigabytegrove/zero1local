@@ -1,0 +1,54 @@
+name: Retire all historical and failed v1.3.0 releases
+
+on:
+  push:
+    paths:
+      - ".github/workflows/retire-pre-v130-releases.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  retire-releases:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPOSITORY: ${{ github.repository }}
+    steps:
+      - name: Retire historical releases and failed 1.3.0 publication
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          [[ "$GH_REPOSITORY" == "gigabytegrove/zero1local" ]] || {
+            echo "ERROR: incorrect repository"; exit 1;
+          }
+          python3 - <<'PY'
+          import json, os, re, subprocess
+          repo=os.environ['GH_REPOSITORY']
+          def api(*parts):
+              result=subprocess.run(['gh','api',*parts],capture_output=True,text=True)
+              if result.returncode:
+                  raise RuntimeError(f"GitHub API {parts[0]} failed: {result.stderr[:500]}")
+              return result.stdout
+          # Request 100 releases; there are only 38 published. Fail if it unexpectedly reaches
+          # 100, since that would require paging rather than risking incomplete deletion.
+          releases=json.loads(api(f'repos/{repo}/releases?per_page=100'))
+          if len(releases)>=100:
+              raise RuntimeError('Refusing unpaged cleanup of 100+ releases')
+          allowed=re.compile(r'^v(?:1[.]2[.][0-9]+(?:[.][0-9]+)?|1[.]3[.]0)$')
+          invalid=[r['tag_name'] for r in releases if not allowed.fullmatch(r['tag_name'])]
+          if invalid:
+              raise RuntimeError(f'Refusing unknown release tags: {invalid}')
+          print('Inventory:',len(releases),'releases',flush=True)
+          for r in releases:
+              print(f"Retire {r['tag_name']} release id {r['id']}",flush=True)
+              api('-X','DELETE',f"repos/{repo}/releases/{r['id']}")
+              # GitHub release deletion does NOT delete the associated tag.
+              tag=r['tag_name']
+              api('-X','DELETE',f'repos/{repo}/git/refs/tags/{tag}')
+          remaining=json.loads(api(f'repos/{repo}/releases?per_page=100'))
+          if remaining:
+              raise RuntimeError(f'Remaining releases: {[r["tag_name"] for r in remaining]}')
+          print('VERIFIED: no GitHub Releases remain. A corrected v1.3.0 is required before install.',flush=True)
+          PY
