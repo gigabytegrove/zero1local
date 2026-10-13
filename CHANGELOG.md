@@ -3,7 +3,7 @@
 ## Unreleased — product scope and release retirement (documentation only)
 
 - Decided to remove built-in Google Drive OAuth, mappings and synchronization from a future verified release, moving cloud synchronization to the separate Syncria companion (**Coming soon**).
-- Inventoried historical production ZIP assets for controlled withdrawal after a Google-free replacement is published.
+- Inventoried all 37 historical production ZIP assets, preserved checksum records, warned on every historical release page, and withdrew the 36 superseded downloadable ZIPs. The current vredacted.invalid ZIP remains pending its tested Google-free successor.
 - **No production binaries or historical packages have yet been rebuilt or scrubbed.** The entries below remain accurate historical release notes.
 
 ## vredacted.invalid — Google Device Client ID Correction
