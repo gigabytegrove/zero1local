@@ -1,8 +1,8 @@
 # Historical Zero1Local production archives — retirement register
 
-**Recorded and updated 2026-10-13.** Thirty-six superseded ZIP assets have been removed from GitHub Releases; their release pages/tags and archived SHA-256 values remain. The current vredacted.invalid ZIP remains downloadable and **still contains the legacy Google Drive implementation**. This register tracks the remaining removal work.
+**Recorded and updated 2026-10-13.** Thirty-six superseded ZIP assets have been removed from GitHub Releases; their release pages/tags and archived SHA-256 values remain. The current Stable vredacted.invalid ZIP remains downloadable and **still contains the legacy Google Drive implementation**. The new **v1.3.0 Beta prerelease** is downloadable separately and awaits physical NAS qualification. This register tracks remaining withdrawal work.
 
-Zero1Local's final product architecture removes its native Google Drive integration entirely. [Syncria](SYNCRIA.md) will be marketed as a separate, optional companion, **Coming soon**. This document does not say any current ZIP has been remediated.
+Zero1Local's final product architecture removes its native Google Drive integration entirely. [Syncria](SYNCRIA.md) will be marketed as a separate, optional companion, **Coming soon**. The **new v1.3.0 Beta release** is a separately built, statically checked candidate with the native Google Drive runtime removed. The **vredacted.invalid Stable binary has not been remediated** and will remain available until v1.3 passes live NAS qualification.
 
 ## Scope and caveats
 
