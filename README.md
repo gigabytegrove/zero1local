@@ -1,12 +1,12 @@
 # Zero1Local
 
-Zero1Local is a local-first management system for the IronCow Zero1 NAS. It replaces the original appliance management layer while preserving owner data and focuses on storage, file sharing, backups, applications, hardware health, recovery, and Zero1Connect integration.
+Zero1Local is a local-first management system for the IronCow Zero1 NAS. It replaces the original appliance management layer while preserving owner data and focuses on storage, file sharing, backups, applications, hardware health, recovery, and safe local-first operation.
 
 ## Current release
 
 **vredacted.invalid is the current stable release.**
 
-This corrective build fixes the Google TVs and Limited Input devices OAuth client ID used by Zero1Local's device authorization flow. The matching client secret and device-flow implementation are otherwise unchanged, and the persistent Omada UPnP control path introduced in vredacted.invalid remains in place.
+**Historical package notice:** vredacted.invalid still includes the legacy native Google Drive and experimental Zero1Connect integration. This published binary has **not** been rebuilt or scrubbed. The planned product direction removes built-in Google Drive in favor of the separate [Syncria companion](docs/SYNCRIA.md), currently **Coming soon**. See the [legacy release retirement register](docs/LEGACY-RELEASE-RETIREMENT.md) before installing an older package.
 
 The public installation artifact is:
 
@@ -25,7 +25,8 @@ Zero1Local provides owner-facing management for:
 - **Sync and backup** — synchronization, backups, restore workflows, snapshots, replication, and Phone Transfer.
 - **Apps and containers** — curated applications, custom Docker images, Docker Compose, and container management.
 - **Networking** — LAN configuration, VLANs, desktop integration, and controlled service exposure.
-- **Zero1Connect** — device pairing and direct private remote connectivity without an operator-hosted relay.
+- **Optional experiments** — Zero1Connect remote pairing/tunneling remains unqualified and is planned to become developer-only rather than an ordinary production feature.
+- **Syncria companion — Coming soon** — Google Drive synchronization will be provided by a separate optional Syncria application, not Zero1Local's built-in engine.
 - **System management** — updates, power, security, automation, logs, recovery, hardware controls, and task history.
 - **Help and diagnostics** — in-product guidance, support evidence, and troubleshooting information.
 
@@ -42,7 +43,7 @@ See:
 
 ## Local-first design
 
-Zero1Local does not require a Zero1Local cloud account. Management stays on the NAS. Remote Zero1Connect access uses direct private networking rather than an operator-hosted relay.
+Zero1Local does not require a Zero1Local cloud account. Management stays on the NAS. Zero1Connect remote/tunnel features in existing builds are experimental and are not qualified for general production use.
 
 ## Documentation
 
@@ -54,7 +55,9 @@ Useful guides include:
 - [Storage and RAID](docs/STORAGE-AND-RAID.md)
 - [File Manager](docs/FILE-MANAGER.md)
 - [Task Center](docs/TASK-CENTER.md)
-- [Zero1Connect](docs/ZERO1CONNECT.md)
+- [Syncria companion — Coming soon](docs/SYNCRIA.md)
+- [Legacy release retirement](docs/LEGACY-RELEASE-RETIREMENT.md)
+- [Zero1Connect — historical/experimental](docs/ZERO1CONNECT.md)
 - [LED Status](docs/LED-STATUS.md)
 - [Phone Transfer](docs/PHONE-TRANSFER.md)
 - [Networking](docs/NETWORKING.md)
