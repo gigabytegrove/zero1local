@@ -1,4 +1,6 @@
-# Release Verification — v1.2.4
+# Release Verification — historical v1.2.4 evidence
+
+> **Archived information only.** The v1.2.4 package shown below has been retired and is no longer downloadable from GitHub Releases as of 2026-10-13. Its historical hashes and test descriptions must not be mistaken for verification of the current vredacted.invalid binary, which still includes native Google Drive. See [legacy package checksums](LEGACY-PACKAGE-CHECKSUMS.md) and [retirement policy](LEGACY-RELEASE-RETIREMENT.md).
 
 ## Production asset
 
