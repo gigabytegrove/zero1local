@@ -1,0 +1,113 @@
+name: Zero1Local production package audit
+
+on:
+  push:
+    paths:
+      - ".github/scripts/verify-production-package.py"
+      - ".github/scripts/test-verify-production-package.py"
+      - ".github/workflows/production-package-audit.yml"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Published release tag to audit (static check only)"
+        type: string
+        required: true
+        default: "v1.2.9.15"
+
+permissions:
+  contents: read
+
+jobs:
+  test-auditor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - name: Python syntax verification
+        run: python3 -m py_compile .github/scripts/verify-production-package.py .github/scripts/test-verify-production-package.py
+      - name: Run fail-closed synthetic package tests
+        run: python3 -W ignore::UserWarning .github/scripts/test-verify-production-package.py
+
+  audit-release:
+    needs: test-auditor
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: \${{ github.token }}
+      GH_REPOSITORY: \${{ github.repository }}
+      TARGET_TAG: \${{ inputs.release_tag || 'v1.2.9.15' }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Download exact published production ZIP and verify GitHub asset SHA-256
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          [[ "$TARGET_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$ ]] || {
+            echo "ERROR: Invalid version tag"
+            exit 1
+          }
+          VERSION="\${TARGET_TAG#v}"
+          NAME="Zero1Local-v\${VERSION}-production.zip"
+          mkdir -p artifact
+          gh release download "$TARGET_TAG" --repo "$GH_REPOSITORY" --pattern "$NAME" --dir artifact
+          gh api "repos/\${GH_REPOSITORY}/releases/tags/\${TARGET_TAG}" > release-metadata.json
+          python3 - "$NAME" <<'PY'
+          import hashlib
+          import json
+          import sys
+          from pathlib import Path
+          name=sys.argv[1]
+          d=json.loads(Path("release-metadata.json").read_text())
+          assets=[a for a in d.get("assets",[]) if a.get("name")==name]
+          if len(assets)!=1 or not assets[0].get("digest","").startswith("sha256:"):
+              raise SystemExit("No unique GitHub production asset with SHA-256 digest")
+          expected=assets[0]["digest"].split(":",1)[1].lower()
+          with open(Path("artifact")/name,"rb") as fp:
+              actual=hashlib.file_digest(fp,"sha256").hexdigest()
+          if actual!=expected:
+              raise SystemExit("Published asset digest mismatch")
+          print("Verified GitHub production asset digest:", actual)
+          PY
+      - name: Inspect distribution (expected legacy failure on push; enforced on manual audit)
+        id: inspect
+        shell: bash
+        run: |
+          set -uo pipefail
+          VERSION="\${TARGET_TAG#v}"
+          NAME="Zero1Local-v\${VERSION}-production.zip"
+          python3 .github/scripts/verify-production-package.py \
+            "artifact/$NAME" --version "$VERSION" --json-out gate-report.json
+          STATUS=$?
+          {
+            echo "## Static production ZIP audit"
+            echo ""
+            echo "**Artifact:** \`$NAME\`"
+            echo "**Static auditor exit status:** \`$STATUS\`"
+            if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+              echo ""
+              echo "**This push run is a known-legacy baseline only, not a promotion approval.**"
+            else
+              echo ""
+              echo "**Manual audit:** any nonzero exit means promotion is blocked."
+            fi
+            echo ""
+            echo "Source-level, runtime-security and physical-NAS qualification are separate mandatory gates."
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+            if [[ "$STATUS" -ne 0 ]]; then
+              echo "::warning::Current published release failed static audit as expected; do not promote"
+            fi
+            exit 0
+          fi
+          exit "$STATUS"
+      - name: Attach machine-readable audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zero1local-production-package-audit
+          path: |
+            gate-report.json
+            release-metadata.json
+          if-no-files-found: warn
+          retention-days: 30
