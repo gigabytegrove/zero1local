@@ -53,3 +53,7 @@ Zero1Local documents unsupported/unqualified paths explicitly rather than implyi
 
 - WireGuard capability depends on the required local tools being present.
 - Zero1Local does not require or provide a cloud relay account for remote access.
+
+## Deprecated native Google Drive
+
+Current published production ZIPs, including vredacted.invalid, still contain the old Zero1Local Google Drive OAuth/sync implementation. It is targeted for complete removal in the next verified production build, with [Syncria](SYNCRIA.md) planned as the optional external companion (**Coming soon**). Do not describe current/archived binaries as scrubbed. See [historical release retirement](LEGACY-RELEASE-RETIREMENT.md).
