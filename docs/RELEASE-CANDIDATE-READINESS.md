@@ -2,6 +2,28 @@
 
 **Release status: BLOCKED.** The latest downloadable release is `v1.2.9.15`; it still contains the retired native Google Drive implementation and experimental Zero1Connect/tunnel controls. The owner supplied a complete-looking **v1.2.9.12 editable source archive**, which passed baseline Go tests. The original 1.2.9.15 source is not verified, and the v1.2.9.12 archive contains an embedded Google OAuth client secret; sanitation and credential rotation assessment are required before it can be committed or used to build a clean successor. **A verified production binary has not yet been built.** Do not promote a documentation-only commit as a new Zero1Local version.
 
+## v1.3.0 candidate built and statically verified (2026-10-13)
+
+The recovered **v1.2.9.12 editable source archive** was sanitized and used as the baseline for a **v1.3.0 release candidate**, not a public stable update. The v1.2.9.13–1.2.9.15 production source was not reconstructed or claimed to be complete.
+
+**Available as conversation artifacts only (NOT yet GitHub Release assets):**
+
+- `Zero1Local-v1.3.0-production-candidate.zip` — SHA-256 `986a1a5ec2a906fe23d94e796fa50203339f4851701ebc79d1f082fc708604c2`
+- `Zero1Local-v1.3.0-SOURCE-PRIVATE.tar.gz` — SHA-256 `783d8e5c207367ae7602097d90ce13a780c53cd0018f870dc328493f22494441`
+- `Zero1Local-v1.3.0.tar.gz` inner runtime — SHA-256 `6c93c136198d04b59a84c43922f21d9b6d777f7a18da30ee2d6d54c4bf535e6d`
+
+Automated tests passed: Go unit/race/vet, JavaScript syntax, all shell syntax, web capabilities/62 routes, systemd unit contracts, cross-compiled ARM64 management/recovery, 80-file release tree. The public static ZIP verifier scanned 81 runtime files and returned **STATIC_PASS_NEEDS_SOURCE_AND_HARDWARE_TESTS**, with zero known native Google Drive markers. Static scan passing is **not** equivalent to complete security/hardware validation.
+
+**Remaining hard blockers:**
+
+- [ ] Import the sanitized, verified **complete v1.3.0 source** to the private [zero1local-source](https://github.com/gigabytegrove/zero1local-source) repo; currently only policy and import tools are committed.
+- [ ] Test upgrade and rollback of **the exact ZIP** on a nonproduction IronCow Zero1; verify data/share/ACL/storage/restore/USB/containers/Recovery and segmented LAN behavior.
+- [ ] Confirm legacy Connect APIs return 404 and old managed tunnels/mDNS/router mappings have been safely retired; external router mappings may require operator inspection.
+- [ ] Qualify existing Google job state cannot initiate transfers/deletions and unrelated cloud-independent providers still work on hardware.
+- [ ] Publish only after above acceptance, then retire remaining legacy v1.2.9.15 ZIP and verify in-app updater can select the promoted version.
+
+[Private v1.3.0 candidate record](https://github.com/gigabytegrove/zero1local-source/blob/main/CANDIDATE-v1.3.0.md) and [checksum-gated source importer](https://github.com/gigabytegrove/zero1local-source/blob/main/scripts/import-v130.sh).
+
 ## Product scope for the next mainline release
 
 | Area | Release disposition |
