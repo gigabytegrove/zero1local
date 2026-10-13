@@ -1,6 +1,6 @@
 # Zero1Local production promotion gate — October 13, 2026
 
-**Release status: BLOCKED.** The latest downloadable release is `v1.2.9.15`; it still contains the retired native Google Drive implementation and experimental Zero1Connect/tunnel controls. Its original private Go source/build workspace has not been located in the available connected repositories or conversation files, so **there is no defensible way to publish a verified clean production binary in this audit session**. Do not promote a documentation-only commit as a new Zero1Local version.
+**Release status: BLOCKED.** The latest downloadable release is `v1.2.9.15`; it still contains the retired native Google Drive implementation and experimental Zero1Connect/tunnel controls. The owner supplied a complete-looking **v1.2.9.12 editable source archive**, which passed baseline Go tests. The original 1.2.9.15 source is not verified, and the v1.2.9.12 archive contains an embedded Google OAuth client secret; sanitation and credential rotation assessment are required before it can be committed or used to build a clean successor. **A verified production binary has not yet been built.** Do not promote a documentation-only commit as a new Zero1Local version.
 
 ## Product scope for the next mainline release
 
@@ -15,9 +15,11 @@
 
 ## Source and build prerequisites
 
-A release owner must identify a **complete private source tree** corresponding to the published 1.2.9.x Go daemon and recovery service, including its tests and build scripts; it must remain **outside** the public documentation/distribution repository.
+A release owner must verify the recovered **v1.2.9.12 source archive** is complete, compare any relevant changes through v1.2.9.15, and import sanitized source to the **private** `gigabytegrove/zero1local-source` GitHub repository. Source must remain outside this public documentation/distribution repository.
 
-- [ ] Source identified and its provenance recorded privately.
+- [x] Recovered v1.2.9.12 editable source archive, with passing baseline Go package tests (not proof of build/release qualification).
+- [ ] Remove embedded OAuth secrets and other sensitive material before import, and evaluate provider-side credential rotation.
+- [ ] Commit sanitized source to private `gigabytegrove/zero1local-source` and establish its canonical build provenance.
 - [ ] Perform a minimal feature-removal change, rather than a rewrite, preserving unrelated implementation.
 - [ ] `go test ./...`, `go vet ./...`, target-platform builds, JavaScript/shell syntax checks, and security regression tests pass.
 - [ ] Confirm no native Google Drive handlers, background jobs, application OAuth credential constants, account/mapping UI, API routes, or packaged runtime assets remain.
