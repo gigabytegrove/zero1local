@@ -1,18 +1,13 @@
 name: Zero1Local production package audit
 
 on:
-  push:
-    paths:
-      - ".github/scripts/verify-production-package.py"
-      - ".github/scripts/test-verify-production-package.py"
-      - ".github/workflows/production-package-audit.yml"
   workflow_dispatch:
     inputs:
       release_tag:
         description: "Published release tag to audit (static check only)"
         type: string
         required: true
-        default: "v1.2.9.15"
+        default: "v1.3.0"
 
 permissions:
   contents: read
@@ -35,7 +30,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPOSITORY: ${{ github.repository }}
-      TARGET_TAG: ${{ inputs.release_tag || 'v1.2.9.15' }}
+      TARGET_TAG: ${{ inputs.release_tag || 'v1.3.0' }}
     steps:
       - uses: actions/checkout@v7
       - name: Download exact published production ZIP and verify GitHub asset SHA-256
