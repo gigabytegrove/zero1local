@@ -32,7 +32,7 @@ Availability varies by hardware, kernel capabilities, filesystem, installed serv
 
 ## Hardware support
 
-The primary platform is the **YXS / IronCow Zero1 NAS**. The established native hardware profile uses a **Rockchip RK3568 EVB8 LP4 V10 ARM64** board, a vendor **Debian 11** environment and **Linux 5.10.198** kernel, with separate internal system storage and owner data normally mounted at \`/disk0\`.
+The primary platform is the **YXS / IronCow Zero1 NAS**. The established native hardware profile uses a **Rockchip RK3568 EVB8 LP4 V10 ARM64** board, a vendor **Debian 11** environment and **Linux 5.10.198** kernel, with separate internal system storage and owner data normally mounted at `/disk0`.
 
 | Component | Practical boundary |
 | --- | --- |
@@ -51,7 +51,7 @@ The primary platform is the **YXS / IronCow Zero1 NAS**. The established native 
 
 Zero1Local checks the physical identity of mounted Main Storage before allowing dependent services to treat it as writable owner storage. If the expected array disappears, the application is designed to protect against silently writing data into the underlying root/eMMC mount directory. A degraded RAID1 still needs repair, while RAID0 provides no redundancy.
 
-Never create test files in an unverified \`/disk0\` mount, run unplanned filesystem repair, or force array creation to work around a failed installation preflight.
+Never create test files in an unverified `/disk0` mount, run unplanned filesystem repair, or force array creation to work around a failed installation preflight.
 
 ## Files, sharing and applications
 
@@ -100,25 +100,25 @@ Zero1Local **does not** automatically install Syncria, operate its scheduler, ac
 
 When a qualified release is available, download its exact named asset from [Releases](https://github.com/gigabytegrove/zero1local/releases):
 
-\`\`\`text
+```text
 Zero1Local-vX.Y.Z-production.zip
-\`\`\`
+```
 
 The expected production ZIP includes these five top-level files:
 
-\`\`\`text
+```text
 Install-Zero1Local.ps1
 README.txt
 SHA256SUMS.txt
 Zero1Local-vX.Y.Z.tar.gz
 deploy-on-nas.sh
-\`\`\`
+```
 
-Unzip into an empty folder. Review \`SHA256SUMS.txt\` and verify that the included files match their published hashes. The installer pins the corresponding runtime tarball checksum; an asset or digest mismatch is a **stop condition**.
+Unzip into an empty folder. Review `SHA256SUMS.txt` and verify that the included files match their published hashes. The installer pins the corresponding runtime tarball checksum; an asset or digest mismatch is a **stop condition**.
 
 From PowerShell inside the extracted folder, this read-only check validates the manifest entries:
 
-\`\`\`powershell
+```powershell
 $ErrorActionPreference = 'Stop'
 foreach ($entry in Get-Content -LiteralPath '.\SHA256SUMS.txt') {
     if ([string]::IsNullOrWhiteSpace($entry)) { continue }
@@ -134,7 +134,7 @@ foreach ($entry in Get-Content -LiteralPath '.\SHA256SUMS.txt') {
     if ($actual -ine $expected) { throw "Checksum mismatch: $filename" }
     Write-Host "Verified: $filename"
 }
-\`\`\`
+```
 
 A matching checksum catches corruption or inconsistent files. It does not, by itself, authenticate a malicious source; download from the official repository.
 
@@ -142,19 +142,19 @@ A matching checksum catches corruption or inconsistent files. It does not, by it
 
 Run the cumulative Windows installer in the extracted release folder:
 
-\`\`\`powershell
+```powershell
 .\Install-Zero1Local.ps1 <NAS-IP>
-\`\`\`
+```
 
-Replace \`<NAS-IP>\` with the appliance IP. Existing authorized root SSH access must work for this path.
+Replace `<NAS-IP>` with the appliance IP. Existing authorized root SSH access must work for this path.
 
 ### Windows installer: factory-stock IronCow Zero1
 
 For an unrooted/factory-stock compatible IronCow Zero1, the supported installer path accepts the device serial number:
 
-\`\`\`powershell
+```powershell
 .\Install-Zero1Local.ps1 <NAS-IP> -Serial '<NAS-SERIAL>'
-\`\`\`
+```
 
 The serial is encoded in the QR code on the sticker under the device; use its exact value. On factory devices a direct root SSH probe may initially fail as expected; the installer can continue through its supported bootstrap sequence.
 
@@ -169,10 +169,10 @@ After a successful installation, on the **private LAN**:
 
 | Address | Purpose |
 | --- | --- |
-| \`http://<NAS-IP>/\` | Main management UI |
-| \`http://<NAS-IP>:8088/\` | Compatibility management listener |
-| \`http://<NAS-IP>:8089/\` | Separate Recovery Environment |
-| \`http://<NAS-IP>:8090/\` | Session-independent update progress monitor |
+| `http://<NAS-IP>/` | Main management UI |
+| `http://<NAS-IP>:8088/` | Compatibility management listener |
+| `http://<NAS-IP>:8089/` | Separate Recovery Environment |
+| `http://<NAS-IP>:8090/` | Session-independent update progress monitor |
 
 Confirm Main Storage, RAID, shares and permissions, network connectivity, and backup destinations. Run the built-in diagnostics. Go to **System → Recovery** and save the **Recovery Key off the NAS**. It is separate from the ordinary administrator password. HTTP should only be used on a trusted, controlled network; arrange supported HTTPS or protected VPN access for less-trusted paths.
 
@@ -189,7 +189,7 @@ The Updates screen distinguishes **Installed**, **Latest found**, **Last checked
 | **Alpha** | All published release classes |
 | **Draft** | Never included |
 
-Advanced settings control the channel. A prerelease does not appear on Stable; a source-code version bump does not create an updater-visible release. A new version must be **published with an exact matching \`Zero1Local-vX.Y.Z-production.zip\` asset**.
+Advanced settings control the channel. A prerelease does not appear on Stable; a source-code version bump does not create an updater-visible release. A new version must be **published with an exact matching `Zero1Local-vX.Y.Z-production.zip` asset**.
 
 A typical update consists of download, checksums, staged validation, storage/compatibility checks, rollback preparation, activation, service restart, health verification, and cleanup. The status-only independent Update Monitor on port **8090** follows the transaction while the main service restarts.
 
@@ -197,13 +197,13 @@ Rollback depends on an intact compatible previous release and recovery checkpoin
 
 ## Independent recovery
 
-If the main UI fails, first try \`http://<NAS-IP>:8089/\` and authenticate with your separate Recovery Key. Depending on current state, the Recovery Environment can inspect health, restart management, restore verified configuration, reset ordinary admin access, and roll back to an eligible earlier installation.
+If the main UI fails, first try `http://<NAS-IP>:8089/` and authenticate with your separate Recovery Key. Depending on current state, the Recovery Environment can inspect health, restart management, restore verified configuration, reset ordinary admin access, and roll back to an eligible earlier installation.
 
 An emergency key-only SSH path is also provided for protected private-LAN recovery; it is **not** a general-purpose Internet SSH endpoint.
 
 From an already authorized root session, gather evidence without changing storage:
 
-\`\`\`bash
+```bash
 systemctl --no-pager --full status zero1-local.service zero1-recovery.service zero1-storage.service
 journalctl -u zero1-local.service -n 200 --no-pager
 curl -fsS http://127.0.0.1:8088/healthz
@@ -211,15 +211,15 @@ curl -fsS http://127.0.0.1:8089/healthz
 findmnt -T /disk0
 cat /proc/mdstat
 lsblk -f
-\`\`\`
+```
 
 For update failures, these are useful evidence sources:
 
-\`\`\`bash
+```bash
 cat /var/lib/zero1-local/update-apply.json 2>/dev/null
 ls -lah /var/lib/zero1-local/update-apply-*.log 2>/dev/null
 ls -lah /var/cache/zero1-local/updates 2>/dev/null
-\`\`\`
+```
 
 Do not delete active update staging, rollback evidence or existing data roots just because an update or application failed.
 
@@ -286,4 +286,4 @@ The software is provided **“AS IS”** with no warranty. You assume responsibi
 
 ---
 
-**Zero1Local is developed and released by [Gigabyte Grove](https://github.com/gigabytegrove).** It is not a Grand Bay product.
+**Zero1Local is developed and released by [Gigabyte Grove](https://github.com/gigabytegrove).**
