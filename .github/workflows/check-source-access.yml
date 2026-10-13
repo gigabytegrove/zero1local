@@ -17,6 +17,7 @@ jobs:
           repository: gigabytegrove/zero1local-source
           ref: main
           path: source
+          token: ${{ secrets.ZERO1LOCAL_SOURCE_TOKEN || secrets.SOURCE_REPO_TOKEN || secrets.PRIVATE_REPO_TOKEN || secrets.GH_PAT || secrets.GH_TOKEN || github.token }}
           persist-credentials: false
       - name: Verify private source identity without exposing it
         shell: bash
