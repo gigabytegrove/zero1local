@@ -72,6 +72,7 @@ jobs:
         id: inspect
         shell: bash
         run: |
+          set +e
           set -uo pipefail
           VERSION="${TARGET_TAG#v}"
           NAME="Zero1Local-v${VERSION}-production.zip"
