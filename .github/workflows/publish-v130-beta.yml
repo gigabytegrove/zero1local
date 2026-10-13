@@ -22,7 +22,7 @@ jobs:
       GH_REPOSITORY: ${{ github.repository }}
       TAG: v1.3.0
       FILENAME: Zero1Local-v1.3.0-production.zip
-      EXPECTED_SHA256: 986a1a5ec2a906fe23d94e796fa50203339f4851701ebc79d1f082fc708604c2
+      EXPECTED_SHA256: 561e9c4259caeaf6c6da6e3dca176d30e8321e0dc79bae29bdb59ac5fcdd4267
     steps:
       - name: Check out public distribution repository
         uses: actions/checkout@v4
@@ -37,17 +37,27 @@ jobs:
           # Only public installer binary slices are staged in the Git object store,
           # not source code or secrets. No 8MB ZIP is committed to main.
           BLOBS=(
-            c01d9ca65b10cf81167fb36142ebb627422e2435
-            b11057cd583f62edfca92238450a9a771a28ab59
-            6866cb96cb9f2179da8c8d2bbedb9be7a19b01b1
-            cd4d365802255b43a954f3c00d285a8ef92bd240
-            ac83579265456086f05888abfcda5530ff4d806e
-            cba6a02ad020793e49fffaf2539ed85a5a519af5
-            071bc1f88375259716deb5979891d69a6a981e33
-            990c27e2037a91d1a6f20a31c9ba99ecddcddbfa
-            803a11c1779acfc9bede4a7293279195e0570149
-            5ed82661ded1f44db4273df893725d25ad8df52e
-            e147b7febe836ef3df694acfc0aceb653483e14d
+            f8fe8a94aac0eab3ae8bf9e0ca072a6857652e2d
+            f1cb48a01171558e950349e8e530b8532cb0664b
+            f8daf7dbf87e67be908f4cb78906453161b9d465
+            a306026f932a426166a5a1b93220daa1d383eb86
+            423dffc1f3ca6ca664cafe89c555d8e6657e74c3
+            651a419881a1218b4368d531b121abc2c54706f3
+            88d57d9db6d278c159bb89032a32d9da8a92af88
+            baad5b7b52bfcaf860e1042cf9e46cecf6d77b1f
+            56a748f4c67597ea4d6a86c3f30a072b071a5779
+            3e69978ef12da852896e9a6378e5fcbf3b1da9bc
+            8c0b57419a41d4f748576c68b83c58ea1b10d45d
+            530f8aa60f5fad206421d54911e1687f8609ae57
+            5fba2e0f504dca4ff034a923cd433dea8de02e82
+            744341b59cedd3bb5f4037e419e4cda9358f219d
+            2cc8839eff8a59cb38d423447270f3950367d8dd
+            1e3c15a5389acdcdbc88c73227972115fd14ac63
+            39cb5290489db898e6b7f1a02387cb748b06417f
+            3a7246d52a91ae40a15c1182f305d6d6926bdd2e
+            2fe24aa482c969e66588d61b91526be517db3dd4
+            adffbc2beb3b168d3e944f45adc6815b7e4ca0e4
+            ec69088171aa153839f065089bd9f5fc6b9ac717
           )
           count=0
           for sha in "${BLOBS[@]}"; do
@@ -55,11 +65,12 @@ jobs:
               base64 --decode >> "$OUT"
             count=$((count+1))
           done
-          [[ $count -eq 11 ]]
-          [[ $(stat -c %s "$OUT") -eq 8194795 ]]
+          [[ $count -eq 21 ]]
+          [[ $(stat -c %s "$OUT") -eq 7943158 ]]
           printf '%s  %s\n' "$EXPECTED_SHA256" "$OUT" | sha256sum -c -
           unzip -t "$OUT" >/dev/null
-          echo "Exact production candidate reconstructed and verified."
+          python3 .github/scripts/verify-production-package.py "$OUT" --version 1.3.0
+          echo "Corrected production candidate rebuilt, scanned and verified."
 
       - name: Publish prerelease and verify freshly downloaded GitHub asset
         shell: bash
@@ -72,7 +83,14 @@ jobs:
             gh release create "$TAG" "$PKG" \
               --repo "$GH_REPOSITORY" \
               --title "Zero1Local v1.3.0 (Beta release candidate)" \
-              --notes-file docs/releases/v1.3.0-beta.md \
+              --notes "Beta release candidate, rebuilt from private Zero1Local source commit 55c6a2fe0bbdaca79ce2e4713f2dbc51e9a2a3fa.
+
+Fix: prevent Go HTTP ServeMux startup panic (GET / conflicting with retired /api/connect/).
+Native Google Drive/OAuth and experimental Zero1Connect remote API are not available. Syncria integration is planned for future development only.
+Includes rebuilt ARM64 server and recovery binaries, vetted scripts and verified production ZIP.
+Not yet hardware-qualified: verify upgrade, rollback, data preservation, and management health on a test NAS before stable promotion.
+
+Production ZIP SHA-256: 561e9c4259caeaf6c6da6e3dca176d30e8321e0dc79bae29bdb59ac5fcdd4267" \
               --prerelease \
               --target main
           fi
@@ -84,7 +102,7 @@ jobs:
           assets=[x for x in obj["assets"] if x["name"]==sys.argv[2]]
           assert len(assets)==1, "Expected exactly one production ZIP asset"
           assert assets[0].get("digest")==f"sha256:{sys.argv[3]}", "Published GitHub asset digest mismatch"
-          assert assets[0].get("size")==8194795, "Published asset size mismatch"
+          assert assets[0].get("size")==7943158, "Published asset size mismatch"
           print("GitHub asset metadata VERIFIED:",obj["html_url"])
           PY
           mkdir -p "$RUNNER_TEMP/verify-download"
@@ -97,7 +115,7 @@ jobs:
             echo "[GitHub prerelease](https://github.com/$GH_REPOSITORY/releases/tag/$TAG)"
             echo ""
             echo "- Asset: \`$FILENAME\`"
-            echo "- Size: 8,194,795 bytes"
+            echo "- Size: 7,943,158 bytes"
             echo "- SHA-256: \`$EXPECTED_SHA256\`"
             echo "- Verified freshly downloaded published asset"
             echo "- Channel: **Beta prerelease**, not Stable; NAS qualification pending"
