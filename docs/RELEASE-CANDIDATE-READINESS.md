@@ -27,6 +27,20 @@ A release owner must verify the recovered **vredacted.invalid source archive** i
 - [ ] Zero1Connect experimental mode is disabled by default and cannot publish ports or run enrollment/tunnel APIs in production. Developer access must require server-side authorization, optional allowlisted IP/CIDR and owner-controlled opt-in. Verify direct requests fail when disabled, regardless of browser UI.
 - [ ] Confirm the new core UI works directly, including refreshing each route, sessions and permissions, in both themes and on narrow viewports.
 
+## v1.3.0 candidate engineering results (2026-10-13)
+
+A **new standalone v1.3.0 candidate has been built from the recovered vredacted.invalid editable source**. It is **not published** as a stable GitHub Release and has **not been deployed on a physical NAS**.
+
+- Go source test suite and `go vet ./...`: PASS.
+- ARM64 server and recovery builds: PASS.
+- Source-level UI check: 62 direct-refresh SPA routes checked, with no native Google wizard or ordinary-user remote pairing control.
+- Independent public package static scanner: `STATIC_PASS_NEEDS_SOURCE_AND_HARDWARE_TESTS`; 81 runtime files scanned, no legacy markers found.
+- Original local source archive may still contain historical references in prose/docs; production runtime scan is what qualifies package contents, while code-level review remains required.
+- The source candidate is **not yet committed** to private `gigabytegrove/zero1local-source`; owner import is required from a machine with GitHub write access. Do not place the private tar archive in the public release repository.
+- Physical ARM64 NAS qualification, safe upgrade, rollback and recovery tests are still mandatory. **Do not promote** based solely on static test results.
+
+Candidate SHA-256: `a0f4b42034b5ce724cf1f1b5362afb2aa236364eb79eb73140c347f13c1dc54b` (candidate ZIP).
+
 ## Verified vredacted.invalid packaged-artifact evidence (2026-10-13)
 
 A GitHub-hosted audit downloaded the actual stable ZIP, matched its public asset SHA-256 digest, and inspected 104 runtime files in the internal production archive. The result was **FAIL**: executable/runtime Google Drive markers were detected in:
