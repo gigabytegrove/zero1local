@@ -2,6 +2,10 @@
 
 Software Updates lives at **System → Updates** (`/updates`). It is designed to answer four owner questions immediately: **what is installed, what is newest, what changed, and what is happening now?**
 
+## Retired historical versions
+
+On 2026-10-13, all 36 superseded production ZIPs were removed from GitHub Releases. Their tags and notes remain for history but have no installable asset. The remaining stable vredacted.invalid ZIP **still contains legacy built-in Google Drive** and is awaiting a tested replacement. Google Drive will belong to the optional [Syncria companion — Coming soon](SYNCRIA.md), not a future Zero1Local engine. See [legacy release retirement](LEGACY-RELEASE-RETIREMENT.md).
+
 ## Public update source
 
 The official public update source is GitHub Releases for `gigabytegrove/zero1local`.
