@@ -13,7 +13,8 @@ Zero1Local is local-first NAS software for supported Zero1 NAS hardware. The pub
 - [File Manager](FILE-MANAGER.md) — previews, media, text/code viewing, and path confinement.
 - [Phone Transfer](PHONE-TRANSFER.md) — automatic and manual phone-to-NAS workflows.
 - [Syncria companion — Coming soon](SYNCRIA.md) — planned standalone sync integration; no current production connector.
-- [Legacy release retirement](LEGACY-RELEASE-RETIREMENT.md) — historical Google Drive-containing package inventory and retirement gates.
+- [Legacy release retirement](LEGACY-RELEASE-RETIREMENT.md)
+- [Production promotion readiness](RELEASE-CANDIDATE-READINESS.md) — live artifact audit and mandatory release gates. — historical Google Drive-containing package inventory and retirement gates.
 - [Zero1Connect](ZERO1CONNECT.md) — experimental, developer-only target; not general production access.
 - [Task Center](TASK-CENTER.md) — background jobs, progress, transfer controls, and update tasks.
 - [LED Status](LED-STATUS.md) — supported chassis LED states and Phone Transfer overlays.
