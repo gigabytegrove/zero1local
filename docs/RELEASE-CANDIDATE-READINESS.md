@@ -1,113 +1,64 @@
-# Zero1Local production promotion gate — October 13, 2026
+# Zero1Local v1.3.0 — beta release and Stable promotion gate
 
-**Release status: BLOCKED.** The latest downloadable release is `vredacted.invalid`; it still contains the retired native Google Drive implementation and experimental Zero1Connect/tunnel controls. The owner supplied a complete-looking **vredacted.invalid editable source archive**, which passed baseline Go tests. The original redacted.invalid source is not verified, and the vredacted.invalid archive contains an embedded Google OAuth client secret; sanitation and credential rotation assessment are required before it can be committed or used to build a clean successor. **A verified production binary has not yet been built.** Do not promote a documentation-only commit as a new Zero1Local version.
+Updated October 13, 2026.
 
-## v1.3.0 candidate built and statically verified (2026-10-13)
+## Verified distribution status
 
-The recovered **vredacted.invalid editable source archive** was sanitized and used as the baseline for a **v1.3.0 release candidate**, not a public stable update. The vredacted.invalid–redacted.invalid production source was not reconstructed or claimed to be complete.
+- **Stable:** [vredacted.invalid](https://github.com/gigabytegrove/zero1local/releases/tag/vredacted.invalid). This older binary still contains the retired native Google Drive implementation.
+- **Beta / Release Candidate:** [v1.3.0](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.0) — **published and downloadable** as a GitHub prerelease. It has **NOT** been promoted to Stable or qualified on physical NAS hardware.
+- **Official update asset:** [Zero1Local-v1.3.0-production.zip](https://github.com/gigabytegrove/zero1local/releases/download/v1.3.0/Zero1Local-v1.3.0-production.zip).
+- **Release ZIP SHA-256:** `986a1a5ec2a906fe23d94e796fa50203339f4851701ebc79d1f082fc708604c2` (8,194,795 bytes).
+- **Source repository:** private [gigabytegrove/zero1local-source](https://github.com/gigabytegrove/zero1local-source), branch `main`, exact import commit `6d2d39db4476a32a7348f6a821f0891ab583d8fe`.
+- **Source completeness:** all 196 archive source files were independently compared byte-for-byte with corresponding Git blob SHAs on private `main`; the repository also retains four management files.
 
-**Available as conversation artifacts only (NOT yet GitHub Release assets):**
+The recovered **vredacted.invalid source archive** was sanitized and used as the baseline for v1.3.0. The intervening original vredacted.invalid–vredacted.invalid source tree was not recovered; changes specific to those versions must not be implied to have been merged. The original archive contained a historical OAuth client secret; the v1.3 source import underwent credential-signature checks. Provider-side rotation of any historical exposed credential should still be evaluated.
 
-- `Zero1Local-v1.3.0-production-candidate.zip` — SHA-256 `986a1a5ec2a906fe23d94e796fa50203339f4851701ebc79d1f082fc708604c2`
-- `Zero1Local-v1.3.0-SOURCE-PRIVATE.tar.gz` — SHA-256 `783d8e5c207367ae7602097d90ce13a780c53cd0018f870dc328493f22494441`
-- `Zero1Local-v1.3.0.tar.gz` inner runtime — SHA-256 `6c93c136198d04b59a84c43922f21d9b6d777f7a18da30ee2d6d54c4bf535e6d`
+## Product scope
 
-Automated tests passed: Go unit/race/vet, JavaScript syntax, all shell syntax, web capabilities/62 routes, systemd unit contracts, cross-compiled ARM64 management/recovery, 80-file release tree. The public static ZIP verifier scanned 81 runtime files and returned **STATIC_PASS_NEEDS_SOURCE_AND_HARDWARE_TESTS**, with zero known native Google Drive markers. Static scan passing is **not** equivalent to complete security/hardware validation.
-
-**Remaining hard blockers:**
-
-- [ ] Import the sanitized, verified **complete v1.3.0 source** to the private [zero1local-source](https://github.com/gigabytegrove/zero1local-source) repo; currently only policy and import tools are committed.
-- [ ] Test upgrade and rollback of **the exact ZIP** on a nonproduction IronCow Zero1; verify data/share/ACL/storage/restore/USB/containers/Recovery and segmented LAN behavior.
-- [ ] Confirm legacy Connect APIs return 404 and old managed tunnels/mDNS/router mappings have been safely retired; external router mappings may require operator inspection.
-- [ ] Qualify existing Google job state cannot initiate transfers/deletions and unrelated cloud-independent providers still work on hardware.
-- [ ] Publish only after above acceptance, then retire remaining legacy vredacted.invalid ZIP and verify in-app updater can select the promoted version.
-
-[Private v1.3.0 candidate record](https://github.com/gigabytegrove/zero1local-source/blob/main/CANDIDATE-v1.3.0.md) and [checksum-gated source importer](https://github.com/gigabytegrove/zero1local-source/blob/main/scripts/import-v130.sh).
-
-## Product scope for the next mainline release
-
-| Area | Release disposition |
+| Area | v1.3.0 disposition |
 | --- | --- |
-| Storage, drive health, RAID, users, groups, shares, SMB/NFS, File Manager, recovery, update/rollback, local backup and replication, Task Center, hardware controls, notifications | Retain and verify on actual supported hardware |
-| Native Google Drive OAuth, credentials, jobs, sync workers, settings, web routes | **Remove completely** from implementation; not merely hide |
-| Syncria | **Coming soon** informational companion only; no nonfunctional installation/connection controls or required dependency |
-| Zero1Connect, auto router mapping, bootstrap HTTP(S), managed WireGuard/tunnels | Experimental/developer-only, **off by default**; disable public listener/mapping creation and public API registration until proven; never rely on UI hiding alone |
-| Kernel, bootloader and Debian 13 migration | Out of current management-plane promotion scope; security limitation documented explicitly; keep appliance segmented |
-| Zero1Local-ix2 | Separate ARMv5 hardware release track; same quality bar, only supported lightweight features |
+| Storage health/RAID, users and groups, SMB/NFS and shares, File Manager, USB, local backup/restore/replication, applications/containers, updates/rollback, recovery and hardware controls | Retained in source and package; hardware regression testing outstanding |
+| Native Google Drive OAuth, jobs, sync workers, UI and API | Removed from v1.3 candidate, including known runtime markers |
+| Syncria | **Coming soon** informational reference only; no dependency or working integration in this release |
+| Zero1Connect and experimental remote bootstrap, enrollment, UPnP/mappings and managed tunnels | Removed/disabled from normal production UI and APIs in candidate; physical firewall/router state must be inspected |
+| Kernel, bootloader and Debian 13 migration | Not part of this management-plane release; continue segmentation |
+| Zero1Local-ix2 ARMv5 | Separate hardware product/release track |
 
-## Source and build prerequisites
+## Engineering and distribution checks completed
 
-A release owner must verify the recovered **vredacted.invalid source archive** is complete, compare any relevant changes through vredacted.invalid, and import sanitized source to the **private** `gigabytegrove/zero1local-source` GitHub repository. Source must remain outside this public documentation/distribution repository.
+- [x] Go unit/race tests and `go vet ./...` passed on prepared candidate.
+- [x] ARM64 Go management daemon and recovery service compiled; JavaScript/shell syntax and service contracts checked.
+- [x] SPA route manifest/UI validation checked 62 routes.
+- [x] Static packaged runtime audit scanned 81 files and returned `STATIC_PASS_NEEDS_SOURCE_AND_HARDWARE_TESTS`, with zero detectable native Google Drive markers.
+- [x] Full sanitized source imported to private `main` with 196/196 byte-identical file verification.
+- [x] Exact candidate ZIP transferred without committing the production binary into public Git history.
+- [x] [Publication workflow](https://github.com/gigabytegrove/zero1local/actions/runs/38407090364) reconstructed the ZIP, validated its exact size and SHA-256, created the GitHub v1.3.0 **prerelease**, and independently downloaded the published asset and verified the same SHA-256.
+- [x] Existing Stable vredacted.invalid package remains available while the prerelease is tested; older 36 superseded ZIPs remain withdrawn.
 
-- [x] Recovered vredacted.invalid editable source archive, with passing baseline Go package tests (not proof of build/release qualification).
-- [ ] Remove embedded OAuth secrets and other sensitive material before import, and evaluate provider-side credential rotation.
-- [ ] Commit sanitized source to private `gigabytegrove/zero1local-source` and establish its canonical build provenance.
-- [ ] Perform a minimal feature-removal change, rather than a rewrite, preserving unrelated implementation.
-- [ ] `go test ./...`, `go vet ./...`, target-platform builds, JavaScript/shell syntax checks, and security regression tests pass.
-- [ ] Confirm no native Google Drive handlers, background jobs, application OAuth credential constants, account/mapping UI, API routes, or packaged runtime assets remain.
-- [ ] On upgrades, preserve NAS data and backups. Disable old Google Drive jobs safely; do not propagate remote deletions. Old refresh tokens/config may require explicit user-approved cleanup, not silent deletion.
-- [ ] Zero1Connect experimental mode is disabled by default and cannot publish ports or run enrollment/tunnel APIs in production. Developer access must require server-side authorization, optional allowlisted IP/CIDR and owner-controlled opt-in. Verify direct requests fail when disabled, regardless of browser UI.
-- [ ] Confirm the new core UI works directly, including refreshing each route, sessions and permissions, in both themes and on narrow viewports.
+**These checks permit Beta publication, not a Stable promotion.** Static scanning cannot prove absence of dynamically assembled routes, credentials, functionality, or real-world regressions.
 
-## v1.3.0 candidate engineering results (2026-10-13)
+## Required physical NAS qualification before Stable promotion
 
-A **new standalone v1.3.0 candidate has been built from the recovered vredacted.invalid editable source**. It is **not published** as a stable GitHub Release and has **not been deployed on a physical NAS**.
+- [ ] Independently back up and restore-test owner data and NAS configuration before upgrade testing.
+- [ ] Capture installed version, model, storage health, mount guards, RAID, SMART, shares, ACLs, and service health before installing.
+- [ ] Test the **exact published v1.3.0 ZIP** using **System → Updates → Advanced → Beta / Release Candidate → Check now** on a designated nonproduction Zero1 NAS.
+- [ ] Confirm upgrade preserves storage mounts, shares/users/groups/ACLs, data, local backups/restore, replication, applications/Docker data, network segmentation and access to the management UI.
+- [ ] Confirm recovered appliance status and logs after reboot/cold boot, update status monitor and Recovery Key/emergency access.
+- [ ] Test rollback and failed-update recovery on a **disposable test target** with a verified off-device backup.
+- [ ] Confirm old native Google Drive jobs cannot initiate sync/delete operations; old OAuth configuration does not trigger transfers; existing local backup and restore remain functional.
+- [ ] Probe disabled Google OAuth/Zero1Connect APIs directly, not only through the UI. Confirm no new public listeners or Zero1Local-managed UPnP, router mapping, WireGuard or tunnel services; check external router state separately.
+- [ ] Confirm client routes refresh directly, login/authz and narrow-screen UI work in both themes.
+- [ ] Confirm normal NAS functions on its segmented VLAN and with no general Internet access (except what the owner explicitly permits for updates).
+- [ ] Record hardware test and rollback evidence against the **published** ZIP, not a local near-equivalent build.
 
-- Go source test suite and `go vet ./...`: PASS.
-- ARM64 server and recovery builds: PASS.
-- Source-level UI check: 62 direct-refresh SPA routes checked, with no native Google wizard or ordinary-user remote pairing control.
-- Independent public package static scanner: `STATIC_PASS_NEEDS_SOURCE_AND_HARDWARE_TESTS`; 81 runtime files scanned, no legacy markers found.
-- Original local source archive may still contain historical references in prose/docs; production runtime scan is what qualifies package contents, while code-level review remains required.
-- The source candidate is **not yet committed** to private `gigabytegrove/zero1local-source`; owner import is required from a machine with GitHub write access. Do not place the private tar archive in the public release repository.
-- Physical ARM64 NAS qualification, safe upgrade, rollback and recovery tests are still mandatory. **Do not promote** based solely on static test results.
+Only after this gate is complete: explicitly promote the tested version to Stable and consider retiring the `vredacted.invalid` asset. Do not silently retag, mutate an existing ZIP/checksum or delete the last Stable installer in advance.
 
-Candidate SHA-256: `a0f4b42034b5ce724cf1f1b5362afb2aa236364eb79eb73140c347f13c1dc54b` (candidate ZIP).
+## Historical baseline risk
 
-## Verified vredacted.invalid packaged-artifact evidence (2026-10-13)
+A separate [vredacted.invalid audit](https://github.com/gigabytegrove/zero1local/actions/runs/38388257044) downloaded the existing Stable ZIP and found legacy native Google Drive references in the ARM64 Go daemon, web JavaScript and CSS, helper script and manifest. That is why the Stable binary cannot be described as sanitized. The older 36 superseded asset withdrawals are documented in [the retirement register](LEGACY-RELEASE-RETIREMENT.md).
 
-A GitHub-hosted audit downloaded the actual stable ZIP, matched its public asset SHA-256 digest, and inspected 104 runtime files in the internal production archive. The result was **FAIL**: executable/runtime Google Drive markers were detected in:
+## Ongoing release control
 
-- `Zero1Local-vredacted.invalid/bin/zero1d-linux-arm64` (compiled ARM64 Go daemon)
-- `Zero1Local-vredacted.invalid/helpers/validate-web-capabilities.sh`
-- `Zero1Local-vredacted.invalid/manifest.json`
-- `Zero1Local-vredacted.invalid/web/app.css`
-- `Zero1Local-vredacted.invalid/web/app.js`
+The public repository owns production ZIPs, checksum verification, GitHub Release notes and the update feed; the private source repository owns editable Go source, web code and tests. Neither the private source archive nor credential-bearing source may be published as a public asset. The in-app updater must continue to accept the exact versioned five-file package layout and honor Stable versus Beta release eligibility.
 
-This confirms the package is **not** a Google-free release. It does not by itself establish that every runtime route is reachable or reveal implementation source. [Review the audited GitHub workflow log](https://github.com/gigabytegrove/zero1local/actions/runs/38388257044).
-
-## Binary package gate
-
-The public repository includes [a fail-closed static package verifier](../.github/scripts/verify-production-package.py), [synthetic regression tests](../.github/scripts/test-verify-production-package.py) and [a GitHub Actions production ZIP audit](../.github/workflows/production-package-audit.yml).
-
-For a freshly built **candidate** with a versioned `Zero1Local-v<version>-production.zip`:
-
-```bash
-python3 .github/scripts/test-verify-production-package.py
-python3 .github/scripts/verify-production-package.py \
-  Zero1Local-v<VERSION>-production.zip --version <VERSION> \
-  --json-out zero1local-static-gate.json
-```
-
-This checks outer archive identity, file checksums, unsafe archive members, ARM64 runtime identity and known native Google Drive markers in executable/runtime files. **A static pass is insufficient for release approval**. The source test and real-hardware checklists remain mandatory because compiled behavior can be dynamically constructed or bypass simple string scans.
-
-## Appliance qualification gates (before stable publication)
-
-- [ ] Capture current version and health from each test unit. Back up all owner data independently before any installer/storage test.
-- [ ] Verify healthy cold boot, Main Storage identity and mount guard, RAID and SMART status, SMB user/share ACLs, system services, Recovery Key, emergency access and safe power.
-- [ ] Test upgrades to the exact candidate from the installed version without destroying existing storage, Docker data root, shares, users and backups.
-- [ ] Test update rollback/failure recovery using a **separate disposable target**, not the three stable deployed appliances.
-- [ ] Verify backup **and restore**, realistic share permissions, Task Center, local networking and VLAN access.
-- [ ] Confirm normal production operations function with **no Internet access** on the segmented VLAN.
-- [ ] Verify Zero1Connect and legacy Google OAuth/tunnel handlers have no public or authenticated production functionality; no listening remote bootstrap and no implicit UPnP port mappings.
-- [ ] Run and archive reproducible source-level and exact-artifact tests, including a QA record of UI navigation and access controls.
-- [ ] Publish a new versioned release asset/checksum with full notes and no misleading statements; keep source private.
-- [ ] Run the GitHub production package audit on that **exact new release** and confirm the artifact is installable through System → Updates.
-- [ ] Only then retire the remaining legacy `vredacted.invalid` production ZIP and verify the updater cannot select assetless historical releases.
-
-## Current Github distribution state
-
-On October 13, 2026, the 36 superseded production ZIP assets were withdrawn after preserving checksums and warning on all 37 historical release pages. Only `vredacted.invalid` remains downloadable. The public GitHub documentation repository contains no canonical private Go application source; documentation and tooling changes do not alter the currently installed NAS binaries.
-
-Tracked work: [Zero1Local #2](https://github.com/gigabytegrove/zero1local/issues/2), [Syncria companion specification](SYNCRIA.md), [legacy release retirement](LEGACY-RELEASE-RETIREMENT.md).
-
-**No stable promotion until the original application source, verified binary removal, and appliance qualification are complete.**
+Related tracker: [Google Drive retirement issue #2](https://github.com/gigabytegrove/zero1local/issues/2), [Zero1Connect production restrictions issue #3](https://github.com/gigabytegrove/zero1local/issues/3).
