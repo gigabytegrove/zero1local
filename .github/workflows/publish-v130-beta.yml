@@ -83,14 +83,7 @@ jobs:
             gh release create "$TAG" "$PKG" \
               --repo "$GH_REPOSITORY" \
               --title "Zero1Local v1.3.0 (Beta release candidate)" \
-              --notes "Beta release candidate, rebuilt from private Zero1Local source commit 55c6a2fe0bbdaca79ce2e4713f2dbc51e9a2a3fa.
-
-Fix: prevent Go HTTP ServeMux startup panic (GET / conflicting with retired /api/connect/).
-Native Google Drive/OAuth and experimental Zero1Connect remote API are not available. Syncria integration is planned for future development only.
-Includes rebuilt ARM64 server and recovery binaries, vetted scripts and verified production ZIP.
-Not yet hardware-qualified: verify upgrade, rollback, data preservation, and management health on a test NAS before stable promotion.
-
-Production ZIP SHA-256: 561e9c4259caeaf6c6da6e3dca176d30e8321e0dc79bae29bdb59ac5fcdd4267" \
+              --notes "Corrected v1.3.0 Beta, source commit 55c6a2fe0bbdaca79ce2e4713f2dbc51e9a2a3fa. Fix: Go ServeMux startup conflict with retired remote APIs. Native Google Drive removed; Syncria coming soon. Test on a NAS before Stable promotion. SHA-256: 561e9c4259caeaf6c6da6e3dca176d30e8321e0dc79bae29bdb59ac5fcdd4267" \
               --prerelease \
               --target main
           fi
