@@ -9,3 +9,7 @@ The private canonical application source and developer build/test tree are **not
 Some runtime components are necessarily readable because the appliance executes or serves them directly, including PowerShell, shell, Python and browser JavaScript files. Their presence does not mean the private application source/build tree is being published.
 
 For installation instructions, see [Installation](INSTALLATION.md). For release-package verification, see [Release Verification](RELEASE-VERIFICATION.md).
+
+## Google Drive retirement notice
+
+Previously published production packages, including vredacted.invalid, contain legacy native Google Drive functionality. They cannot be sanitized by changing public documentation. A new clean build from the private source is required before a historical-asset retirement campaign. See [Syncria](SYNCRIA.md) and [legacy release retirement](LEGACY-RELEASE-RETIREMENT.md).
