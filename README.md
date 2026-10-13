@@ -1,5 +1,13 @@
 # Zero1Local
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/zero1-local-logo-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="./assets/zero1-local-logo-light.png">
+    <img src="./assets/zero1-local-logo-light.png" alt="Zero1Local — NAS management for YXS / IronCow Zero1" width="520">
+  </picture>
+</p>
+
 **Local-first NAS management software for YXS / IronCow Zero1 appliances.**
 
 Zero1Local modernizes supported YXS / IronCow Zero1 network-attached storage devices with a browser-based management interface for files, storage, network sharing, backup and replication, applications, appliance health, updates, and recovery. Core NAS functionality stays on your network and does not require a manufacturer cloud account.
