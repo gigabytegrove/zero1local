@@ -22,7 +22,11 @@ Zero1Local-to-Zero1Local replication uses a dedicated generated Ed25519 identity
 
 ## Cloud/off-site workflows
 
-Cloud/off-site configuration is exposed through guided synchronization workflows. Provider authorization remains provider-specific. Never publish OAuth tokens or remote credentials in support issues.
+Zero1Local retains existing independent backup/replication functionality such as SMB, NFS, rsync/SSH, SFTP and supported S3-compatible targets. **Native Google Drive synchronization is deprecated and targeted for complete removal from future Zero1Local builds.** The v1.2.9.15 and older published binaries have not yet been scrubbed.
+
+**Syncria — Coming soon** is the planned separate Google Drive companion. Syncria will be a standalone Docker/native app; a future optional connector may provide health and summary status in Zero1Local. See [Syncria](SYNCRIA.md) and [legacy release retirement](LEGACY-RELEASE-RETIREMENT.md).
+
+Never publish OAuth tokens or remote credentials in support issues.
 
 ## Restore
 
