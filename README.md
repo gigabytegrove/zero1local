@@ -9,7 +9,7 @@ Zero1Local modernizes supported YXS / IronCow Zero1 network-attached storage dev
 [Releases and downloads](https://github.com/gigabytegrove/zero1local/releases) · [Report an issue](https://github.com/gigabytegrove/zero1local/issues) · [Syncria](https://github.com/gigabytegrove/syncria)
 
 > [!IMPORTANT]
-> **Release status — October 13, 2026:** Zero1Local **v1.3.1 is in release qualification and has not been published**. The currently published **v1.3.0 Beta** encountered an installation/startup failure and **should not be installed** on a working device. Before installing any future update, confirm its exact release asset, notes, and hardware-qualification status. A completed build by itself is not proof of a safe NAS upgrade.
+> **Release status — October 13, 2026:** Zero1Local **v1.3.1 is undergoing release qualification and is not yet published**. Use only a release package confirmed compatible with your appliance. Check [GitHub Releases](https://github.com/gigabytegrove/zero1local/releases) for current downloads, checksums and release notes.
 
 > [!CAUTION]
 > **BACK UP YOUR DATA OUTSIDE THE NAS FIRST.** Installation, recovery, upgrades, storage migration, power interruptions, or hardware faults can cause service interruption or permanent data loss. Verify that you can restore from your independent backup. A second folder or drive inside the same appliance is not an independent disaster-recovery backup.
@@ -45,7 +45,7 @@ The primary platform is the **YXS / IronCow Zero1 NAS**. The established native 
 | NFS | Optional userspace **NFSv3**, not kernel NFSv4 on the validated vendor profile |
 | Other ARM64 NAS devices | Compatibility only until separately qualified; model-specific controls cannot be assumed |
 
-**Zero1Local does not install Debian 13, flash the bootloader, replace the device tree, or upgrade the kernel.** The retained vendor system is older and has security-support limitations. Keep it on a trusted private/segmented network.
+Zero1Local uses the appliance's existing vendor operating system, kernel and boot environment. The underlying platform requires careful security management, including a private, appropriately segmented network.
 
 ### Storage safety
 
@@ -67,24 +67,28 @@ Never create test files in an unverified `/disk0` mount, run unplanned filesyste
 
 ## Backups, replication and Syncria
 
-These are deliberately **separate responsibilities**:
+Zero1Local provides native NAS protection and appliance replication. For cloud synchronization with a Zero1Local NAS or another NAS, use **[Syncria](https://github.com/gigabytegrove/syncria)**.
 
 | Need | Recommended path |
 | --- | --- |
-| **NAS to NAS** | Zero1Local's own native NAS-to-NAS replication |
+| **Between supported Zero1Local NAS devices** | Zero1Local's built-in NAS-to-NAS replication |
 | **Local or USB backup / restore** | Zero1Local's supported backup and restore workflows |
-| **NAS to cloud, cloud to NAS, or cloud synchronization** | **[Syncria](https://github.com/gigabytegrove/syncria)** — a separate optional application |
+| **Cloud ↔ Zero1Local NAS or another NAS** | **[Syncria](https://github.com/gigabytegrove/syncria)** — independent Docker-based cloud and NAS synchronization |
 | **Disaster recovery** | Independently verified backups, stored separately from both source and replica |
 
 ### Native NAS-to-NAS replication
 
 Zero1Local provides appliance-to-appliance replication on trusted network paths without requiring a cloud account, Syncria, Docker, or a third-party management platform. Depending on the supported configuration, native replication uses secure SSH/rsync transport with a dedicated peer identity and tracked jobs. Replication is **not a substitute for backup**: file deletion, corruption and ransomware-encrypted content can be replicated.
 
-### Cloud transfers are handled by Syncria
+### Cloud and NAS synchronization with Syncria
 
-As of the **1.3.1 product scope**, Zero1Local no longer implements native **NAS-to-cloud**, **cloud-to-NAS**, Google Drive/OAuth synchronization, or S3/cloud backup targets. Instead, use **[Syncria](https://github.com/gigabytegrove/syncria)** for those workflows. Syncria can be deployed as its own Docker container and operates independently with its own configuration and update process.
+**[Syncria](https://github.com/gigabytegrove/syncria)** is the recommended companion for syncing your cloud files with a **Zero1Local NAS or another compatible NAS**. It can run as a standalone Docker container on a suitable NAS or a separate Docker host with authorized access to your storage.
 
-Zero1Local **does not** automatically install Syncria, operate its scheduler, access its cloud credentials, or require its Docker socket. Syncria is **optional**. Existing legacy cloud settings are to be preserved **inactive** during the 1.3.1 transition; disabling an old sync job must not silently erase local files or data stored remotely. Do not assume that automatic Syncria pairing or legacy-credential migration is available.
+Syncria supports **cloud → NAS**, **NAS → cloud** and **bidirectional synchronization**. Configure your cloud accounts, permitted storage locations, sync direction, relationships and schedules using Syncria's own interface. A separate Docker host can reach NAS storage through suitable network shares or mounted folders, according to Syncria's supported setup methods.
+
+Syncria manages its own configuration and updates, and works independently with Zero1Local or other NAS devices. **Zero1Local's native NAS-to-NAS replication works without Syncria.**
+
+**Get Syncria:** https://github.com/gigabytegrove/syncria
 
 ## Installation
 
@@ -93,7 +97,7 @@ Zero1Local **does not** automatically install Syncria, operate its scheduler, ac
 1. Have an **independent, readable backup** of your files off the target NAS.
 2. Confirm this is a compatible YXS/IronCow Zero1, with a known IP address on a trusted LAN.
 3. Check current disk/RAID health, free space, power reliability, and your recovery options.
-4. Read the intended GitHub release's status and notes. **Do not use the failed v1.3.0 Beta.**
+4. Confirm the intended [GitHub Release](https://github.com/gigabytegrove/zero1local/releases) is approved for your device and review its notes and checksums.
 5. Use only an intact, matched release package. Do not mix installer files between versions.
 
 ### Download the official production package
@@ -178,7 +182,7 @@ Confirm Main Storage, RAID, shares and permissions, network connectivity, and ba
 
 ## Updating from inside Zero1Local
 
-For a running appliance, **System → Updates is the primary, preferred upgrade path**. The appliance itself checks the public GitHub Releases feed, downloads the matching ZIP, verifies the package, stages the upgrade, records progress and handles supported rollback. **No Dokploy, Portainer, separate update container, third-party Docker platform or manual recompilation is required for end users.**
+For a running appliance, **System → Updates is the primary, preferred upgrade path**. The appliance checks GitHub Releases, downloads the matching ZIP, verifies it, stages the upgrade, reports progress and handles supported rollback. Updates are managed directly within Zero1Local, independently of third-party container platforms.
 
 The Updates screen distinguishes **Installed**, **Latest found**, **Last checked**, and whether an update is eligible. Select **Check now** to force a fresh check rather than relying on cached discovery.
 
@@ -241,9 +245,7 @@ Zero1Local is designed for a **trusted local network or segmented VLAN**. No pub
 
 **Do not forward NAS management, recovery, SMB, NFS, or SSH services to the open Internet.** Use a firewall and trusted private VPN where remote administration is necessary. The retained vendor OS/kernel may no longer receive all upstream security fixes. VLAN isolation, least privilege, working backups and carefully controlled access are particularly important.
 
-**Zero1Connect public pairing, managed public tunnels and automatic router mappings are not supported production features of 1.3.1.** Do not depend on them to reach the NAS remotely.
-
-Never include passwords, Recovery Keys, OAuth refresh tokens, VPN private keys, SSH keys, full connection files or owner data in a public support report.
+Never include passwords, Recovery Keys, cloud service credentials, VPN private keys, SSH keys, full connection files or owner data in a public support report.
 
 ## Troubleshooting
 
@@ -257,18 +259,16 @@ Never include passwords, Recovery Keys, OAuth refresh tokens, VPN private keys, 
 | **Docker containers appear missing** | Confirm Docker's real existing data root before modifying anything |
 | **Phone transfer waiting** | Unlock Android device and choose **File transfer / Android Auto** USB mode |
 | **Replication fails** | Check trusted peer access, storage space, permissions and Task Center job output |
-| **Legacy cloud jobs stopped** | Expected with v1.3.1; move cloud workflows to separate Syncria |
 | **Installation rolled back** | Preserve the specific installer log/transaction state; do not repeatedly bypass safety preflight |
 
-## Release scope and known limitations
+## Platform compatibility and release channels
 
-- Built for **YXS / IronCow Zero1** hardware, not every device sold as a generic ARM64 NAS.
-- No underlying vendor OS, bootloader or kernel replacement.
-- Older Linux/Debian base: keep on a private, controlled network.
-- No fake XFS/ext4 native snapshots, unsupported RAID operations, or NFSv4 claims.
-- Native NAS-to-NAS replication stays in Zero1Local; cloud sync belongs in [Syncria](https://github.com/gigabytegrove/syncria).
-- Experimental public Zero1Connect endpoints are disabled/not production-qualified in 1.3.1.
-- A **Beta candidate is not Stable**; real upgrade, reboot, file access, restore and recovery/rollback qualification matters.
+- **Device focus:** YXS / IronCow Zero1 NAS hardware using the supported ARM64 profile.
+- **Operating environment:** Existing vendor OS, kernel and boot environment on a private, controlled network.
+- **Storage:** RAID, snapshots and filesystem operations follow the actual hardware and filesystem capabilities.
+- **NAS replication:** Native replication between supported Zero1Local appliances.
+- **Cloud/NAS sync:** **[Syncria](https://github.com/gigabytegrove/syncria)** connects cloud storage with Zero1Local or another NAS.
+- **Updates:** Stable, Beta/Release Candidate and Alpha are selected under **System → Updates → Advanced**. Review release qualification and compatibility notes before installing.
 
 ## Support and feedback
 
