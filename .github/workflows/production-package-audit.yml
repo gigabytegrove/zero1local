@@ -33,9 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      GH_TOKEN: \${{ github.token }}
-      GH_REPOSITORY: \${{ github.repository }}
-      TARGET_TAG: \${{ inputs.release_tag || 'v1.2.9.15' }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPOSITORY: ${{ github.repository }}
+      TARGET_TAG: ${{ inputs.release_tag || 'v1.2.9.15' }}
     steps:
       - uses: actions/checkout@v7
       - name: Download exact published production ZIP and verify GitHub asset SHA-256
@@ -46,11 +46,11 @@ jobs:
             echo "ERROR: Invalid version tag"
             exit 1
           }
-          VERSION="\${TARGET_TAG#v}"
-          NAME="Zero1Local-v\${VERSION}-production.zip"
+          VERSION="${TARGET_TAG#v}"
+          NAME="Zero1Local-v${VERSION}-production.zip"
           mkdir -p artifact
           gh release download "$TARGET_TAG" --repo "$GH_REPOSITORY" --pattern "$NAME" --dir artifact
-          gh api "repos/\${GH_REPOSITORY}/releases/tags/\${TARGET_TAG}" > release-metadata.json
+          gh api "repos/${GH_REPOSITORY}/releases/tags/${TARGET_TAG}" > release-metadata.json
           python3 - "$NAME" <<'PY'
           import hashlib
           import json
@@ -73,8 +73,8 @@ jobs:
         shell: bash
         run: |
           set -uo pipefail
-          VERSION="\${TARGET_TAG#v}"
-          NAME="Zero1Local-v\${VERSION}-production.zip"
+          VERSION="${TARGET_TAG#v}"
+          NAME="Zero1Local-v${VERSION}-production.zip"
           python3 .github/scripts/verify-production-package.py \
             "artifact/$NAME" --version "$VERSION" --json-out gate-report.json
           STATUS=$?
