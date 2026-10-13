@@ -24,7 +24,7 @@ jobs:
       PUBLIC_REPOSITORY: gigabytegrove/zero1local
       RELEASE_TAG: v1.3.1
       RELEASE_ASSET: Zero1Local-v1.3.1-production.zip
-      Z1L_BUILD_DIR: ${{ runner.temp }}/zero1local-v131
+      Z1L_BUILD_DIR: /tmp/zero1local-v131
     steps:
       - name: Verify secure, read-only private source access
         env:
