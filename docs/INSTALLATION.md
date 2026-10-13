@@ -8,6 +8,10 @@ Zero1Local replaces software that manages the appliance and may rewrite or reini
 
 A second copy on the same NAS is not an independent backup.
 
+## Legacy release download policy
+
+As of 2026-10-13 the 36 superseded Zero1Local production ZIPs have been withdrawn from GitHub Releases. The current `vredacted.invalid` ZIP remains the sole downloadable installer **and still contains the legacy built-in Google Drive engine**. A future Google-free replacement with the optional [Syncria companion](SYNCRIA.md) is **Coming soon**. Do not download historic packages from unofficial mirrors to restore the retired feature. See the [release retirement register](LEGACY-RELEASE-RETIREMENT.md).
+
 ## Public release package
 
 The official GitHub release publishes the production distribution package:
