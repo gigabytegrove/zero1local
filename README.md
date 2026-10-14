@@ -17,7 +17,7 @@ Zero1Local modernizes supported YXS / IronCow Zero1 network-attached storage dev
 [Releases and downloads](https://github.com/gigabytegrove/zero1local/releases) · [Report an issue](https://github.com/gigabytegrove/zero1local/issues) · [Syncria](https://github.com/gigabytegrove/syncria)
 
 > [!IMPORTANT]
-> **Release status — October 13, 2026:** Zero1Local **v1.3.1 is undergoing release qualification and is not yet published**. Use only a release package confirmed compatible with your appliance. Check [GitHub Releases](https://github.com/gigabytegrove/zero1local/releases) for current downloads, checksums and release notes.
+> **Release status — October 14, 2026:** [Zero1Local v1.3.5](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.5) is **published as a Beta / Release Candidate**, with a downloadable `Zero1Local-v1.3.5-production.zip`. It has **not** been promoted to Stable or comprehensively qualified on every appliance. No update is required solely because documentation was refreshed. The released ZIP, tag and checksum remain unchanged.
 
 > [!CAUTION]
 > **BACK UP YOUR DATA OUTSIDE THE NAS FIRST.** Installation, recovery, upgrades, storage migration, power interruptions, or hardware faults can cause service interruption or permanent data loss. Verify that you can restore from your independent backup. A second folder or drive inside the same appliance is not an independent disaster-recovery backup.
@@ -31,12 +31,23 @@ Zero1Local modernizes supported YXS / IronCow Zero1 network-attached storage dev
 | **Protection** | Local/USB backup and restore, **native NAS-to-NAS replication**, appropriate filesystem-native snapshots where available |
 | **Applications** | Docker containers, images, networks, volumes, Compose stacks, supported application catalog |
 | **Connectivity** | LAN settings, hostnames, DNS, VLANs, guarded network changes |
-| **Monitoring** | Appliance health, notices, Action Center, Task Center, diagnostics and service state |
+| **Monitoring** | Appliance health, Notifications and activity (including background tasks), diagnostics and service state |
 | **System** | In-UI software updater, maintenance, activity history, separate recovery and eligible rollback |
 | **Phone Transfer** | Android USB/MTP file transfers on compatible hardware, optional managed offload workflows |
 | **Guidance** | Built-in Help for the functions available on your appliance |
 
 Availability varies by hardware, kernel capabilities, filesystem, installed services, and release. Zero1Local does not invent unsupported storage features.
+
+### Current v1.3.5 experience
+
+- **Users & Groups** has separate **Users**, **Groups**, and **Account Policies** pages. Only the current page should be highlighted; v1.3.5 corrects an overlap that highlighted both Users and Account Policies.
+- **Mobile access on your LAN** remains available for authenticated Android/mobile pairing, allowed shared folders, browsing, uploads and downloads. The earlier managed WireGuard/VPN, cellular bootstrap and automatic public router mapping features have been retired; there is no need to expose the NAS to the Internet to use the LAN mobile client.
+- **System-managed device accounts** remain protected and are not presented as ordinary owner accounts. The NAS does not delete factory-era filesystem identities just to simplify the UI.
+- **Status lights** have in-app animated examples for steady, fast-flashing and slow-flashing green/yellow/red indicators. A yellow power light and a yellow drive light mean different things; use **Hardware → Customize lights** or **Help → Status light meanings** for the illustrated guide.
+- **Quotas** require the supported filesystem/mount configuration and the `setquota` utility. Installing the optional tool does not automatically turn on filesystem quotas, remount your drives or reformat storage.
+
+See the [LAN mobile and network guide](docs/LAN-MOBILE-AND-NETWORK.md) and [status-light guide](docs/STATUS-LIGHTS.md). These are user guides, not instructions to modify operating-system services.
+
 
 ## Hardware support
 
@@ -69,7 +80,7 @@ Never create test files in an unverified `/disk0` mount, run unplanned filesyste
 
 **Network controls:** Manage supported DNS, hostname, VLAN, and LAN settings, with safeguards for changes that could disconnect administrators. Avoid exposing any of these management services to the public Internet.
 
-**Monitoring:** The appliance overview summarizes health. **Action Center** highlights active items requiring attention; **Notifications** provides the notice history and management actions; **Task Center** tracks running, finished and failed operations. An unread badge should correspond to genuinely visible active notices.
+**Monitoring:** Home summarizes appliance health and items needing attention. **Notifications** shows unread notices, active tasks and completed activity, without manufacturing unread counts for items already read or dismissed. Background work remains accessible through its task details and history.
 
 **Phone transfers:** USB/MTP is the primary established Android transfer path. Phone hardware and protocol availability vary. Unlock the device and select its file-transfer USB mode before expecting browsing/offload.
 
@@ -190,7 +201,7 @@ Confirm Main Storage, RAID, shares and permissions, network connectivity, and ba
 
 ## Updating from inside Zero1Local
 
-For a running appliance, **System → Updates is the primary, preferred upgrade path**. The appliance checks GitHub Releases, downloads the matching ZIP, verifies it, stages the upgrade, reports progress and handles supported rollback. Updates are managed directly within Zero1Local, independently of third-party container platforms.
+For a running appliance, the top-level **Updates** navigation entry is the primary, preferred upgrade path. The appliance checks GitHub Releases, downloads the matching ZIP, verifies it, stages the upgrade, reports progress and handles supported rollback. Updates are managed directly within Zero1Local, independently of third-party container platforms.
 
 The Updates screen distinguishes **Installed**, **Latest found**, **Last checked**, and whether an update is eligible. Select **Check now** to force a fresh check rather than relying on cached discovery.
 
@@ -251,6 +262,8 @@ Zero1Local is designed for a **trusted local network or segmented VLAN**. No pub
 | TCP **22222** | Restricted key-only emergency SSH |
 | Other | Configured HTTPS, container ports or other optional services |
 
+**A listener is not automatically Internet-accessible.** Loopback bindings (`127.0.0.1` and `::1`) accept only NAS-local traffic. Wildcard bindings may accept traffic from multiple NAS interfaces, but the actual firewall, VLAN and router policy determine accessibility. A common port label is a hint when Linux cannot identify the owning process. See the [network and LAN mobile guide](docs/LAN-MOBILE-AND-NETWORK.md).
+
 **Do not forward NAS management, recovery, SMB, NFS, or SSH services to the open Internet.** Use a firewall and trusted private VPN where remote administration is necessary. The retained vendor OS/kernel may no longer receive all upstream security fixes. VLAN isolation, least privilege, working backups and carefully controlled access are particularly important.
 
 Never include passwords, Recovery Keys, cloud service credentials, VPN private keys, SSH keys, full connection files or owner data in a public support report.
@@ -276,7 +289,11 @@ Never include passwords, Recovery Keys, cloud service credentials, VPN private k
 - **Storage:** RAID, snapshots and filesystem operations follow the actual hardware and filesystem capabilities.
 - **NAS replication:** Native replication between supported Zero1Local appliances.
 - **Cloud/NAS sync:** **[Syncria](https://github.com/gigabytegrove/syncria)** connects cloud storage with Zero1Local or another NAS.
-- **Updates:** Stable, Beta/Release Candidate and Alpha are selected under **System → Updates → Advanced**. Review release qualification and compatibility notes before installing.
+- **Updates:** Stable, Beta/Release Candidate and Alpha are selected under **Updates → Advanced**. Review release qualification and compatibility notes before installing.
+
+## Release and deployment status
+
+The currently documented release is **v1.3.5 Beta/Release Candidate**, published October 14, 2026; [view release and download](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.5). It is not a Stable release. Work on the current operational baseline has been paused; publication of documentation does not modify installed systems. A GitHub release being downloadable is not proof that cold-boot, data restore, rollback and every hardware combination have been independently qualified.
 
 ## Support and feedback
 
