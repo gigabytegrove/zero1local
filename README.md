@@ -312,3 +312,7 @@ The software is provided **“AS IS”** with no warranty. You assume responsibi
 ---
 
 **Zero1Local is developed and released by [Gigabyte Grove](https://github.com/gigabytegrove).**
+
+## Support Gigabyte Grove
+
+If this project is useful to you, you can support ongoing Gigabyte Grove development with an optional [PayPal donation](https://paypal.me/gigabytegrove). Donations are appreciated but never required to use this repository.
