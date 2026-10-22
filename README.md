@@ -1,5 +1,18 @@
 # Zero1Local
 
+<!-- GIGABYTE GROVE REPOSITORY BADGES START -->
+<p align="center">
+  <a href="https://github.com/gigabytegrove/zero1local"><img alt="GitHub repository" src="https://img.shields.io/badge/GitHub-Repository-181717?logo=github&logoColor=white"></a>
+  <a href="https://github.com/gigabytegrove/zero1local/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/gigabytegrove/zero1local?style=flat&label=Stars&logo=github"></a>
+  <a href="https://github.com/gigabytegrove/zero1local/issues"><img alt="Issues" src="https://img.shields.io/badge/Issues-View-555555?logo=github"></a>
+  <a href="https://github.com/gigabytegrove/zero1local/releases"><img alt="Releases" src="https://img.shields.io/badge/Releases-View-555555?logo=github"></a>
+  <a href="https://paypal.me/gigabytegrove"><img alt="Donate via PayPal" src="https://img.shields.io/badge/Donate-PayPal-0070BA?logo=paypal&logoColor=white"></a>
+</p>
+<p align="center">
+  <a href="https://github.com/gigabytegrove/zero1local">Repository</a> · <a href="https://github.com/gigabytegrove/zero1local/stargazers">Stars</a> · <a href="https://github.com/gigabytegrove/zero1local/issues">Issues</a> · <a href="https://github.com/gigabytegrove/zero1local/releases">Releases</a> · <a href="https://paypal.me/gigabytegrove">Donate via PayPal</a>
+</p>
+<!-- GIGABYTE GROVE REPOSITORY BADGES END -->
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/zero1-local-logo-dark.png">
