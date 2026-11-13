@@ -27,10 +27,10 @@ Zero1Local modernizes supported YXS / IronCow Zero1 network-attached storage dev
 
 **Developed and released by [Gigabyte Grove](https://github.com/gigabytegrove).** Originally created by Brad Trammell.
 
-[Releases and downloads](https://github.com/gigabytegrove/zero1local/releases) · [Report an issue](https://github.com/gigabytegrove/zero1local/issues) · [Syncria](https://github.com/gigabytegrove/syncria)
+[Releases and downloads](https://github.com/gigabytegrove/zero1local/releases) · [Release history](RELEASE-HISTORY.md) · [Report an issue](https://github.com/gigabytegrove/zero1local/issues) · [Syncria](https://github.com/gigabytegrove/syncria)
 
 > [!IMPORTANT]
-> **Release status — October 14, 2026:** [Zero1Local v1.3.5](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.5) is **published as a Beta / Release Candidate**, with a downloadable `Zero1Local-v1.3.5-production.zip`. It has **not** been promoted to Stable or comprehensively qualified on every appliance. No update is required solely because documentation was refreshed. The released ZIP, tag and checksum remain unchanged.
+> **Production baseline — November 13, 2026:** [Zero1Local v1.4.15](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.15) is the owner-accepted production version following deployment and Windows 11 SMB testing. Its exact package is `Zero1Local-v1.4.15-production.zip` (SHA-256: `3bb6fc44617bca8a5aa5014ac590aec59cd1d3441c824ce614d5e372bf58e81e`). This acceptance is specific to the tested deployment, not a universal hardware certification. See the [complete release history](RELEASE-HISTORY.md) for earlier versions and channel distinctions.
 
 > [!CAUTION]
 > **BACK UP YOUR DATA OUTSIDE THE NAS FIRST.** Installation, recovery, upgrades, storage migration, power interruptions, or hardware faults can cause service interruption or permanent data loss. Verify that you can restore from your independent backup. A second folder or drive inside the same appliance is not an independent disaster-recovery backup.
@@ -51,7 +51,7 @@ Zero1Local modernizes supported YXS / IronCow Zero1 network-attached storage dev
 
 Availability varies by hardware, kernel capabilities, filesystem, installed services, and release. Zero1Local does not invent unsupported storage features.
 
-### Current v1.3.5 experience
+### Established user experience (originally introduced in v1.3.5)
 
 - **Users & Groups** has separate **Users**, **Groups**, and **Account Policies** pages. Only the current page should be highlighted; v1.3.5 corrects an overlap that highlighted both Users and Account Policies.
 - **Mobile access on your LAN** remains available for authenticated Android/mobile pairing, allowed shared folders, browsing, uploads and downloads. The earlier managed WireGuard/VPN, cellular bootstrap and automatic public router mapping features have been retired; there is no need to expose the NAS to the Internet to use the LAN mobile client.
@@ -306,7 +306,7 @@ Never include passwords, Recovery Keys, cloud service credentials, VPN private k
 
 ## Release and deployment status
 
-The currently documented release is **v1.3.5 Beta/Release Candidate**, published October 14, 2026; [view release and download](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.5). It is not a Stable release. Work on the current operational baseline has been paused; publication of documentation does not modify installed systems. A GitHub release being downloadable is not proof that cold-boot, data restore, rollback and every hardware combination have been independently qualified.
+**v1.4.15 is the owner-accepted production baseline**, with [release notes and download](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.15) and a [complete historical release index](RELEASE-HISTORY.md). Earlier prereleases remain available as historical artifacts. Publication of documentation does not modify installed systems. A downloadable GitHub release is not proof that cold-boot, data restore, rollback and every hardware combination have been independently qualified.
 
 ## Support and feedback
 
