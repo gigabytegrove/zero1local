@@ -10,34 +10,34 @@ The [GitHub Releases page](https://github.com/gigabytegrove/zero1local/releases)
 
 ## Release index
 
-| Release | GitHub publication class at inventory review | Download / notes |
+| Release | Release role | Download / notes |
 | --- | --- | --- |
-| v1.4.15 | Production baseline (promotion approved) | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.15) |
-| v1.4.14 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.14) |
-| v1.4.14a | Prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.14a) |
-| v1.4.13 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.13) |
-| v1.4.12 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.12) |
-| v1.4.11 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.11) |
-| v1.4.10 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.10) |
-| v1.4.9 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.9) |
-| v1.4.8 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.8) |
-| v1.4.7 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.7) |
-| v1.4.6 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.6) |
-| v1.4.5 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.5) |
-| v1.4.4 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.4) |
-| v1.4.3 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.3) |
-| v1.4.2 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.2) |
-| v1.4.1 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.1) |
-| v1.4.0 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.0) |
-| v1.3.8 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.8) |
-| v1.3.7 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.7) |
-| v1.3.6 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.6) |
-| v1.3.5 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.5) |
-| v1.3.4 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.4) |
-| v1.3.3 | Non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.3) |
-| v1.3.2 | Prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.2) |
-| v1.3.1 | Prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.1) |
-| v1.3.0 | Prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.0) |
+| v1.4.15 | Stable — accepted production | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.15) |
+| v1.4.14 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.14) |
+| v1.4.14a | Historical prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.14a) |
+| v1.4.13 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.13) |
+| v1.4.12 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.12) |
+| v1.4.11 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.11) |
+| v1.4.10 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.10) |
+| v1.4.9 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.9) |
+| v1.4.8 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.8) |
+| v1.4.7 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.7) |
+| v1.4.6 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.6) |
+| v1.4.5 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.5) |
+| v1.4.4 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.4) |
+| v1.4.3 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.3) |
+| v1.4.2 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.2) |
+| v1.4.1 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.1) |
+| v1.4.0 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.0) |
+| v1.3.8 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.8) |
+| v1.3.7 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.7) |
+| v1.3.6 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.6) |
+| v1.3.5 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.5) |
+| v1.3.4 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.4) |
+| v1.3.3 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.3) |
+| v1.3.2 | Historical prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.2) |
+| v1.3.1 | Historical prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.1) |
+| v1.3.0 | Historical prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.3.0) |
 
 ## Historical integrity and channel rules
 
