@@ -27,7 +27,9 @@ Zero1Local modernizes supported YXS / IronCow Zero1 network-attached storage dev
 
 **Developed and released by [Gigabyte Grove](https://github.com/gigabytegrove).** Originally created by Brad Trammell.
 
-[Releases and downloads](https://github.com/gigabytegrove/zero1local/releases) · [Release history](RELEASE-HISTORY.md) · [Report an issue](https://github.com/gigabytegrove/zero1local/issues) · [Syncria](https://github.com/gigabytegrove/syncria)
+[Releases and downloads](https://github.com/gigabytegrove/zero1local/releases) · [Release history](RELEASE-HISTORY.md)
+
+**Current published version:** [v1.4.16 Alpha](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.16) — NAS user roles and managed SMB share access. It is a prerelease for testing, not an approved production update. **Owner-accepted production baseline:** [v1.4.15](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.15). GitHub's Stable/Latest metadata has not yet been synchronized with that acceptance. · [Report an issue](https://github.com/gigabytegrove/zero1local/issues) · [Syncria](https://github.com/gigabytegrove/syncria)
 
 > [!IMPORTANT]
 > **Production baseline — November 13, 2026:** [Zero1Local v1.4.15](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.15) is the owner-accepted production version following deployment and Windows 11 SMB testing. Its exact package is `Zero1Local-v1.4.15-production.zip` (SHA-256: `3bb6fc44617bca8a5aa5014ac590aec59cd1d3441c824ce614d5e372bf58e81e`). This acceptance is specific to the tested deployment, not a universal hardware certification. See the [complete release history](RELEASE-HISTORY.md) for earlier versions and channel distinctions.
@@ -306,7 +308,7 @@ Never include passwords, Recovery Keys, cloud service credentials, VPN private k
 
 ## Release and deployment status
 
-**v1.4.15 is the owner-accepted production baseline**, with [release notes and download](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.15) and a [complete historical release index](RELEASE-HISTORY.md). Earlier prereleases remain available as historical artifacts. Publication of documentation does not modify installed systems. A downloadable GitHub release is not proof that cold-boot, data restore, rollback and every hardware combination have been independently qualified.
+**v1.4.16 Alpha is the newest published version**, with [release notes and download](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.16). It adds NAS user roles and per-share access controls but still requires real NAS validation before Stable approval. **v1.4.15 is the owner-accepted production baseline**, with [notes and download](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.15). GitHub currently still labels v1.4.15 as prerelease and reports v1.4.14 as Latest Stable; those release metadata flags are not proof of the owner's acceptance status. See the [complete release index](RELEASE-HISTORY.md). Publication of documentation does not modify installed systems. A downloadable GitHub release is not proof that cold-boot, data restore, rollback and every hardware combination have been independently qualified.
 
 ## Support and feedback
 
