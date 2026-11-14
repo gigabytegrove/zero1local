@@ -1,0 +1,67 @@
+name: Promote accepted Zero1Local v1.4.16 to Stable
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/promote-v1416-stable.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: zero1local-v1416-stable-promotion
+  cancel-in-progress: false
+jobs:
+  promote:
+    if: github.repository == 'gigabytegrove/zero1local' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Verify published asset, promote without rebuilding, and confirm Latest Stable
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: gigabytegrove/zero1local
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          gh api "repos/$GH_REPO/releases/tags/v1.4.16" > release-before.json
+          python3 - <<'PY'
+          import json
+          with open('release-before.json', encoding='utf-8') as fh:
+              release = json.load(fh)
+          assert release['tag_name'] == 'v1.4.16'
+          assert release['draft'] is False
+          assert release['name'] in ('Zero1Local v1.4.16 Alpha', 'Zero1Local v1.4.16')
+          assets = [a for a in release['assets'] if a['name'] == 'Zero1Local-v1.4.16-production.zip']
+          assert len(assets) == 1, 'Expected exactly one existing v1.4.16 ZIP'
+          assert assets[0]['digest'] == 'sha256:298c2a96863c64a850a4531a758f1491be940d899eed5ea38809f856078b937d'
+          assert assets[0]['size'] == 9380458, 'Unexpected package size'
+          body = release.get('body') or ''
+          assert '- Channel: Alpha' in body or '- Channel: Stable' in body
+          body = body.replace('- Channel: Alpha', '- Channel: Stable')
+          body = body.replace(
+              '- This Alpha requires real NAS testing of account creation, promotion, demotion, share creation, and Windows SMB read/write before Stable acceptance.',
+              '- Stable acceptance: approved by the appliance owner on November 14, 2026. Further hardware-specific acceptance checks remain advisable for other NAS installations.'
+          )
+          if '### Production acceptance' not in body:
+              body += ('\n### Production acceptance\n'
+                  '- Version: v1.4.16 (Stable; approved November 14, 2026).\n'
+                  '- This is the current production baseline, superseding v1.4.15.\n'
+                  '- Existing release ZIP, SHA-256, and source commit remain unchanged.\n'
+                  '- Storage administrator permissions do not grant SSH/root or separate web-administrator access.\n')
+          payload = dict(name='Zero1Local v1.4.16', prerelease=False, draft=False, make_latest='true', body=body)
+          with open('promotion.json', 'w', encoding='utf-8') as fh:
+              json.dump(payload, fh)
+          PY
+          gh api -X PATCH "repos/$GH_REPO/releases/444907667" --input promotion.json > release-after.json
+          gh api "repos/$GH_REPO/releases/latest" > latest.json
+          python3 - <<'PY'
+          import json
+          before = json.load(open('release-before.json', encoding='utf-8'))
+          after = json.load(open('release-after.json', encoding='utf-8'))
+          latest = json.load(open('latest.json', encoding='utf-8'))
+          assert after['tag_name'] == 'v1.4.16' and not after['prerelease'] and not after['draft']
+          assert latest['tag_name'] == 'v1.4.16', 'v1.4.16 is not Latest Stable'
+          assert [(a['id'], a['name'], a['digest'], a['size']) for a in before['assets']] == [(a['id'], a['name'], a['digest'], a['size']) for a in after['assets']], 'Release artifacts changed'
+          assert '- Channel: Stable' in after['body'], 'Stable release notes not applied'
+          print('Verified: v1.4.16 is Latest Stable; original assets and digests preserved.')
+          PY
