@@ -2,24 +2,24 @@
 
 The [GitHub Releases page](https://github.com/gigabytegrove/zero1local/releases) is the authoritative download source. This is a historical index, not an instruction to downgrade. Always verify the exact package SHA-256 and read the corresponding release notes before installing.
 
-**Latest published prerelease: [v1.4.16 Alpha](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.16)** (published November 14, 2026). This version introduces user-role assignment and managed SMB share permissions; physical NAS acceptance for Stable promotion is pending.
+**Current approved production release: [v1.4.16 Stable](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.16)** (approved November 14, 2026). This version introduces NAS user-role assignment and managed SMB share permissions and supersedes v1.4.15.
 
-**v1.4.16 Alpha ZIP:** [`Zero1Local-v1.4.16-production.zip`](https://github.com/gigabytegrove/zero1local/releases/download/v1.4.16/Zero1Local-v1.4.16-production.zip) — SHA-256: `298c2a96863c64a850a4531a758f1491be940d899eed5ea38809f856078b937d`.
+**v1.4.16 production ZIP:** [`Zero1Local-v1.4.16-production.zip`](https://github.com/gigabytegrove/zero1local/releases/download/v1.4.16/Zero1Local-v1.4.16-production.zip) — SHA-256: `298c2a96863c64a850a4531a758f1491be940d899eed5ea38809f856078b937d`.
 
-**Accepted production baseline: [v1.4.15](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.15).** Accepted by the appliance owner following deployment and Windows SMB testing on November 13, 2026. This acceptance applies to the tested environment; it is not certification of every hardware or Windows configuration.
+**Previous accepted production baseline: [v1.4.15](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.15).** Accepted following owner deployment and Windows SMB testing on November 13, 2026. It remains available as a historical release.
 
 **v1.4.15 production ZIP:** [`Zero1Local-v1.4.15-production.zip`](https://github.com/gigabytegrove/zero1local/releases/download/v1.4.15/Zero1Local-v1.4.15-production.zip)
 
 **SHA-256:** `3bb6fc44617bca8a5aa5014ac590aec59cd1d3441c824ce614d5e372bf58e81e`
 
-**Publication metadata caveat:** As checked on November 14, 2026, GitHub still reports v1.4.14 as its Latest non-prerelease release. The owner accepted v1.4.15 for the tested NAS but its GitHub prerelease flag has not yet been changed.
+**Release classification:** v1.4.16 is the owner-approved current Stable production release. Older versions retain their original historical tags and downloads; historical GitHub prerelease labels need not be changed to identify the current production version.
 
 ## Release index
 
 | Release | Release role | Download / notes |
 | --- | --- | --- |
-| v1.4.16 | Published Alpha — testing | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.16) |
-| v1.4.15 | Owner-accepted production; GitHub still marks prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.15) |
+| v1.4.16 | Current Stable — owner-approved production | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.16) |
+| v1.4.15 | Previous owner-accepted production | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.15) |
 | v1.4.14 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.14) |
 | v1.4.14a | Historical prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.14a) |
 | v1.4.13 | Historical non-prerelease | [Release notes and artifacts](https://github.com/gigabytegrove/zero1local/releases/tag/v1.4.13) |
